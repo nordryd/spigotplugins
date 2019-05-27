@@ -2,7 +2,6 @@ package com.nordryd.util;
 
 public interface Values
 {
-	public static final String PREFIX = "[" + Reference.PLUGIN_NAME + "]";
 	public static final String DEV_PLAYER_NAME = "Nordryd";
 	
 	public static final int LIGHTNING_STRIKE_RADIUS = 3;

@@ -1,13 +1,10 @@
 package com.nordryd;
 
-import static java.lang.System.out;
-
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.nordryd.event.EventListener;
 import com.nordryd.util.UpdateChecker;
-import com.nordryd.util.Values;
 import com.nordryd.util.Values.Config;
 
 public class Main extends JavaPlugin
@@ -16,10 +13,10 @@ public class Main extends JavaPlugin
 
 	@Override
 	public void onEnable() {
-		getLogger().info("onEnable has been invoked!");
-		out.println(Values.PREFIX + " Hello!");
-		UpdateChecker updateChecker = new UpdateChecker();
-		updateChecker.run();
+		getLogger().info("Hello!");
+		
+		UpdateChecker updateChecker = new UpdateChecker(this);
+		updateChecker.start();
 
 		config.addDefault(Config.YOU_ARE_AWESOME, true);
 		config.options().copyDefaults(true);
@@ -30,7 +27,6 @@ public class Main extends JavaPlugin
 
 	@Override
 	public void onDisable() {
-		getLogger().info("onDisable has been invoked!");
-		out.println(Values.PREFIX + " Goodbye!");
+		getLogger().info("Goodbai!");
 	}
 }
