@@ -15,7 +15,7 @@ public class Main extends JavaPlugin
 	public void onEnable() {
 		getLogger().info("Hello!");
 		
-		UpdateChecker updateChecker = new UpdateChecker(this);
+		UpdateChecker updateChecker = new UpdateChecker(this.getLogger());
 		updateChecker.start();
 
 		config.addDefault(Config.YOU_ARE_AWESOME, true);
