@@ -7,14 +7,21 @@ import com.nordryd.event.EventListener;
 import com.nordryd.util.UpdateChecker;
 import com.nordryd.util.Values.Config;
 
+/**
+ * <p>
+ * Main class for <b>NordrydSpigotPlugin</b>
+ * </p>
+ * 
+ * @author Nordryd
+ */
 public class Main extends JavaPlugin
 {
 	FileConfiguration config = getConfig();
 
 	@Override
 	public void onEnable() {
-		getLogger().info("Hello!");
-		
+		getLogger().info("Herro!");
+
 		UpdateChecker updateChecker = new UpdateChecker(this.getLogger());
 		updateChecker.start();
 
@@ -22,11 +29,11 @@ public class Main extends JavaPlugin
 		config.options().copyDefaults(true);
 		saveConfig();
 
-		getServer().getPluginManager().registerEvents(new EventListener(this), this);
+		getServer().getPluginManager().registerEvents(new EventListener(), this);
 	}
 
 	@Override
 	public void onDisable() {
-		getLogger().info("Goodbai!");
+		getLogger().info("Goodbaiaru!");
 	}
 }
