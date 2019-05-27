@@ -1,9 +1,5 @@
 package com.nordryd.event;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Egg;
@@ -11,7 +7,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -48,9 +43,6 @@ public class EventListener implements Listener
 
 	@EventHandler
 	public void onLightningRodUse(PlayerInteractEvent pievent) {
-		Player player = pievent.getPlayer();
-		List<Action> validActions = new ArrayList<>(Arrays.asList(Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK));
-
 	}
 
 	@EventHandler
