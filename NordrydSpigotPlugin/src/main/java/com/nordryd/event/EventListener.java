@@ -1,16 +1,20 @@
 package com.nordryd.event;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LightningStrike;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerEggThrowEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.weather.LightningStrikeEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.nordryd.util.Values.Config;
@@ -22,7 +26,7 @@ public class EventListener implements Listener
 	public EventListener(JavaPlugin plugin) {
 		this.plugin = plugin;
 
-		StringEvent sevent = new StringEvent("Fucking PlayerEvent... how does it work?");
+		StringEvent sevent = new StringEvent("Fucking Custom Events... how do they work?");
 		plugin.getServer().getPluginManager().callEvent(sevent);
 	}
 
@@ -38,15 +42,15 @@ public class EventListener implements Listener
 		Egg egg = petevent.getEgg();
 		World world = egg.getWorld();
 
-		world.strikeLightning(egg.getLocation());
+		world.strikeLightningEffect(egg.getLocation());
+		world.spawnEntity(egg.getLocation(), EntityType.CAT);
 	}
 
 	@EventHandler
-	public void onLightningStrike(LightningStrikeEvent lsevent) {
-		LightningStrike lightning = lsevent.getLightning();
-		World world = lightning.getWorld();
+	public void onLightningRodUse(PlayerInteractEvent pievent) {
+		Player player = pievent.getPlayer();
+		List<Action> validActions = new ArrayList<>(Arrays.asList(Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK));
 
-		world.spawnEntity(lightning.getLocation(), EntityType.CAT);
 	}
 
 	@EventHandler
