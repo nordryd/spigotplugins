@@ -6,15 +6,14 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-
-import org.bukkit.plugin.java.JavaPlugin;
+import java.util.logging.Logger;
 
 public class UpdateChecker extends Thread
 {
-	private final JavaPlugin plugin;
+	private final Logger logger;
 	
-	public UpdateChecker(JavaPlugin plugin) {
-		this.plugin = plugin;
+	public UpdateChecker(Logger logger) {
+		this.logger = logger;
 	}
 	
 	@Override
@@ -25,12 +24,13 @@ public class UpdateChecker extends Thread
 			conn = new URL(Reference.API_LINK).openConnection();
 			
 			BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			logger.info("Checking for updates...");
 			
 			if(reader.readLine().equals(Reference.CURRENT_VERSION)) {
-				plugin.getLogger().info("No updates available atm.");
+				logger.info("No updates available atm.");
 			}
 			else {
-				plugin.getLogger().info("There's an update! Download it at " + Reference.RESOURCE_URL);
+				logger.info("There's an update! Download it at " + Reference.RESOURCE_URL + ".");
 			}
 		}
 		catch(MalformedURLException mue) {
