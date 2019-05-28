@@ -20,20 +20,22 @@ public class Main extends JavaPlugin
 
 	@Override
 	public void onEnable() {
-		getLogger().info("Herro!");
+		getLogger().info("Hello, world!");
 
 		UpdateChecker updateChecker = new UpdateChecker(this.getLogger());
 		updateChecker.start();
 
 		config.addDefault(Config.YOU_ARE_AWESOME, true);
+		config.addDefault(Config.PLAYERS_SLEEPING_TO_SKIP_NIGHT, 1);
+		
 		config.options().copyDefaults(true);
 		saveConfig();
 
-		getServer().getPluginManager().registerEvents(new EventListener(), this);
+		getServer().getPluginManager().registerEvents(new EventListener(config), this);
 	}
 
 	@Override
 	public void onDisable() {
-		getLogger().info("Goodbaiaru!");
+		getLogger().info("Goodbye, world!");
 	}
 }
