@@ -12,8 +12,8 @@ import net.md_5.bungee.api.ChatColor;
  */
 public interface Values
 {
-	public static final String PREFIX = ChatColor.DARK_AQUA + "[" + Reference.PLUGIN_NAME + "]" + ChatColor.AQUA;
-	
+	public static final String PREFIX = ChatColor.AQUA + "[" + Reference.PLUGIN_NAME + "]" + ChatColor.LIGHT_PURPLE;
+
 	public static final int BEACON_SIN_RADIUS = 6;
 	public static final int NULL_EXPLOSION = 0;
 	public static final int LIGHTNING_STRIKE_RADIUS = 3;
@@ -42,6 +42,6 @@ public interface Values
 	 */
 	public static interface ParticleValues
 	{
-		public static final int[] SPARKLE_COUNT = { 5, 6, 7, 8, 9, 10 };
+		public static final int[] PARTICLE_COUNT = { 5, 6, 7, 8, 9, 10 };
 	}
 }

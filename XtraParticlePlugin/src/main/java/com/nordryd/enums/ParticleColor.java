@@ -1,5 +1,7 @@
 package com.nordryd.enums;
 
+import org.bukkit.Color;
+
 /**
  * <p>
  * Enum for different colors in terms of <b>RGB</b>.
@@ -9,8 +11,8 @@ package com.nordryd.enums;
  */
 public enum ParticleColor
 {
-	NATURAL(0, 0, 0), WHITE(255, 255, 255), BLACK(1, 1, 1), RED(255, 0, 0), GREEN(0, 255, 0), BLUE(0, 0, 255), YELLOW(255, 255, 0), MAGENTA(255, 0,
-			255), CYAN(0, 255, 255);
+	WHITE(255, 255, 255), BLACK(1, 1, 1), RED(255, 0, 0), GREEN(0, 255, 0), BLUE(0, 0, 255), YELLOW(255, 255, 0), MAGENTA(255, 0, 255), CYAN(0, 255,
+			255);
 
 	private int red, green, blue;
 
@@ -41,20 +43,24 @@ public enum ParticleColor
 		return blue;
 	}
 
+	public Color getColorFromRGB() {
+		return Color.fromRGB(red, green, blue);
+	}
+
 	/**
 	 * @return Normalized <b>red</b> value &isin; [0, 1].
 	 */
 	public double getNormalizedRed() {
 		return red / 255.0;
 	}
-	
+
 	/**
 	 * @return Normalized <b>red</b> value &isin; [0, 1].
 	 */
 	public double getNormalizedGreen() {
 		return green / 255.0;
 	}
-	
+
 	/**
 	 * @return Normalized <b>red</b> value &isin; [0, 1].
 	 */

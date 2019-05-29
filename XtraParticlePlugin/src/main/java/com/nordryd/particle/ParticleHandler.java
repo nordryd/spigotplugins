@@ -3,6 +3,7 @@ package com.nordryd.particle;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Particle.DustOptions;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import com.nordryd.util.Values;
@@ -28,17 +29,19 @@ public class ParticleHandler
 		this.config = pluginConfig;
 		this.rng = new Random();
 	}
-	
+
 	public void sparkle(final ParticleSparkle pSparkle) {
 		if (config.getBoolean(Config.DO_SPARKLES)) {
 			Bukkit.broadcastMessage(Values.PREFIX + " Sparkle " + pSparkle.getCount());
 			pSparkle.getWorld().spawnParticle(pSparkle.getParticle(), pSparkle.getLocation(), pSparkle.getCount());
 		}
 	}
-	
+
 	public void dust(final ParticleDust pDust) {
-		if(config.getBoolean(Config.DO_DUST)) {
+		if (config.getBoolean(Config.DO_DUST)) {
 			Bukkit.broadcastMessage(Values.PREFIX + " Dust " + pDust.getCount() + ", " + pDust.getSize());
+			pDust.getWorld().spawnParticle(pDust.getParticle(), pDust.getLocation(), pDust.getCount(),
+					new DustOptions(pDust.getColor(), pDust.getSize()));
 		}
 	}
 }

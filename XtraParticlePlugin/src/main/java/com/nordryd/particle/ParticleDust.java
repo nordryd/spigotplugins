@@ -1,10 +1,14 @@
 package com.nordryd.particle;
 
+import java.util.Random;
+
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.World;
 
 import com.nordryd.enums.ParticleColor;
+import com.nordryd.util.Values.ParticleValues;
 
 /**
  * Class for a <b><i>dust</i></b> particles with certain characteristics. Based
@@ -18,9 +22,9 @@ public class ParticleDust
 	private final Location location;
 	private final World world;
 	private final int count, size;
-	private final ParticleColor color;
+	private final Color color;
 
-	private ParticleDust(Location location, World world, int count, int size, ParticleColor color) {
+	private ParticleDust(Location location, World world, int count, int size, Color color) {
 		this.particle = Particle.REDSTONE;
 		this.location = location;
 		this.world = world;
@@ -29,41 +33,41 @@ public class ParticleDust
 		this.color = color;
 	}
 
+	public static Builder getBuilder(Location location, World world) {
+		return new Builder(location, world, new Random());
+	}
+
 	public static class Builder
 	{
 		private Location location;
 		private World world;
 		private int count, size;
-		private ParticleColor color;
-		
-		private Builder(Location location, World world) {
+		private Color color;
+
+		private Builder(Location location, World world, Random rng) {
 			this.location = location;
 			this.world = world;
-			this.count = 5;
-			this.size = 1;
-			this.color = ParticleColor.RED;
+			this.count = ParticleValues.PARTICLE_COUNT[rng.nextInt(ParticleValues.PARTICLE_COUNT.length)];
+			this.size = rng.nextInt(10) + 1;
+			this.color = ParticleColor.RED.getColorFromRGB();
 		}
-		
-		public static Builder builder(Location location, World world) {
-			return new Builder(location, world);
-		}
-		
+
 		public ParticleDust build() {
 			return new ParticleDust(this.location, this.world, this.count, this.size, this.color);
 		}
-		
+
 		public Builder setCount(int count) {
 			this.count = count;
 			return this;
 		}
-		
+
 		public Builder setSize(int size) {
 			this.size = size;
 			return this;
 		}
-		
+
 		public Builder setColor(ParticleColor color) {
-			this.color = color;
+			this.color = color.getColorFromRGB();
 			return this;
 		}
 	}
@@ -75,7 +79,7 @@ public class ParticleDust
 	public Location getLocation() {
 		return location;
 	}
-	
+
 	public World getWorld() {
 		return world;
 	}
@@ -88,7 +92,7 @@ public class ParticleDust
 		return size;
 	}
 
-	public ParticleColor getColor() {
+	public Color getColor() {
 		return color;
 	}
 }

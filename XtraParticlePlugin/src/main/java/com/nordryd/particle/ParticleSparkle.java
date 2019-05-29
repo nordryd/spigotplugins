@@ -22,6 +22,10 @@ public class ParticleSparkle
 		this.count = count;
 	}
 
+	public static Builder getBuilder(Location location, World world) {
+		return new Builder(location, world, new Random());
+	}
+
 	public static class Builder
 	{
 		private Location location;
@@ -31,11 +35,7 @@ public class ParticleSparkle
 		private Builder(Location location, World world, Random rng) {
 			this.location = location;
 			this.world = world;
-			this.count = ParticleValues.SPARKLE_COUNT[rng.nextInt(ParticleValues.SPARKLE_COUNT.length)];
-		}
-
-		public static Builder builder(Location location, World world) {
-			return new Builder(location, world, new Random());
+			this.count = ParticleValues.PARTICLE_COUNT[rng.nextInt(ParticleValues.PARTICLE_COUNT.length)];
 		}
 
 		public ParticleSparkle build() {
@@ -55,7 +55,7 @@ public class ParticleSparkle
 	public Location getLocation() {
 		return location;
 	}
-	
+
 	public World getWorld() {
 		return world;
 	}
