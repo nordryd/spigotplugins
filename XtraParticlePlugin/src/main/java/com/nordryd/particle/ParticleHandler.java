@@ -55,7 +55,9 @@ public class ParticleHandler
 
 	private void sparkle(final ParticleSparkle pSparkle) {
 		if (config.getBoolean(Config.DO_SPARKLE.getString())) {
-			Bukkit.broadcastMessage(Values.PREFIX + " Sparkle " + pSparkle.getCount());
+			if (config.getBoolean(Config.DEBUG.getString())) {
+				Bukkit.broadcastMessage(Values.PREFIX + " Sparkle " + pSparkle.getCount());
+			}
 
 			pSparkle.getWorld().spawnParticle(pSparkle.getParticle(), pSparkle.getLocation(), pSparkle.getCount());
 		}
@@ -63,7 +65,9 @@ public class ParticleHandler
 
 	private void dust(final ParticleDust pDust) {
 		if (config.getBoolean(Config.DO_DUST.getString())) {
-			Bukkit.broadcastMessage(Values.PREFIX + " Dust " + pDust.getCount() + ", " + pDust.getSize() + ", " + pDust.getColor());
+			if (config.getBoolean(Config.DEBUG.getString())) {
+				Bukkit.broadcastMessage(Values.PREFIX + " Dust " + pDust.getCount() + ", " + pDust.getSize() + ", " + pDust.getColor());
+			}
 
 			pDust.getWorld().spawnParticle(pDust.getParticle(), pDust.getLocation(), pDust.getCount(),
 					new DustOptions(pDust.getColor(), pDust.getSize()));
@@ -72,7 +76,9 @@ public class ParticleHandler
 
 	private void spellEffect(final ParticleSpellEffect pSpellEffect) {
 		if (config.getBoolean(Config.DO_SPELLEFFECT.getString())) {
-			Bukkit.broadcastMessage(Values.PREFIX + " SpellEffect " + pSpellEffect.getCount() + ", " + pSpellEffect.getColor());
+			if (config.getBoolean(Config.DEBUG.getString())) {
+				Bukkit.broadcastMessage(Values.PREFIX + " SpellEffect " + pSpellEffect.getCount() + ", " + pSpellEffect.getColor());
+			}
 
 			for (int count = 0; count < pSpellEffect.getCount(); count++) {
 				pSpellEffect.getWorld().spawnParticle(pSpellEffect.getParticle(), pSpellEffect.getLocation(), 0,
