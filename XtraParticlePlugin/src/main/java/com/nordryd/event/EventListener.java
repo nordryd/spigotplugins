@@ -4,6 +4,7 @@ import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -12,7 +13,8 @@ import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.vehicle.VehicleCollisionEvent;
+import org.bukkit.event.vehicle.VehicleBlockCollisionEvent;
+import org.bukkit.event.vehicle.VehicleEntityCollisionEvent;
 
 import com.nordryd.enums.ParticleColor;
 import com.nordryd.particle.ParticleDust;
@@ -59,7 +61,8 @@ public class EventListener implements Listener
 	public void onEntityDeath(EntityDeathEvent edevent) {
 		Entity entity = edevent.getEntity();
 
-		pHandler.spawnParticles(ParticleSpellEffect.getBuilder(entity.getLocation(), entity.getWorld()).setCount(10).setColor(ParticleColor.RED).build());
+		pHandler.spawnParticles(
+				ParticleSpellEffect.getBuilder(entity.getLocation(), entity.getWorld()).setCount(10).setColor(ParticleColor.RED).build());
 	}
 
 	@EventHandler
@@ -73,7 +76,7 @@ public class EventListener implements Listener
 	public void onItemEnchanted(EnchantItemEvent eievent) {
 		Player player = eievent.getEnchanter();
 		Block eTable = eievent.getEnchantBlock();
-		
+
 		player.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, player.getLocation(), 50);
 		eTable.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, eTable.getLocation(), 50);
 	}

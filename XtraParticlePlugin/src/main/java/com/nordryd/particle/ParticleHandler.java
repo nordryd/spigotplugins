@@ -26,7 +26,7 @@ public class ParticleHandler
 		this.config = pluginConfig;
 	}
 	
-	public void spawnParticles(PluginParticle particle) {
+	public void spawnParticles(final PluginParticle particle) {
 		if(particle instanceof ParticleSparkle) {
 			sparkle((ParticleSparkle)particle);
 		}
