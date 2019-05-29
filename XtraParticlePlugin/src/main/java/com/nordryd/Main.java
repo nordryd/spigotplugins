@@ -32,6 +32,7 @@ public class Main extends JavaPlugin
 
 		config.addDefault(Config.DO_SPARKLES, true);
 		config.addDefault(Config.DO_DUST, true);
+		config.addDefault(Config.DO_SPELLEFFECT, true);
 
 		config.options().copyDefaults(true);
 		saveConfig();

@@ -1,5 +1,6 @@
 package com.nordryd.event;
 
+import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
@@ -16,6 +17,7 @@ import com.nordryd.enums.ParticleColor;
 import com.nordryd.particle.ParticleDust;
 import com.nordryd.particle.ParticleHandler;
 import com.nordryd.particle.ParticleSparkle;
+import com.nordryd.particle.ParticleSpellEffect;
 
 /**
  * <p>
@@ -41,24 +43,28 @@ public class EventListener implements Listener
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent pjevent) {
 		Player player = pjevent.getPlayer();
-		pHandler.sparkle(ParticleSparkle.getBuilder(player.getLocation(), player.getWorld()).setCount(100).build());
+
+		pHandler.sparkle(ParticleSparkle.getBuilder(player.getLocation(), player.getWorld()).setCount(50).build());
 	}
 
 	@EventHandler
 	public void onProjectileHit(ProjectileHitEvent phevent) {
 		Entity entity = phevent.getEntity();
-		pHandler.sparkle(ParticleSparkle.getBuilder(entity.getLocation(), entity.getWorld()).setCount(25).build());
+
+		pHandler.sparkle(ParticleSparkle.getBuilder(entity.getLocation(), entity.getWorld()).setCount(10).build());
 	}
 
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent edevent) {
 		Entity entity = edevent.getEntity();
-		pHandler.sparkle(ParticleSparkle.getBuilder(entity.getLocation(), entity.getWorld()).setCount(25).build());
+
+		pHandler.spellEffect(ParticleSpellEffect.getBuilder(entity.getLocation(), entity.getWorld()).setCount(5).setColor(ParticleColor.RED).build());
 	}
 
 	@EventHandler
 	public void onLeafDecay(LeavesDecayEvent ldevent) {
 		Block leaf = ldevent.getBlock();
+
 		pHandler.dust(ParticleDust.getBuilder(leaf.getLocation(), leaf.getWorld()).setColor(ParticleColor.GREEN).build());
 	}
 
