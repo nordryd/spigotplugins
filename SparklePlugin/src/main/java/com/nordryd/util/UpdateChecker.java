@@ -19,7 +19,7 @@ public class UpdateChecker extends Thread
 {
 	private final Logger logger;
 
-	public UpdateChecker(Logger logger) {
+	private UpdateChecker(Logger logger) {
 		this.logger = logger;
 	}
 
@@ -41,10 +41,15 @@ public class UpdateChecker extends Thread
 			}
 		}
 		catch (MalformedURLException mue) {
-
+			System.err.println(Values.PREFIX + " MalformedURLException occurred. Please check URL.");
 		}
 		catch (IOException ie) {
-
+			System.err.println(Values.PREFIX + " IOException occurred.");
 		}
+	}
+	
+	public static void checkForUpdates(Logger logger) {
+		UpdateChecker updateChecker = new UpdateChecker(logger);
+		updateChecker.start();
 	}
 }

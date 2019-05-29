@@ -1,5 +1,7 @@
 package com.nordryd;
 
+import java.util.logging.Logger;
+
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -18,15 +20,15 @@ import com.nordryd.util.Values.Config;
 public class Main extends JavaPlugin
 {
 	FileConfiguration config = getConfig();
+	Logger logger = getLogger();
 
 	@Override
 	public void onEnable() {
-		getLogger().info("Xtra Particle Plugin started. Hello, world!");
-		getLogger().info("Please contact " + Dev.PLAYER_NAME + " on discord with any problems.");
-		getLogger().info("Dev Discord: " + Dev.DISCORD);
+		logger.info("Xtra Particle Plugin started. Hello, world!");
+		logger.info("Please contact " + Dev.PLAYER_NAME + " on discord with any problems.");
+		logger.info("Dev Discord: " + Dev.DISCORD);
 
-		UpdateChecker updateChecker = new UpdateChecker(this.getLogger());
-		updateChecker.start();
+		UpdateChecker.checkForUpdates(logger);
 
 		config.addDefault(Config.DO_SPARKLES, true);
 
