@@ -25,8 +25,23 @@ public class ParticleHandler
 	public ParticleHandler(FileConfiguration pluginConfig) {
 		this.config = pluginConfig;
 	}
+	
+	public void spawnParticles(PluginParticle particle) {
+		if(particle instanceof ParticleSparkle) {
+			sparkle((ParticleSparkle)particle);
+		}
+		else if(particle instanceof ParticleDust) {
+			dust((ParticleDust)particle);
+		}
+		else if(particle instanceof ParticleSpellEffect) {
+			spellEffect((ParticleSpellEffect)particle);
+		}
+		else {
+			System.err.println(Values.PREFIX + " Somehow an invalid particle type was given? o.O");
+		}
+	}
 
-	public void sparkle(final ParticleSparkle pSparkle) {
+	private void sparkle(final ParticleSparkle pSparkle) {
 		if (config.getBoolean(Config.DO_SPARKLES)) {
 			Bukkit.broadcastMessage(Values.PREFIX + " Sparkle " + pSparkle.getCount());
 
@@ -34,7 +49,7 @@ public class ParticleHandler
 		}
 	}
 
-	public void dust(final ParticleDust pDust) {
+	private void dust(final ParticleDust pDust) {
 		if (config.getBoolean(Config.DO_DUST)) {
 			Bukkit.broadcastMessage(Values.PREFIX + " Dust " + pDust.getCount() + ", " + pDust.getSize() + ", " + pDust.getColor());
 
@@ -43,7 +58,7 @@ public class ParticleHandler
 		}
 	}
 
-	public void spellEffect(final ParticleSpellEffect pSpellEffect) {
+	private void spellEffect(final ParticleSpellEffect pSpellEffect) {
 		if (config.getBoolean(Config.DO_SPELLEFFECT)) {
 			Bukkit.broadcastMessage(Values.PREFIX + " SpellEffect " + pSpellEffect.getCount() + ", " + pSpellEffect.getColor());
 

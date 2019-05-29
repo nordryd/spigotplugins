@@ -16,19 +16,13 @@ import com.nordryd.util.Values.ParticleValues;
  * 
  * @author Nordryd
  */
-public class ParticleDust
+public class ParticleDust extends PluginParticle
 {
-	private final Particle particle;
-	private final Location location;
-	private final World world;
-	private final int count, size;
+	private final int size;
 	private final Color color;
 
 	private ParticleDust(Location location, World world, int count, int size, Color color) {
-		this.particle = Particle.REDSTONE;
-		this.location = location;
-		this.world = world;
-		this.count = count;
+		super(Particle.REDSTONE, location, world, count);
 		this.size = size;
 		this.color = color;
 	}
@@ -71,23 +65,7 @@ public class ParticleDust
 			return this;
 		}
 	}
-
-	public Particle getParticle() {
-		return particle;
-	}
-
-	public Location getLocation() {
-		return location;
-	}
-
-	public World getWorld() {
-		return world;
-	}
-
-	public int getCount() {
-		return count;
-	}
-
+	
 	public int getSize() {
 		return size;
 	}

@@ -8,18 +8,10 @@ import org.bukkit.World;
 
 import com.nordryd.util.Values.ParticleValues;
 
-public class ParticleSparkle
+public class ParticleSparkle extends PluginParticle
 {
-	private final Particle particle;
-	private final Location location;
-	private final World world;
-	private final int count;
-
 	private ParticleSparkle(Location location, World world, int count) {
-		this.particle = Particle.FIREWORKS_SPARK;
-		this.location = location;
-		this.world = world;
-		this.count = count;
+		super(Particle.FIREWORKS_SPARK, location, world, count);
 	}
 
 	public static Builder getBuilder(Location location, World world) {
@@ -47,21 +39,4 @@ public class ParticleSparkle
 			return this;
 		}
 	}
-
-	public Particle getParticle() {
-		return particle;
-	}
-
-	public Location getLocation() {
-		return location;
-	}
-
-	public World getWorld() {
-		return world;
-	}
-
-	public int getCount() {
-		return count;
-	}
-
 }

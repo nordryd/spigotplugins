@@ -9,18 +9,12 @@ import org.bukkit.World;
 import com.nordryd.enums.ParticleColor;
 import com.nordryd.util.Values.ParticleValues;
 
-public class ParticleSpellEffect
+public class ParticleSpellEffect extends PluginParticle
 {
-	private Particle particle = Particle.SPELL_MOB;
-	private Location location;
-	private World world;
-	private int count;
 	private ParticleColor color;
 
 	public ParticleSpellEffect(Location location, World world, int count, ParticleColor color) {
-		this.location = location;
-		this.world = world;
-		this.count = count;
+		super(Particle.SPELL_MOB, location, world, count);
 		this.color = color;
 	}
 
@@ -55,22 +49,6 @@ public class ParticleSpellEffect
 			this.color = color;
 			return this;
 		}
-	}
-
-	public Particle getParticle() {
-		return particle;
-	}
-
-	public Location getLocation() {
-		return location;
-	}
-
-	public World getWorld() {
-		return world;
-	}
-
-	public int getCount() {
-		return count;
 	}
 	
 	public ParticleColor getColor() {
