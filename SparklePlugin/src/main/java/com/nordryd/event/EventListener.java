@@ -14,6 +14,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 import com.nordryd.enums.ParticleColor;
 import com.nordryd.particle.ParticleHandler;
+import com.nordryd.particle.ParticleSparkle;
 
 /**
  * <p>
@@ -45,7 +46,7 @@ public class EventListener implements Listener
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent pjevent) {
 		Player player = pjevent.getPlayer();
-		pHandler.sparkle(player.getLocation(), player.getWorld());
+		// lightning here
 	}
 
 	/**
@@ -57,7 +58,7 @@ public class EventListener implements Listener
 	@EventHandler
 	public void onProjectileHit(ProjectileHitEvent phevent) {
 		Entity entity = phevent.getEntity();
-		pHandler.sparkle(entity.getLocation(), entity.getWorld(), 50);
+		pHandler.sparkle(ParticleSparkle.Builder.builder(entity.getLocation(), entity.getWorld()).setCount(25).build());
 	}
 
 	/**
@@ -70,7 +71,7 @@ public class EventListener implements Listener
 	public void onEntityDeath(EntityDeathEvent edevent) {
 		Entity entity = edevent.getEntity();
 
-		pHandler.sparkle(entity.getLocation(), entity.getWorld());
+		pHandler.sparkle(ParticleSparkle.Builder.builder(entity.getLocation(), entity.getWorld()).setCount(25).build());
 	}
 
 	/**
@@ -82,11 +83,11 @@ public class EventListener implements Listener
 	@EventHandler
 	public void onLeafDecay(LeavesDecayEvent ldevent) {
 		Block leaf = ldevent.getBlock();
-		pHandler.sparkle(leaf.getLocation(), leaf.getWorld());
+		// dust here
 	}
 	
 	@EventHandler
 	public void onItemEnchanted(EnchantItemEvent eievent) {
-		// spawn book characters here
+		// book characters here
 	}
 }

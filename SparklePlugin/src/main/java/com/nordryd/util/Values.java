@@ -1,5 +1,7 @@
 package com.nordryd.util;
 
+import net.md_5.bungee.api.ChatColor;
+
 /**
  * <p>
  * Interface for various values used throughout the plugin. This is to reduce
@@ -10,7 +12,7 @@ package com.nordryd.util;
  */
 public interface Values
 {
-	public static final String PREFIX = "[" + Reference.PLUGIN_NAME + "]";
+	public static final String PREFIX = ChatColor.DARK_AQUA + "[" + Reference.PLUGIN_NAME + "]" + ChatColor.AQUA;
 	
 	public static final int BEACON_SIN_RADIUS = 6;
 	public static final int NULL_EXPLOSION = 0;
@@ -32,6 +34,7 @@ public interface Values
 	public static interface Config
 	{
 		public static final String DO_SPARKLES = "doSparkles";
+		public static final String DO_DUST = "doDust";
 	}
 
 	/**

@@ -31,6 +31,7 @@ public class Main extends JavaPlugin
 		UpdateChecker.checkForUpdates(logger);
 
 		config.addDefault(Config.DO_SPARKLES, true);
+		config.addDefault(Config.DO_DUST, true);
 
 		config.options().copyDefaults(true);
 		saveConfig();
