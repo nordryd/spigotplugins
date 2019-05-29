@@ -11,8 +11,10 @@ import com.nordryd.enums.ParticleColor;
 import com.nordryd.util.Values.ParticleValues;
 
 /**
- * Class for a <b><i>dust</i></b> particles with certain characteristics. Based
- * on <b>REDSTONE</b> particles.
+ * <p>
+ * Class for <b><i>dust</i></b> particles with certain characteristics. Based on
+ * <b>REDSTONE</b> particles.
+ * </p>
  * 
  * @author Nordryd
  */
@@ -65,7 +67,7 @@ public class ParticleDust extends PluginParticle
 			return this;
 		}
 	}
-	
+
 	public int getSize() {
 		return size;
 	}

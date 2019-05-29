@@ -2,6 +2,7 @@ package com.nordryd.event;
 
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
+import org.bukkit.block.CreatureSpawner;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -9,8 +10,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.LeavesDecayEvent;
 import org.bukkit.event.enchantment.EnchantItemEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.entity.SpawnerSpawnEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import com.nordryd.enums.ParticleColor;
@@ -58,8 +61,8 @@ public class EventListener implements Listener
 	public void onEntityDeath(EntityDeathEvent edevent) {
 		Entity entity = edevent.getEntity();
 
-		pHandler.spawnParticles(
-				ParticleSpellEffect.getBuilder(entity.getLocation(), entity.getWorld()).setCount(25).setColor(ParticleColor.RED).build());
+		pHandler.spawnParticles(ParticleSpellEffect.getBuilder(entity.getLocation().add(0.0, 0.75, 0.0), entity.getWorld()).setCount(25)
+				.setColor(ParticleColor.RED).build());
 	}
 
 	@EventHandler
@@ -76,5 +79,22 @@ public class EventListener implements Listener
 
 		player.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, player.getLocation().add(0.0, 1.0, 0.0), 50);
 		eTable.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, eTable.getLocation().add(0.0, 1.0, 0.0), 50);
+	}
+
+	@EventHandler
+	public void onCreatureSpawn(CreatureSpawnEvent esevent) {
+		Entity entity = esevent.getEntity();
+		pHandler.spawnParticles(
+				ParticleSpellEffect.getBuilder(entity.getLocation(), entity.getWorld()).setColor(ParticleColor.CYAN).setCount(15).build());
+	}
+
+	@EventHandler
+	public void onCreatureSpawnerSpawn(SpawnerSpawnEvent ssevent) {
+		Entity entity = ssevent.getEntity();
+		CreatureSpawner spawner = ssevent.getSpawner();
+
+		pHandler.spawnParticles(
+				ParticleSpellEffect.getBuilder(entity.getLocation(), entity.getWorld()).setColor(ParticleColor.MAGENTA).setCount(15).build(),
+				ParticleSparkle.getBuilder(spawner.getLocation(), spawner.getWorld()).setCount(15).build());
 	}
 }

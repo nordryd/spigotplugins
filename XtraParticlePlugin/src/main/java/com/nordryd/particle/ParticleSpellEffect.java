@@ -9,6 +9,14 @@ import org.bukkit.World;
 import com.nordryd.enums.ParticleColor;
 import com.nordryd.util.Values.ParticleValues;
 
+/**
+ * <p>
+ * Class for <b><i>spell effect</i></b> particles with certain characteristics.
+ * Based on <b>SPELL_MOB</b> particles.
+ * </p>
+ * 
+ * @author Nordryd
+ */
 public class ParticleSpellEffect extends PluginParticle
 {
 	private ParticleColor color;
@@ -44,13 +52,13 @@ public class ParticleSpellEffect extends PluginParticle
 			this.count = count;
 			return this;
 		}
-		
+
 		public Builder setColor(ParticleColor color) {
 			this.color = color;
 			return this;
 		}
 	}
-	
+
 	public ParticleColor getColor() {
 		return color;
 	}

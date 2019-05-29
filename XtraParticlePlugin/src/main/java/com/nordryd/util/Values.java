@@ -1,6 +1,6 @@
 package com.nordryd.util;
 
-import net.md_5.bungee.api.ChatColor;
+import org.bukkit.ChatColor;
 
 /**
  * <p>
@@ -26,16 +26,6 @@ public interface Values
 	public static interface Time
 	{
 		public static final long DAY = 0, NOON = 6000, NIGHT = 13000, MIDNIGHT = 18000;
-	}
-
-	/**
-	 * Interface for storing any and all config.yml arguments.
-	 */
-	public static interface Config
-	{
-		public static final String DO_SPARKLES = "doSparkles";
-		public static final String DO_DUST = "doDust";
-		public static final String DO_SPELLEFFECT = "doSpellEffect";
 	}
 
 	/**

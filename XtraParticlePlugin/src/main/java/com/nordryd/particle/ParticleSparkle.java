@@ -8,6 +8,14 @@ import org.bukkit.World;
 
 import com.nordryd.util.Values.ParticleValues;
 
+/**
+ * <p>
+ * Class for <b><i>sparkle</i></b> particles with certain characteristics. Based
+ * on <b>FIREWORK_SPARK</b> particles.
+ * </p>
+ * 
+ * @author Nordryd
+ */
 public class ParticleSparkle extends PluginParticle
 {
 	private ParticleSparkle(Location location, World world, int count) {

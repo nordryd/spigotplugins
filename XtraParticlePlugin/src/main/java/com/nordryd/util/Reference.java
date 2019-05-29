@@ -16,7 +16,17 @@ public interface Reference
 	public static final String API_LINK = "https://api.spigotmc.org/legacy/update.php?resource=65264";
 
 	/**
-	 * Interface to group together information about the plugin dev.
+	 * Interface containing messages to display when the plugin starts and stops.
+	 */
+	public static interface InfoMessages
+	{
+		public static final String ON_ENABLE = Reference.PLUGIN_NAME + " started. Hello, world!";
+		public static final String CONTACT = "Please contact " + Dev.DISCORD + " on discord with any problems.";
+		public static final String ON_DISABLE = Reference.PLUGIN_NAME + " stopped. Goodbye, world!";
+	}
+
+	/**
+	 * Interface containing information about the plugin's dev.
 	 */
 	public static interface Dev
 	{

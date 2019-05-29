@@ -5,14 +5,14 @@ import java.util.logging.Logger;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.nordryd.enums.Config;
 import com.nordryd.event.EventListener;
-import com.nordryd.util.Reference.Dev;
+import com.nordryd.util.Reference.InfoMessages;
 import com.nordryd.util.UpdateChecker;
-import com.nordryd.util.Values.Config;
 
 /**
  * <p>
- * Main class for <b>XtraParticlePlugin</b>
+ * Main class for <b>XtraParticlePlugin</b>.
  * </p>
  * 
  * @author Nordryd
@@ -24,24 +24,26 @@ public class Main extends JavaPlugin
 
 	@Override
 	public void onEnable() {
-		logger.info("Xtra Particle Plugin started. Hello, world!");
-		logger.info("Please contact " + Dev.PLAYER_NAME + " on discord with any problems.");
-		logger.info("Dev Discord: " + Dev.DISCORD);
+		logger.info(InfoMessages.ON_ENABLE);
+		logger.info(InfoMessages.CONTACT);
 
 		UpdateChecker.checkForUpdates(logger);
-
-		config.addDefault(Config.DO_SPARKLES, true);
-		config.addDefault(Config.DO_DUST, true);
-		config.addDefault(Config.DO_SPELLEFFECT, true);
-
-		config.options().copyDefaults(true);
-		saveConfig();
+		addDefaultConfig();
 
 		getServer().getPluginManager().registerEvents(new EventListener(config), this);
 	}
 
 	@Override
 	public void onDisable() {
-		getLogger().info("Xtra Particle Plugin stopped. Goodbye, world!");
+		getLogger().info(InfoMessages.ON_DISABLE);
+	}
+
+	private void addDefaultConfig() {
+		for (Config configDefault : Config.values()) {
+			config.addDefault(configDefault.getString(), configDefault.getDefault());
+		}
+
+		config.options().copyDefaults(true);
+		saveConfig();
 	}
 }
