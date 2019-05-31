@@ -22,13 +22,16 @@ public interface Values
 	public static final int BEACON_SIN_RADIUS = 6;
 	public static final int NULL_EXPLOSION = 0;
 	public static final int LIGHTNING_STRIKE_RADIUS = 3;
-	
+
 	public static final double BLOCK_CENTER_OFFSET = 0.5;
 
 	public static final float[] PITCH = { 0.5f, 1.0f, 2.0f };
 
 	public static final List<Material> ORES = new ArrayList<>(Arrays.asList(Material.COAL_ORE, Material.DIAMOND_ORE, Material.EMERALD_ORE,
 			Material.GOLD_ORE, Material.IRON_ORE, Material.NETHER_QUARTZ_ORE, Material.LAPIS_ORE, Material.REDSTONE_ORE));
+	public static final List<Material> SIGNS = new ArrayList<>(Arrays.asList(Material.ACACIA_SIGN, Material.ACACIA_WALL_SIGN, Material.BIRCH_SIGN,
+			Material.BIRCH_WALL_SIGN, Material.DARK_OAK_SIGN, Material.DARK_OAK_WALL_SIGN, Material.JUNGLE_SIGN, Material.JUNGLE_WALL_SIGN,
+			Material.OAK_SIGN, Material.OAK_WALL_SIGN, Material.SPRUCE_SIGN, Material.SPRUCE_WALL_SIGN));
 
 	/**
 	 * Interface for storing time values (ms).

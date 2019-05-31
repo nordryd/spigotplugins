@@ -3,29 +3,38 @@ package com.nordryd.event;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.advancement.Advancement;
 import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
+import org.bukkit.block.Sign;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.LeavesDecayEvent;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityBreedEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.SpawnerSpawnEvent;
+import org.bukkit.event.inventory.BrewEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.FurnaceSmeltEvent;
 import org.bukkit.event.player.PlayerAdvancementDoneEvent;
+import org.bukkit.event.player.PlayerEggThrowEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerLevelChangeEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerRiptideEvent;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -33,7 +42,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.nordryd.enums.Metadata;
 import com.nordryd.enums.ParticleColor;
+import com.nordryd.particle.ParticleDragonBreath;
 import com.nordryd.particle.ParticleDust;
+import com.nordryd.particle.ParticleEnchanting;
 import com.nordryd.particle.ParticleHandler;
 import com.nordryd.particle.ParticleSparkle;
 import com.nordryd.particle.ParticleSpellEffect;
@@ -64,6 +75,38 @@ public class EventListener implements Listener
 	}
 
 	@EventHandler
+	public void onPlayerInteract(PlayerInteractEvent pievent) {
+		Action action = pievent.getAction();
+		if (action == Action.RIGHT_CLICK_BLOCK) {
+			Block block = pievent.getClickedBlock();
+			if (Values.SIGNS.contains(block.getType())) {
+				PlayerInteractEvents.onSignInteract(pievent.getPlayer(), ((Sign) block.getState()));
+			}
+		}
+	}
+
+	@EventHandler
+	public void testParticleWithEggThrow(PlayerEggThrowEvent petevent) {
+	}
+
+	@EventHandler
+	public void onDing(PlayerLevelChangeEvent plcevent) {
+		Player player = plcevent.getPlayer();
+		pHandler.spawnParticles(ParticleDragonBreath.getBuilder(player.getLocation().add(0, 1, 0), player.getWorld()).setCount(100).build(),
+				ParticleSpellEffect.getBuilder(player.getLocation().add(0, 1, 0), player.getWorld()).setColors(ParticleColor.values()).setCount(100)
+						.build());
+
+		float pitch = 1.0f;
+
+		if (plcevent.getNewLevel() > plcevent.getOldLevel()) {
+			Broadcaster.sendMessage(player, "Ding! You are now level " + ChatColor.GREEN + ChatColor.BOLD + plcevent.getNewLevel());
+			player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1.0F, pitch);
+			player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1.0F, pitch + (pitch * 0.5f));
+			player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1.0F, pitch + (pitch * 1.5f) + (pitch * 1.75f));
+		}
+	}
+
+	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent pjevent) {
 		Player player = pjevent.getPlayer();
 
@@ -80,10 +123,12 @@ public class EventListener implements Listener
 	@EventHandler
 	public void onAdvancementDone(PlayerAdvancementDoneEvent paaevent) {
 		Player player = paaevent.getPlayer();
+		Advancement advancement = paaevent.getAdvancement();
 
-		Broadcaster.sendMessage(player, "Advancement done: " + paaevent.getAdvancement().getKey());
-		pHandler.spawnParticles(
-				ParticleSpellEffect.getBuilder(player.getLocation(), player.getWorld()).setCount(50).setColors(ParticleColor.MAROON).build());
+		if (!advancement.getKey().toString().contains("minecraft:recipes")) {
+			pHandler.spawnParticles(
+					ParticleSpellEffect.getBuilder(player.getLocation(), player.getWorld()).setCount(50).setColors(ParticleColor.MAROON).build());
+		}
 	}
 
 	@EventHandler
@@ -130,11 +175,15 @@ public class EventListener implements Listener
 	@EventHandler
 	public void onItemEnchanted(EnchantItemEvent eievent) {
 		Player player = eievent.getEnchanter();
-		Block eTable = eievent.getEnchantBlock();
+		Block enchantingTable = eievent.getEnchantBlock();
 
-		player.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, player.getLocation().add(0, 1, 0), 50);
-		eTable.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE,
-				eTable.getLocation().add(Values.BLOCK_CENTER_OFFSET, 1 + Values.BLOCK_CENTER_OFFSET, Values.BLOCK_CENTER_OFFSET), 50);
+		pHandler.spawnParticles(ParticleEnchanting.getBuilder(player.getLocation().add(0.0, 1.0, 0.0), player.getWorld()).setCount(75).build(),
+				ParticleEnchanting.getBuilder(
+						enchantingTable.getLocation().add(Values.BLOCK_CENTER_OFFSET, Values.BLOCK_CENTER_OFFSET + 1, Values.BLOCK_CENTER_OFFSET),
+						enchantingTable.getWorld()).setCount(75).build(),
+				ParticleSpellEffect.getBuilder(
+						enchantingTable.getLocation().add(Values.BLOCK_CENTER_OFFSET, Values.BLOCK_CENTER_OFFSET + 1, Values.BLOCK_CENTER_OFFSET),
+						enchantingTable.getWorld()).setColors(ParticleColor.values()).setCount(75).build());
 	}
 
 	@EventHandler
@@ -180,6 +229,22 @@ public class EventListener implements Listener
 	}
 
 	@EventHandler
+	public void onEntityBreed(EntityBreedEvent ebevent) {
+		Entity entity = ebevent.getEntity();
+
+		pHandler.spawnParticles(ParticleSpellEffect.getBuilder(entity.getLocation(), entity.getWorld())
+				.setColors(ParticleColor.IVORY, ParticleColor.MAGENTA).build());
+	}
+
+	@EventHandler
+	public void onBrew(BrewEvent bevent) {
+		Block brewingStand = bevent.getBlock();
+
+		pHandler.spawnParticles(
+				ParticleSpellEffect.getBuilder(brewingStand.getLocation(), brewingStand.getWorld()).setColors(ParticleColor.values()).build());
+	}
+
+	@EventHandler
 	public void onBlockBreak(BlockBreakEvent bbevent) {
 		Block block = bbevent.getBlock();
 		if (Values.ORES.contains(block.getType())) {
@@ -213,7 +278,8 @@ public class EventListener implements Listener
 			pHandler.spawnParticles(
 					ParticleDust
 							.getBuilder(block.getLocation().add(Values.BLOCK_CENTER_OFFSET, Values.BLOCK_CENTER_OFFSET, Values.BLOCK_CENTER_OFFSET),
-									block.getWorld()).setColor(colors.get(0)).setSize(3).build(),
+									block.getWorld())
+							.setColor(colors.get(0)).setSize(3).build(),
 					ParticleSpellEffect
 							.getBuilder(block.getLocation().add(Values.BLOCK_CENTER_OFFSET, Values.BLOCK_CENTER_OFFSET, Values.BLOCK_CENTER_OFFSET),
 									block.getWorld())

@@ -45,7 +45,7 @@ public class ParticleSparkle extends PluginParticle
 		private Builder(Location location, World world, Random rng) {
 			this.location = location;
 			this.world = world;
-			this.count = rng.nextInt(6) + 5;
+			this.count = (rng.nextInt(6) + 1) * 5;
 		}
 
 		/**

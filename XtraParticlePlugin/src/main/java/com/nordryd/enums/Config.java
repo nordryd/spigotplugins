@@ -12,7 +12,8 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public enum Config
 {
-	DEBUG("debug", false), DO_SPARKLE("doSparkles", true), DO_DUST("doDust", true), DO_SPELLEFFECT("doSpellEffect", true);
+	DO_SPARKLE("doSparkles", true), DO_DUST("doDust", true), DO_SPELLEFFECT("doSpellEffect", true), DO_ENCHANTING("doEnchanting",
+			true), DO_DRAGONBREATH("doDragonBreath", true);
 
 	private final String string;
 	private final Object defaultValue;
@@ -37,8 +38,9 @@ public enum Config
 
 	/**
 	 * Initializes all the configutation values with their respective defaults.
+	 * 
 	 * @param plugin
-	 * 			{@code JavaPlugin} to add config values to.
+	 *            {@code JavaPlugin} to add config values to.
 	 */
 	public static void addDefaultConfig(JavaPlugin plugin) {
 		for (Config configDefault : Config.values()) {
