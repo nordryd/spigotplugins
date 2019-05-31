@@ -7,7 +7,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.advancement.Advancement;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.block.Sign;
@@ -33,13 +32,11 @@ import org.bukkit.event.inventory.BrewEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.FurnaceSmeltEvent;
 import org.bukkit.event.player.PlayerAdvancementDoneEvent;
-import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLevelChangeEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.event.player.PlayerRiptideEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -57,6 +54,14 @@ import com.nordryd.util.Values;
 /**
  * <p>
  * Listener class for all events in the plugin.
+ * </p>
+ * <p>
+ * TODO Consider separating events into different classes, such as
+ * PlayerEventListener, EntityEventListener, and make this class the
+ * superclass:<br>
+ * {@code EventListener#getEventListeners(JavaPlugin)}; use this to initialize
+ * all listeners within this class (and make the constructors private. facade
+ * pattern?)
  * </p>
  * 
  * @author Nordryd
@@ -78,6 +83,14 @@ public class EventListener implements Listener
 	}
 
 	@EventHandler
+	public void onPlayerJoinEvent(PlayerJoinEvent pjevent) {
+		Player player = pjevent.getPlayer();
+		pjevent.setJoinMessage(ChatColor.AQUA + "Who invited " + ChatColor.GREEN + player.getName() + ChatColor.AQUA + "?");
+		player.setMetadata(Metadata.PLAYER_HEALTH_LOW.getKey(), Metadata.getMetadataValue(plugin, false));
+		calculateIfPlayerHasLowHealth(player);
+	}
+
+	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent pievent) {
 		Action action = pievent.getAction();
 		if (action == Action.RIGHT_CLICK_BLOCK) {
@@ -89,28 +102,29 @@ public class EventListener implements Listener
 	}
 
 	@EventHandler
-	public void testParticleWithEggThrow(PlayerEggThrowEvent petevent) {
-	}
-
-	@EventHandler
 	public void onPlayerDamagedBelowLowHealthThreshold(EntityDamageEvent edevent) {
 		if (edevent.getEntityType().equals(EntityType.PLAYER)) {
-			// if player health is below threshold and metadata is false
-			Player player = (Player) edevent.getEntity();
-			if (player.getHealth() < (player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * 0.25)) {
-				// need some way to initialize each player with metadata. Maybe
-				// PlayerPreLoginEvent and store all known players in a file of some sort?
-			}
+			calculateIfPlayerHasLowHealth((Player) edevent.getEntity());
 		}
 	}
 
+	@EventHandler
 	public void onPlayerHealingAboveLowHealthThreshold(EntityRegainHealthEvent erhevent) {
 		if (erhevent.getEntityType().equals(EntityType.PLAYER)) {
-			// if player health goes above threshold and metadata playerHealthLow is true
-			Player player = (Player) erhevent.getEntity();
-			if (player.getHealth() >= (player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * 0.25)) {
+			calculateIfPlayerHasLowHealth((Player) erhevent.getEntity());
+		}
+	}
 
-			}
+	private void calculateIfPlayerHasLowHealth(Player player) {
+		if (!player.getMetadata(Metadata.PLAYER_HEALTH_LOW.getKey()).get(0).asBoolean() && (player.getHealth() <= Values.LOW_HEALTH_THRESHOLD)) {
+			player.setMetadata(Metadata.PLAYER_HEALTH_LOW.getKey(), Metadata.getMetadataValue(plugin, true));
+			player.sendMessage(ChatColor.RED + "[WARNING] " + ChatColor.DARK_RED + "Health is low!");
+			player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_AMBIENT, 1.0f, Values.PITCH[1]);
+			pHandler.spawnParticles(ParticleSpellEffect.getBuilder(player.getLocation().add(0, 1, 0), player.getWorld())
+					.setColors(ParticleColor.RED, ParticleColor.FIREBRICK, ParticleColor.ORANGE).setCount(50).build());
+		}
+		else if (player.getMetadata(Metadata.PLAYER_HEALTH_LOW.getKey()).get(0).asBoolean() && (player.getHealth() > Values.LOW_HEALTH_THRESHOLD)) {
+			player.setMetadata(Metadata.PLAYER_HEALTH_LOW.getKey(), Metadata.getMetadataValue(plugin, false));
 		}
 	}
 
@@ -124,17 +138,9 @@ public class EventListener implements Listener
 			pHandler.spawnParticles(ParticleDragonBreath.getBuilder(player.getLocation().add(0, 1, 0), player.getWorld()).setCount(100).build(),
 					ParticleSpellEffect.getBuilder(player.getLocation().add(0, 1, 0), player.getWorld()).setColors(ParticleColor.values())
 							.setCount(100).build());
-			player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1.0F, pitch);
-			player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1.0F, pitch + (pitch * 0.5f));
-			player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1.0F, pitch + (pitch * 1.5f) + (pitch * 1.75f));
-		}
-		else {
-			float pitch = 0.25f;
-			Broadcaster.sendMessage(player, ChatColor.RED + "Un-" + ChatColor.AQUA + "Ding! Level has been reset to: " + ChatColor.GREEN
-					+ ChatColor.BOLD + plcevent.getNewLevel());
-			player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1.0F, pitch);
-			player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1.0F, pitch + (pitch * 0.5f));
-			player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1.0F, pitch + (pitch * 1.5f) + (pitch * 1.75f));
+			player.getWorld().playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1.0F, pitch);
+			player.getWorld().playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1.0F, pitch + (pitch * 0.5f));
+			player.getWorld().playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1.0F, pitch + (pitch * 1.5f) + (pitch * 1.75f));
 		}
 	}
 
@@ -180,13 +186,6 @@ public class EventListener implements Listener
 		if (projectile.hasMetadata(Metadata.FIRED_FROM_ENCHANTED_WEAPON.getKey())) {
 			pHandler.spawnParticles(ParticleSparkle.getBuilder(projectile.getLocation(), projectile.getWorld()).setCount(10).build());
 		}
-	}
-
-	@EventHandler
-	public void onPlayerRiptide(PlayerRiptideEvent prevent) {
-		Player player = prevent.getPlayer();
-
-		pHandler.spawnParticles(ParticleSpellEffect.getBuilder(player.getLocation(), player.getWorld()).setColors(ParticleColor.BLUE).build());
 	}
 
 	@EventHandler
@@ -272,8 +271,8 @@ public class EventListener implements Listener
 	public void onBrew(BrewEvent bevent) {
 		Block brewingStand = bevent.getBlock();
 
-		pHandler.spawnParticles(
-				ParticleSpellEffect.getBuilder(brewingStand.getLocation(), brewingStand.getWorld()).setColors(ParticleColor.values()).build());
+		pHandler.spawnParticles(ParticleSpellEffect.getBuilder(brewingStand.getLocation(), brewingStand.getWorld())
+				.setColors(ParticleColor.RED_VIOLET, ParticleColor.LAVENDAR, ParticleColor.VIOLET).build());
 	}
 
 	@EventHandler
@@ -315,7 +314,7 @@ public class EventListener implements Listener
 					ParticleSpellEffect
 							.getBuilder(block.getLocation().add(Values.BLOCK_CENTER_OFFSET, Values.BLOCK_CENTER_OFFSET, Values.BLOCK_CENTER_OFFSET),
 									block.getWorld())
-							.setColors(colors).setCount(40).build());
+							.setColors((ParticleColor[]) colors.toArray()).setCount(40).build());
 		}
 	}
 }

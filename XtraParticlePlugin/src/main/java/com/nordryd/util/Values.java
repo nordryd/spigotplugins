@@ -19,9 +19,7 @@ public interface Values
 {
 	public static final String PREFIX = ChatColor.DARK_AQUA + "[" + Reference.PLUGIN_NAME + "]" + ChatColor.AQUA;
 
-	public static final int BEACON_SIN_RADIUS = 6;
-	public static final int NULL_EXPLOSION = 0;
-	public static final int LIGHTNING_STRIKE_RADIUS = 3;
+	public static final double LOW_HEALTH_THRESHOLD = 6.5;
 
 	public static final double BLOCK_CENTER_OFFSET = 0.5;
 

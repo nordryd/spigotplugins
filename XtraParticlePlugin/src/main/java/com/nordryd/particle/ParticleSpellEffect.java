@@ -91,17 +91,17 @@ public class ParticleSpellEffect extends PluginParticle
 			return this;
 		}
 		
-		/**
-		 * Set the possible colors for this particle. They will be chosen at random when spawned.
-		 * @param colors
-		 * 			The possible colors for this particle.
-		 * @return
-		 * 			This {@code Builder}
-		 */
-		public Builder setColors(List<ParticleColor> colors) {
-			this.colors = colors;
-			return this;
-		}
+//		/**
+//		 * Set the possible colors for this particle. They will be chosen at random when spawned.
+//		 * @param colors
+//		 * 			The possible colors for this particle.
+//		 * @return
+//		 * 			This {@code Builder}
+//		 */
+//		public Builder setColors(List<ParticleColor> colors) {
+//			this.colors = colors;
+//			return this;
+//		}
 	}
 	
 	/**

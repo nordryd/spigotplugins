@@ -1,5 +1,9 @@
 package com.nordryd.enums;
 
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
+import org.bukkit.plugin.java.JavaPlugin;
+
 /**
  * <p>
  * Enum containing all plugin metadata keys.
@@ -22,5 +26,9 @@ public enum Metadata
 	 */
 	public String getKey() {
 		return key;
+	}
+	
+	public static MetadataValue getMetadataValue(JavaPlugin plugin, Object value) {
+		return new FixedMetadataValue(plugin, value);
 	}
 }
