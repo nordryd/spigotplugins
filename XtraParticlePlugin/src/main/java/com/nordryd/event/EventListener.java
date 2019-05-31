@@ -7,6 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.advancement.Advancement;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.block.Sign;
@@ -22,7 +23,9 @@ import org.bukkit.event.block.LeavesDecayEvent;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityBreedEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.SpawnerSpawnEvent;
@@ -90,16 +93,45 @@ public class EventListener implements Listener
 	}
 
 	@EventHandler
+	public void onPlayerDamagedBelowLowHealthThreshold(EntityDamageEvent edevent) {
+		if (edevent.getEntityType().equals(EntityType.PLAYER)) {
+			// if player health is below threshold and metadata is false
+			Player player = (Player) edevent.getEntity();
+			if (player.getHealth() < (player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * 0.25)) {
+				// need some way to initialize each player with metadata. Maybe
+				// PlayerPreLoginEvent and store all known players in a file of some sort?
+			}
+		}
+	}
+
+	public void onPlayerHealingAboveLowHealthThreshold(EntityRegainHealthEvent erhevent) {
+		if (erhevent.getEntityType().equals(EntityType.PLAYER)) {
+			// if player health goes above threshold and metadata playerHealthLow is true
+			Player player = (Player) erhevent.getEntity();
+			if (player.getHealth() >= (player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * 0.25)) {
+
+			}
+		}
+	}
+
+	@EventHandler
 	public void onDing(PlayerLevelChangeEvent plcevent) {
 		Player player = plcevent.getPlayer();
-		pHandler.spawnParticles(ParticleDragonBreath.getBuilder(player.getLocation().add(0, 1, 0), player.getWorld()).setCount(100).build(),
-				ParticleSpellEffect.getBuilder(player.getLocation().add(0, 1, 0), player.getWorld()).setColors(ParticleColor.values()).setCount(100)
-						.build());
-
-		float pitch = 1.0f;
 
 		if (plcevent.getNewLevel() > plcevent.getOldLevel()) {
-			Broadcaster.sendMessage(player, "Ding! You are now level " + ChatColor.GREEN + ChatColor.BOLD + plcevent.getNewLevel());
+			float pitch = 1.0f;
+			Broadcaster.sendMessage(player, "Ding! You are now level: " + ChatColor.GREEN + ChatColor.BOLD + plcevent.getNewLevel());
+			pHandler.spawnParticles(ParticleDragonBreath.getBuilder(player.getLocation().add(0, 1, 0), player.getWorld()).setCount(100).build(),
+					ParticleSpellEffect.getBuilder(player.getLocation().add(0, 1, 0), player.getWorld()).setColors(ParticleColor.values())
+							.setCount(100).build());
+			player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1.0F, pitch);
+			player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1.0F, pitch + (pitch * 0.5f));
+			player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1.0F, pitch + (pitch * 1.5f) + (pitch * 1.75f));
+		}
+		else {
+			float pitch = 0.25f;
+			Broadcaster.sendMessage(player, ChatColor.RED + "Un-" + ChatColor.AQUA + "Ding! Level has been reset to: " + ChatColor.GREEN
+					+ ChatColor.BOLD + plcevent.getNewLevel());
 			player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1.0F, pitch);
 			player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1.0F, pitch + (pitch * 0.5f));
 			player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1.0F, pitch + (pitch * 1.5f) + (pitch * 1.75f));

@@ -9,7 +9,7 @@ package com.nordryd.enums;
  */
 public enum Metadata
 {
-	FIRED_FROM_ENCHANTED_WEAPON("firedFromEnchantedWeapon");
+	FIRED_FROM_ENCHANTED_WEAPON("firedFromEnchantedWeapon"), PLAYER_HEALTH_LOW("playerHealthLow");
 
 	private final String key;
 
