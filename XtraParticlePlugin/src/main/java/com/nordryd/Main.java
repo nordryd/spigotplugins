@@ -28,7 +28,7 @@ public class Main extends JavaPlugin
 		UpdateChecker.checkForUpdates(logger);
 		Config.addDefaultConfig(this);
 
-		getServer().getPluginManager().registerEvents(new EventListener(getConfig()), this);
+		getServer().getPluginManager().registerEvents(new EventListener(this), this);
 	}
 
 	@Override

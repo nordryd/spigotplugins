@@ -13,10 +13,10 @@ import org.bukkit.World;
  */
 public abstract class PluginParticle
 {
-	private Particle particle;
-	private Location location;
-	private World world;
-	private int count;
+	private final Particle particle;
+	private final Location location;
+	private final World world;
+	private final int count;
 
 	/**
 	 * Constructor.

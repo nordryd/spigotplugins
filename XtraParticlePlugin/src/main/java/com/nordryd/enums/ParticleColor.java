@@ -12,9 +12,11 @@ import org.bukkit.Color;
 public enum ParticleColor
 {
 	WHITE(255, 255, 255), BLACK(1, 1, 1), RED(255, 0, 0), GREEN(0, 255, 0), BLUE(0, 0, 255), YELLOW(255, 255, 0), MAGENTA(255, 0, 255), CYAN(0, 255,
-			255);
+			255), DARK_TURQUOISE(0, 206, 209), LIGHT_SEA_GREEN(32, 178, 170), IVORY(255, 255, 240), LAVENDAR(230, 230,
+					250), RED_VIOLET(208, 32, 144), VIOLET(160, 32,
+							240), LIME_GREEN(50, 205, 50), GOLD(255, 215, 0), ORANGE(255, 165, 0), MAROON(176, 48, 96), FIREBRICK(178, 34, 34);
 
-	private int red, green, blue;
+	private final int red, green, blue;
 
 	private ParticleColor(int red, int green, int blue) {
 		this.red = red;

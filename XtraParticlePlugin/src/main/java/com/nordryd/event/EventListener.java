@@ -1,26 +1,44 @@
 package com.nordryd.event;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.LeavesDecayEvent;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.SpawnerSpawnEvent;
+import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.inventory.FurnaceSmeltEvent;
+import org.bukkit.event.player.PlayerAdvancementDoneEvent;
+import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerRiptideEvent;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.plugin.java.JavaPlugin;
 
+import com.nordryd.enums.Metadata;
 import com.nordryd.enums.ParticleColor;
 import com.nordryd.particle.ParticleDust;
 import com.nordryd.particle.ParticleHandler;
 import com.nordryd.particle.ParticleSparkle;
 import com.nordryd.particle.ParticleSpellEffect;
+import com.nordryd.util.Broadcaster;
+import com.nordryd.util.Values;
 
 /**
  * <p>
@@ -31,6 +49,7 @@ import com.nordryd.particle.ParticleSpellEffect;
  */
 public class EventListener implements Listener
 {
+	private final JavaPlugin plugin;
 	private final ParticleHandler pHandler;
 
 	/**
@@ -39,8 +58,9 @@ public class EventListener implements Listener
 	 * @param pluginConfig
 	 *            Plugin configuration.
 	 */
-	public EventListener(FileConfiguration pluginConfig) {
-		this.pHandler = new ParticleHandler(pluginConfig);
+	public EventListener(JavaPlugin plugin) {
+		this.plugin = plugin;
+		this.pHandler = new ParticleHandler(plugin.getConfig());
 	}
 
 	@EventHandler
@@ -51,18 +71,53 @@ public class EventListener implements Listener
 	}
 
 	@EventHandler
-	public void onProjectileHit(ProjectileHitEvent phevent) {
-		Entity entity = phevent.getEntity();
+	public void onPlayerRespawn(PlayerRespawnEvent prevent) {
+		Player player = prevent.getPlayer();
 
-		pHandler.spawnParticles(ParticleSparkle.getBuilder(entity.getLocation(), entity.getWorld()).setCount(10).build());
+		pHandler.spawnParticles(ParticleSparkle.getBuilder(player.getLocation(), player.getWorld()).setCount(50).build());
+	}
+
+	@EventHandler
+	public void onAdvancementDone(PlayerAdvancementDoneEvent paaevent) {
+		Player player = paaevent.getPlayer();
+
+		Broadcaster.sendMessage(player, "Advancement done: " + paaevent.getAdvancement().getKey());
+		pHandler.spawnParticles(
+				ParticleSpellEffect.getBuilder(player.getLocation(), player.getWorld()).setCount(50).setColors(ParticleColor.MAROON).build());
+	}
+
+	@EventHandler
+	public void onEntityShootBow(EntityShootBowEvent esbevent) {
+		Entity arrow = esbevent.getProjectile(), shooter = esbevent.getEntity();
+
+		if (shooter.getType().equals(EntityType.PLAYER)) {
+			if (!((Player) shooter).getInventory().getItemInMainHand().getEnchantments().isEmpty()) {
+				arrow.setMetadata(Metadata.FIRED_FROM_ENCHANTED_WEAPON.getKey(), new FixedMetadataValue(plugin, 0));
+			}
+		}
+	}
+
+	@EventHandler
+	public void onProjectileHitEvent(ProjectileHitEvent pjevent) {
+		Projectile projectile = pjevent.getEntity();
+		if (projectile.hasMetadata(Metadata.FIRED_FROM_ENCHANTED_WEAPON.getKey())) {
+			pHandler.spawnParticles(ParticleSparkle.getBuilder(projectile.getLocation(), projectile.getWorld()).setCount(10).build());
+		}
+	}
+
+	@EventHandler
+	public void onPlayerRiptide(PlayerRiptideEvent prevent) {
+		Player player = prevent.getPlayer();
+
+		pHandler.spawnParticles(ParticleSpellEffect.getBuilder(player.getLocation(), player.getWorld()).setColors(ParticleColor.BLUE).build());
 	}
 
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent edevent) {
 		Entity entity = edevent.getEntity();
 
-		pHandler.spawnParticles(ParticleSpellEffect.getBuilder(entity.getLocation().add(0.0, 0.75, 0.0), entity.getWorld()).setCount(25)
-				.setColor(ParticleColor.RED).build());
+		pHandler.spawnParticles(ParticleSpellEffect.getBuilder(entity.getLocation().add(0.0, 1.0, 0.0), entity.getWorld()).setCount(25)
+				.setColors(ParticleColor.RED).build());
 	}
 
 	@EventHandler
@@ -77,15 +132,16 @@ public class EventListener implements Listener
 		Player player = eievent.getEnchanter();
 		Block eTable = eievent.getEnchantBlock();
 
-		player.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, player.getLocation().add(0.0, 1.0, 0.0), 50);
-		eTable.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, eTable.getLocation().add(0.0, 1.0, 0.0), 50);
+		player.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, player.getLocation().add(0, 1, 0), 50);
+		eTable.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE,
+				eTable.getLocation().add(Values.BLOCK_CENTER_OFFSET, 1 + Values.BLOCK_CENTER_OFFSET, Values.BLOCK_CENTER_OFFSET), 50);
 	}
 
 	@EventHandler
 	public void onCreatureSpawn(CreatureSpawnEvent esevent) {
 		Entity entity = esevent.getEntity();
 		pHandler.spawnParticles(
-				ParticleSpellEffect.getBuilder(entity.getLocation(), entity.getWorld()).setColor(ParticleColor.CYAN).setCount(15).build());
+				ParticleSpellEffect.getBuilder(entity.getLocation(), entity.getWorld()).setColors(ParticleColor.CYAN).setCount(15).build());
 	}
 
 	@EventHandler
@@ -94,7 +150,74 @@ public class EventListener implements Listener
 		CreatureSpawner spawner = ssevent.getSpawner();
 
 		pHandler.spawnParticles(
-				ParticleSpellEffect.getBuilder(entity.getLocation(), entity.getWorld()).setColor(ParticleColor.MAGENTA).setCount(15).build(),
+				ParticleSpellEffect.getBuilder(entity.getLocation(), entity.getWorld()).setColors(ParticleColor.MAGENTA).setCount(15).build(),
 				ParticleSparkle.getBuilder(spawner.getLocation(), spawner.getWorld()).setCount(15).build());
+	}
+
+	@EventHandler
+	public void onPlayerItemBreak(PlayerItemBreakEvent pibevent) {
+		Player player = pibevent.getPlayer();
+
+		pHandler.spawnParticles(ParticleSparkle.getBuilder(player.getLocation(), player.getWorld()).setCount(10).build());
+	}
+
+	@EventHandler
+	public void onItemCraft(CraftItemEvent cievent) {
+		Entity player = cievent.getWhoClicked();
+
+		pHandler.spawnParticles(ParticleSpellEffect.getBuilder(player.getLocation().add(0.0, 1.0, 0.0), player.getWorld())
+				.setColors(ParticleColor.RED_VIOLET).setCount(20).build());
+	}
+
+	@EventHandler
+	public void onFurnaceSmeltSuccessful(FurnaceSmeltEvent fsevent) {
+		Block furnace = fsevent.getBlock();
+
+		pHandler.spawnParticles(ParticleSpellEffect
+				.getBuilder(furnace.getLocation().add(Values.BLOCK_CENTER_OFFSET, Values.BLOCK_CENTER_OFFSET, Values.BLOCK_CENTER_OFFSET),
+						furnace.getWorld())
+				.setColors(ParticleColor.ORANGE).build());
+	}
+
+	@EventHandler
+	public void onBlockBreak(BlockBreakEvent bbevent) {
+		Block block = bbevent.getBlock();
+		if (Values.ORES.contains(block.getType())) {
+			List<ParticleColor> colors = new ArrayList<>();
+			if (block.getType().equals(Material.COAL_ORE)) {
+				colors.add(ParticleColor.BLACK);
+			}
+			else if (block.getType().equals(Material.DIAMOND_ORE)) {
+				colors.add(ParticleColor.CYAN);
+				colors.add(ParticleColor.DARK_TURQUOISE);
+			}
+			else if (block.getType().equals(Material.EMERALD_ORE)) {
+				colors.add(ParticleColor.LIME_GREEN);
+			}
+			else if (block.getType().equals(Material.GOLD_ORE)) {
+				colors.add(ParticleColor.GOLD);
+			}
+			else if (block.getType().equals(Material.IRON_ORE)) {
+				colors.add(ParticleColor.LAVENDAR);
+			}
+			else if (block.getType().equals(Material.LAPIS_ORE)) {
+				colors.add(ParticleColor.BLUE);
+			}
+			else if (block.getType().equals(Material.NETHER_QUARTZ_ORE)) {
+				colors.add(ParticleColor.IVORY);
+				colors.add(ParticleColor.FIREBRICK);
+			}
+			else {
+				colors.add(ParticleColor.RED);
+			}
+			pHandler.spawnParticles(
+					ParticleDust
+							.getBuilder(block.getLocation().add(Values.BLOCK_CENTER_OFFSET, Values.BLOCK_CENTER_OFFSET, Values.BLOCK_CENTER_OFFSET),
+									block.getWorld()).setColor(colors.get(0)).setSize(3).build(),
+					ParticleSpellEffect
+							.getBuilder(block.getLocation().add(Values.BLOCK_CENTER_OFFSET, Values.BLOCK_CENTER_OFFSET, Values.BLOCK_CENTER_OFFSET),
+									block.getWorld())
+							.setColors(colors).setCount(40).build());
+		}
 	}
 }

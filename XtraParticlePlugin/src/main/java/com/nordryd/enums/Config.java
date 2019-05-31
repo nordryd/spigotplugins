@@ -14,8 +14,8 @@ public enum Config
 {
 	DEBUG("debug", false), DO_SPARKLE("doSparkles", true), DO_DUST("doDust", true), DO_SPELLEFFECT("doSpellEffect", true);
 
-	private String string;
-	private Object defaultValue;
+	private final String string;
+	private final Object defaultValue;
 
 	private Config(String string, Object defaultValue) {
 		this.string = string;
