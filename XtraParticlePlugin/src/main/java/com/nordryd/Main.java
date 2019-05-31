@@ -5,7 +5,7 @@ import java.util.logging.Logger;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.nordryd.enums.Config;
-import com.nordryd.event.EventListener;
+import com.nordryd.event.misc.MiscEventListener;
 import com.nordryd.util.Reference.InfoMessages;
 import com.nordryd.util.UpdateChecker;
 
@@ -13,12 +13,16 @@ import com.nordryd.util.UpdateChecker;
  * <p>
  * Main class for <b>XtraParticlePlugin</b>.
  * </p>
+ * <p>
+ * Function pointers:<br>
+ * Consumer&lt;Runnable&gt; -&gt; runnable class
+ * </p>
  * 
  * @author Nordryd
  */
 public class Main extends JavaPlugin
 {
-	Logger logger = getLogger();
+	private final Logger logger = getLogger();
 
 	@Override
 	public void onEnable() {
@@ -28,7 +32,7 @@ public class Main extends JavaPlugin
 		UpdateChecker.checkForUpdates(logger);
 		Config.addDefaultConfig(this);
 
-		getServer().getPluginManager().registerEvents(new EventListener(this), this);
+		MiscEventListener.initializeEventListeners(this);
 	}
 
 	@Override

@@ -60,14 +60,14 @@ public class ParticleHandler
 	}
 
 	private void sparkle(final ParticleSparkle pSparkle) {
-		if (config.getBoolean(Config.DO_SPARKLE.getString())) {
+		if (config.getBoolean(Config.DO_SPARKLE.getKey())) {
 
 			pSparkle.getWorld().spawnParticle(pSparkle.getParticle(), pSparkle.getLocation(), pSparkle.getCount());
 		}
 	}
 
 	private void dust(final ParticleDust pDust) {
-		if (config.getBoolean(Config.DO_DUST.getString())) {
+		if (config.getBoolean(Config.DO_DUST.getKey())) {
 
 			pDust.getWorld().spawnParticle(pDust.getParticle(), pDust.getLocation(), pDust.getCount(),
 					new DustOptions(pDust.getColor(), pDust.getSize()));
@@ -75,7 +75,7 @@ public class ParticleHandler
 	}
 
 	private void spellEffect(final ParticleSpellEffect pSpellEffect) {
-		if (config.getBoolean(Config.DO_SPELLEFFECT.getString())) {
+		if (config.getBoolean(Config.DO_SPELLEFFECT.getKey())) {
 			for (int count = 0; count < pSpellEffect.getCount(); count++) {
 				ParticleColor color = pSpellEffect.getColor();
 				pSpellEffect.getWorld().spawnParticle(pSpellEffect.getParticle(), pSpellEffect.getLocation(), 0, color.getNormalizedRed(),
@@ -85,13 +85,13 @@ public class ParticleHandler
 	}
 
 	private void enchanting(final ParticleEnchanting pEnchanting) {
-		if (config.getBoolean(Config.DO_ENCHANTING.getString())) {
+		if (config.getBoolean(Config.DO_ENCHANTING.getKey())) {
 			pEnchanting.getWorld().spawnParticle(pEnchanting.getParticle(), pEnchanting.getLocation(), pEnchanting.getCount());
 		}
 	}
 
 	private void dragonBreath(final ParticleDragonBreath pDragonBreath) {
-		if (config.getBoolean(Config.DO_DRAGONBREATH.getString())) {
+		if (config.getBoolean(Config.DO_DRAGONBREATH.getKey())) {
 			pDragonBreath.getWorld().spawnParticle(pDragonBreath.getParticle(), pDragonBreath.getLocation(), pDragonBreath.getCount());
 		}
 	}

@@ -15,16 +15,16 @@ public enum Config
 	DO_SPARKLE("doSparkles", true), DO_DUST("doDust", true), DO_SPELLEFFECT("doSpellEffect", true), DO_ENCHANTING("doEnchanting",
 			true), DO_DRAGONBREATH("doDragonBreath", true);
 
-	private final String string;
+	private final String key;
 	private final Object defaultValue;
 
-	private Config(String string, Object defaultValue) {
-		this.string = string;
+	private Config(String key, Object defaultValue) {
+		this.key = key;
 		this.defaultValue = defaultValue;
 	}
 
-	public String getString() {
-		return string;
+	public String getKey() {
+		return key;
 	}
 
 	public Object getDefault() {
@@ -33,7 +33,7 @@ public enum Config
 
 	@Override
 	public String toString() {
-		return this.string;
+		return this.key;
 	}
 
 	/**
@@ -44,7 +44,7 @@ public enum Config
 	 */
 	public static void addDefaultConfig(JavaPlugin plugin) {
 		for (Config configDefault : Config.values()) {
-			plugin.getConfig().addDefault(configDefault.getString(), configDefault.getDefault());
+			plugin.getConfig().addDefault(configDefault.getKey(), configDefault.getDefault());
 		}
 
 		plugin.getConfig().options().copyDefaults(true);

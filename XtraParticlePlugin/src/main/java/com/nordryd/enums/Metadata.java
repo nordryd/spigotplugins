@@ -28,7 +28,7 @@ public enum Metadata
 		return key;
 	}
 	
-	public static MetadataValue getMetadataValue(JavaPlugin plugin, Object value) {
-		return new FixedMetadataValue(plugin, value);
+	public static MetadataValue getMetadataValue(JavaPlugin jPlugin, Object value) {
+		return new FixedMetadataValue(jPlugin, value);
 	}
 }

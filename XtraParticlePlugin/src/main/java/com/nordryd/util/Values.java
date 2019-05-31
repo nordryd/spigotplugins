@@ -38,4 +38,12 @@ public interface Values
 	{
 		public static final long DAY = 0, NOON = 6000, NIGHT = 13000, MIDNIGHT = 18000;
 	}
+	
+	/**
+	 * Interface for storing all sign strings that cause signs to do various things.
+	 */
+	public static interface SignStrings
+	{
+		String DING = "ding", RESET_LEVEL = "reset level", HIT_MEH = "hit meh";
+	}
 }

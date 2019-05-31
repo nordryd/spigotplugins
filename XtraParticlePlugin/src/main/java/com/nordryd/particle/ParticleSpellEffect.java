@@ -64,7 +64,8 @@ public class ParticleSpellEffect extends PluginParticle
 		 *         fields.
 		 */
 		public ParticleSpellEffect build() {
-			return new ParticleSpellEffect(this.location, this.world, this.count, (this.colors.equals(null) ? new ArrayList<ParticleColor>(Arrays.asList(ParticleColor.WHITE)) : this.colors));
+			return new ParticleSpellEffect(this.location, this.world, this.count,
+					(this.colors.equals(null) ? new ArrayList<ParticleColor>(Arrays.asList(ParticleColor.WHITE)) : this.colors));
 		}
 
 		/**
@@ -78,32 +79,34 @@ public class ParticleSpellEffect extends PluginParticle
 			this.count = count;
 			return this;
 		}
-		
+
 		/**
-		 * Set the possible colors for this particle. They will be chosen at random when spawned.
+		 * Set the possible colors for this particle. They will be chosen at random when
+		 * spawned.
+		 * 
 		 * @param colors
-		 * 			The possible colors for this particle.
-		 * @return
-		 * 			This {@code Builder}
+		 *            The possible colors for this particle.
+		 * @return This {@code Builder}
 		 */
 		public Builder setColors(ParticleColor... colors) {
 			this.colors = new ArrayList<>(Arrays.asList(colors));
 			return this;
 		}
-		
-//		/**
-//		 * Set the possible colors for this particle. They will be chosen at random when spawned.
-//		 * @param colors
-//		 * 			The possible colors for this particle.
-//		 * @return
-//		 * 			This {@code Builder}
-//		 */
-//		public Builder setColors(List<ParticleColor> colors) {
-//			this.colors = colors;
-//			return this;
-//		}
+
+		// /**
+		// * Set the possible colors for this particle. They will be chosen at random
+		// when spawned.
+		// * @param colors
+		// * The possible colors for this particle.
+		// * @return
+		// * This {@code Builder}
+		// */
+		// public Builder setColors(List<ParticleColor> colors) {
+		// this.colors = colors;
+		// return this;
+		// }
 	}
-	
+
 	/**
 	 * @return One randomly chosen color from the possible colors.
 	 */
