@@ -3,6 +3,7 @@ package com.nordryd.event.entity;
 import java.util.Optional;
 
 import org.bukkit.Effect;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -14,13 +15,13 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityBreedEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
-import org.bukkit.event.entity.EntityTargetEvent.TargetReason;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.SpawnerSpawnEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.nordryd.enums.Config;
 import com.nordryd.enums.Metadata;
 import com.nordryd.enums.ParticleColor;
 import com.nordryd.event.EventListener;
@@ -28,6 +29,7 @@ import com.nordryd.particle.ParticleFlame;
 import com.nordryd.particle.ParticleSparkle;
 import com.nordryd.particle.ParticleSpellEffect;
 import com.nordryd.util.PluginUtility;
+import com.nordryd.util.Values;
 
 /**
  * <p>
@@ -75,17 +77,22 @@ public class EntityEventListener extends EventListener
 				ParticleSpellEffect.getBuilder(entity.getLocation(), entity.getWorld()).setColors(ParticleColor.CYAN).setCount(15).build());
 	}
 
+	// TODO Change this because target = friendly mob moving towards favorite item.
+	// change to be if it's instanceof Creature?
+	// Give farm animals hearts when they target you with their favorite item
 	@EventHandler
 	public void onHostileMobAggro(EntityTargetLivingEntityEvent etleevent) {
-		if (Optional.ofNullable(etleevent.getTarget()).isPresent() && (etleevent.getEntity() instanceof LivingEntity)) {
-			LivingEntity attacker = (LivingEntity) etleevent.getEntity(), target = etleevent.getTarget();
+		if (jPlugin.getConfig().getBoolean(Config.DO_MOB_AGGRO.getKey())) {
+			if (Optional.ofNullable(etleevent.getTarget()).isPresent() && (etleevent.getEntity() instanceof LivingEntity)) {
+				LivingEntity attacker = (LivingEntity) etleevent.getEntity(), target = etleevent.getTarget();
 
-			if ((!attacker.getType().equals(EntityType.VILLAGER)) && (!etleevent.getReason().equals(TargetReason.TARGET_ATTACKED_ENTITY))) {
+				if (PluginUtility.canAttack(attacker) && !(Values.INVALID_HOSTILE_REASONS.contains(etleevent.getReason()))) {
 
-				attacker.getWorld().playEffect(attacker.getEyeLocation(), Effect.MOBSPAWNER_FLAMES, 0);
+					attacker.getWorld().playEffect(attacker.getEyeLocation(), Effect.SMOKE, BlockFace.UP);
 
-				if (target.getType().equals(EntityType.PLAYER)) {
-					attacker.getWorld().playEffect(attacker.getEyeLocation(), Effect.SMOKE, 0);
+					if (target.getType().equals(EntityType.PLAYER)) {
+						attacker.getWorld().playEffect(attacker.getEyeLocation(), Effect.MOBSPAWNER_FLAMES, 0);
+					}
 				}
 			}
 		}

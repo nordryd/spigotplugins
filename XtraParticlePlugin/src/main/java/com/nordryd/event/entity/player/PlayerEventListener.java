@@ -7,8 +7,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -123,11 +123,11 @@ public class PlayerEventListener extends EventListener
 			Optional<PotionEffect> activeEffect = Optional.ofNullable(epeevent.getNewEffect()),
 					fadedEffect = Optional.ofNullable(epeevent.getOldEffect());
 
-			if (activeEffect.isPresent() && (!player.getActivePotionEffects().contains(activeEffect.get()))) {
+			if (activeEffect.isPresent() && !Optional.ofNullable(player.getPotionEffect(activeEffect.get().getType())).isPresent()) {
 				((Player) epeevent.getEntity()).sendMessage(ChatColor.LIGHT_PURPLE + "[ACTIVE] " + ChatColor.DARK_PURPLE
 						+ activeEffect.get().getType().getName().replaceAll("_", " ") + " " + (activeEffect.get().getAmplifier() + 1));
 			}
-			else if(fadedEffect.isPresent()) {
+			else if (fadedEffect.isPresent() && !Optional.ofNullable(player.getPotionEffect(fadedEffect.get().getType())).isPresent()) {
 				((Player) epeevent.getEntity()).sendMessage(ChatColor.GRAY + "[FADED] " + ChatColor.DARK_GRAY
 						+ fadedEffect.get().getType().getName().replaceAll("_", " ") + " " + (fadedEffect.get().getAmplifier() + 1));
 			}
@@ -143,12 +143,18 @@ public class PlayerEventListener extends EventListener
 
 	@EventHandler
 	public void onPlayerEnchantedToolAttack(EntityDamageByEntityEvent edbeevent) {
-		if (edbeevent.getDamager().getType().equals(EntityType.PLAYER)) {
-			ItemStack tool = ((Player) edbeevent.getDamager()).getInventory().getItemInMainHand();
+		if (edbeevent.getDamager().getType().equals(EntityType.PLAYER) && (edbeevent.getEntity() instanceof LivingEntity)) {
+			LivingEntity entity = (LivingEntity) edbeevent.getEntity();
 
-			if (PluginUtility.isTool(tool.getType()) && (!tool.getEnchantments().isEmpty())) {
-				Entity entity = edbeevent.getEntity();
-				pFactory.spawnParticles(ParticleSparkle.getBuilder(entity.getLocation().add(0, 1, 0), entity.getWorld()).setCount(3).build());
+			if (jPlugin.getConfig().getBoolean(Config.DO_MOB_GORE.getKey())) {
+				pFactory.spawnParticles(ParticleItemCrack.getBuilder(entity.getLocation().add(0, entity.getHeight() * 0.75, 0), entity.getWorld(),
+						new ItemStack(Material.REDSTONE_BLOCK)).setCount(10).build());
+
+				ItemStack tool = ((Player) edbeevent.getDamager()).getInventory().getItemInMainHand();
+
+				if (PluginUtility.isTool(tool.getType()) && (!tool.getEnchantments().isEmpty())) {
+					pFactory.spawnParticles(ParticleSparkle.getBuilder(entity.getLocation().add(0, 1, 0), entity.getWorld()).setCount(3).build());
+				}
 			}
 		}
 	}

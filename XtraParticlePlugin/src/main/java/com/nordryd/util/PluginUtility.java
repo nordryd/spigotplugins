@@ -2,6 +2,16 @@ package com.nordryd.util;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Cat;
+import org.bukkit.entity.Creature;
+import org.bukkit.entity.Flying;
+import org.bukkit.entity.Fox;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.NPC;
+import org.bukkit.entity.PolarBear;
+import org.bukkit.entity.Slime;
+import org.bukkit.entity.WaterMob;
+import org.bukkit.entity.Wolf;
 
 /**
  * <p>
@@ -38,5 +48,33 @@ public interface PluginUtility
 	 */
 	public static Location getCenteredBlockLocation(Location location) {
 		return location.add(Values.BLOCK_CENTER_OFFSET, Values.BLOCK_CENTER_OFFSET, Values.BLOCK_CENTER_OFFSET);
+	}
+
+	/**
+	 * Determines if a living entity is able to attack or not. This stops docile
+	 * mobs from having unnecessary particles.
+	 * 
+	 * @param entity
+	 *            {@code LivingEntity} to check.
+	 * @return If the {@code LivingEntity} can attack or not.
+	 */
+	public static boolean canAttack(LivingEntity entity) {
+		if (!((entity instanceof Creature) || (entity instanceof Flying) || (entity instanceof Slime))) {
+			return false;
+		}
+
+		if (entity instanceof WaterMob) {
+			return false;
+		}
+
+		if (entity instanceof NPC) {
+			return false;
+		}
+
+		if (!((entity instanceof PolarBear) || (entity instanceof Fox) || (entity instanceof Wolf) || (entity instanceof Cat))) {
+			return false;
+		}
+
+		return true;
 	}
 }

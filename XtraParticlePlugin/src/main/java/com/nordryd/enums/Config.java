@@ -14,6 +14,11 @@ import com.nordryd.util.Values;
  * as handling their initialization.
  * </p>
  * 
+ * <p>
+ * TODO Redo to work for specific events (like DO_MOB_AGGRO & DO_MOB_GORE),
+ * instead of generalized particles.
+ * </p>
+ * 
  * @author Nordryd
  */
 public enum Config
@@ -25,6 +30,8 @@ public enum Config
 	DO_DRAGONBREATH("doDragonBreath", true),
 	DO_ITEMCRACK("doItemCrack", true),
 	DO_FLAME("doFlame", true),
+	DO_MOB_AGGRO("doMobAggro", true),
+	DO_MOB_GORE("doMobGore", true),
 	DO_CUSTOM_LOGIN_MESSAGES("doCustomLoginMessages", true),
 	DO_CUSTOM_LOGOUT_MESSAGES("doCustomLogoutMessages", true),
 	LOGIN_MESSAGES("loginMessages",

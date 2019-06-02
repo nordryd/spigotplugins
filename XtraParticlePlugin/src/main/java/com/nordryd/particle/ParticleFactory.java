@@ -3,7 +3,6 @@ package com.nordryd.particle;
 import org.bukkit.Particle.DustOptions;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import com.nordryd.enums.Config;
 import com.nordryd.enums.ParticleColor;
 import com.nordryd.util.Values;
 
@@ -39,27 +38,43 @@ public class ParticleFactory
 	 *            {@code PluginParticle} class.
 	 */
 	public void spawnParticles(final AbstractParticle... particles) {
+		spawnParticles(true, particles);
+	}
+	
+	/**
+	 * <p>
+	 * Spawn a given set of {@code AbstractParticle}s. One or more can be given (yay
+	 * ellipses *<i>peepohype</i>*).
+	 * </p>
+	 * 
+	 * @param configValue
+	 *            The configuration value associated with particle's event.
+	 * @param particles
+	 *            The particles to spawn in terms of the plugin's
+	 *            {@code PluginParticle} class.
+	 */
+	public void spawnParticles(final boolean configValue, final AbstractParticle... particles) {
 		for (AbstractParticle particle : particles) {
 			if (particle instanceof ParticleSparkle) {
-				sparkle((ParticleSparkle) particle);
+				sparkle(((ParticleSparkle) particle), configValue);
 			}
 			else if (particle instanceof ParticleDust) {
-				dust((ParticleDust) particle);
+				dust(((ParticleDust) particle), configValue);
 			}
 			else if (particle instanceof ParticleSpellEffect) {
-				spellEffect((ParticleSpellEffect) particle);
+				spellEffect(((ParticleSpellEffect) particle), configValue);
 			}
 			else if (particle instanceof ParticleEnchanting) {
-				enchanting((ParticleEnchanting) particle);
+				enchanting(((ParticleEnchanting) particle), configValue);
 			}
 			else if (particle instanceof ParticleDragonBreath) {
-				dragonBreath((ParticleDragonBreath) particle);
+				dragonBreath(((ParticleDragonBreath) particle), configValue);
 			}
 			else if (particle instanceof ParticleItemCrack) {
-				itemCrack((ParticleItemCrack) particle);
+				itemCrack(((ParticleItemCrack) particle), configValue);
 			}
 			else if (particle instanceof ParticleFlame) {
-				flame((ParticleFlame) particle);
+				flame(((ParticleFlame) particle), configValue);
 			}
 			else {
 				System.err.println(Values.PREFIX + " Somehow an invalid particle type was given? o.O");
@@ -67,23 +82,23 @@ public class ParticleFactory
 		}
 	}
 
-	private void sparkle(final ParticleSparkle pSparkle) {
-		if (config.getBoolean(Config.DO_SPARKLE.getKey())) {
+	private void sparkle(final ParticleSparkle pSparkle, final boolean configValue) {
+		if (configValue) {
 
 			pSparkle.getWorld().spawnParticle(pSparkle.getParticle(), pSparkle.getLocation(), pSparkle.getCount());
 		}
 	}
 
-	private void dust(final ParticleDust pDust) {
-		if (config.getBoolean(Config.DO_DUST.getKey())) {
+	private void dust(final ParticleDust pDust, final boolean configValue) {
+		if (configValue) {
 
 			pDust.getWorld().spawnParticle(pDust.getParticle(), pDust.getLocation(), pDust.getCount(),
 					new DustOptions(pDust.getColor(), pDust.getSize()));
 		}
 	}
 
-	private void spellEffect(final ParticleSpellEffect pSpellEffect) {
-		if (config.getBoolean(Config.DO_SPELLEFFECT.getKey())) {
+	private void spellEffect(final ParticleSpellEffect pSpellEffect, final boolean configValue) {
+		if (configValue) {
 			for (int count = 0; count < pSpellEffect.getCount(); count++) {
 				ParticleColor color = pSpellEffect.getColor();
 				pSpellEffect.getWorld().spawnParticle(pSpellEffect.getParticle(), pSpellEffect.getLocation(), 0, color.getNormalizedRed(),
@@ -92,26 +107,26 @@ public class ParticleFactory
 		}
 	}
 
-	private void enchanting(final ParticleEnchanting pEnchanting) {
-		if (config.getBoolean(Config.DO_ENCHANTING.getKey())) {
+	private void enchanting(final ParticleEnchanting pEnchanting, final boolean configValue) {
+		if (configValue) {
 			pEnchanting.getWorld().spawnParticle(pEnchanting.getParticle(), pEnchanting.getLocation(), pEnchanting.getCount());
 		}
 	}
 
-	private void dragonBreath(final ParticleDragonBreath pDragonBreath) {
-		if (config.getBoolean(Config.DO_DRAGONBREATH.getKey())) {
+	private void dragonBreath(final ParticleDragonBreath pDragonBreath, final boolean configValue) {
+		if (configValue) {
 			pDragonBreath.getWorld().spawnParticle(pDragonBreath.getParticle(), pDragonBreath.getLocation(), pDragonBreath.getCount());
 		}
 	}
 
-	private void itemCrack(final ParticleItemCrack pItemCrack) {
-		if (config.getBoolean(Config.DO_ITEMCRACK.getKey())) {
+	private void itemCrack(final ParticleItemCrack pItemCrack, final boolean configValue) {
+		if (configValue) {
 			pItemCrack.getWorld().spawnParticle(pItemCrack.getParticle(), pItemCrack.getLocation(), pItemCrack.getCount(), pItemCrack.getItem());
 		}
 	}
-	
-	private void flame(final ParticleFlame pFlame) {
-		if(config.getBoolean(Config.DO_FLAME.getKey())) {
+
+	private void flame(final ParticleFlame pFlame, final boolean configValue) {
+		if (configValue) {
 			pFlame.getWorld().spawnParticle(pFlame.getParticle(), pFlame.getLocation(), pFlame.getCount());
 		}
 	}
