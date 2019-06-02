@@ -10,6 +10,7 @@ import org.bukkit.Particle;
 import org.bukkit.World;
 
 import com.nordryd.enums.ParticleColor;
+import com.nordryd.util.Values;
 
 /**
  * <p>
@@ -19,7 +20,7 @@ import com.nordryd.enums.ParticleColor;
  * 
  * @author Nordryd
  */
-public class ParticleSpellEffect extends PluginParticle
+public class ParticleSpellEffect extends AbstractParticle
 {
 	private final List<ParticleColor> colors;
 	private final Random rng;
@@ -56,7 +57,7 @@ public class ParticleSpellEffect extends PluginParticle
 		private Builder(Location location, World world, Random rng) {
 			this.location = location;
 			this.world = world;
-			this.count = (rng.nextInt(6) + 1) * 5;
+			this.count = (rng.nextInt(Values.RANDOMIZER_VALUE_FOR_DEFAULT_PARTICLE_COUNTS) + 1) * Values.RANDOMIZER_VALUE_FOR_DEFAULT_PARTICLE_COUNTS;
 		}
 
 		/**
@@ -93,18 +94,18 @@ public class ParticleSpellEffect extends PluginParticle
 			return this;
 		}
 
-		// /**
-		// * Set the possible colors for this particle. They will be chosen at random
-		// when spawned.
-		// * @param colors
-		// * The possible colors for this particle.
-		// * @return
-		// * This {@code Builder}
-		// */
-		// public Builder setColors(List<ParticleColor> colors) {
-		// this.colors = colors;
-		// return this;
-		// }
+		/**
+		 * Set the possible colors for this particle. They will be chosen at random when
+		 * spawned.
+		 * 
+		 * @param colors
+		 *            The possible colors for this particle.
+		 * @return This {@code Builder}
+		 */
+		public Builder setColors(List<ParticleColor> colors) {
+			this.colors = colors;
+			return this;
+		}
 	}
 
 	/**

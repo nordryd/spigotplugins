@@ -6,12 +6,12 @@ import org.bukkit.World;
 
 /**
  * <p>
- * Class to represent a particle handled by the plugin.
+ * Abstract class to represent a {@link Particle} handled by the plugin.
  * </p>
  * 
  * @author Nordryd
  */
-public abstract class PluginParticle
+public abstract class AbstractParticle
 {
 	private final Particle particle;
 	private final Location location;
@@ -21,7 +21,7 @@ public abstract class PluginParticle
 	/**
 	 * Constructor.
 	 * @param particle
-	 * 			{@code Particle} type to spawn.
+	 * 			{@code Particle} type to spawn. This is from {@link org.bukkit.Particle}.
 	 * @param location
 	 * 			{@code Location} at which to particle.
 	 * @param world
@@ -29,7 +29,7 @@ public abstract class PluginParticle
 	 * @param count
 	 * 			The amount of particles.
 	 */
-	protected PluginParticle(Particle particle, Location location, World world, int count) {
+	protected AbstractParticle(Particle particle, Location location, World world, int count) {
 		this.particle = particle;
 		this.location = location;
 		this.world = world;

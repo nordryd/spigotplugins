@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 
 /**
  * <p>
@@ -18,19 +17,18 @@ import org.bukkit.Material;
 public interface Values
 {
 	public static final String PREFIX = ChatColor.DARK_AQUA + "[" + Reference.PLUGIN_NAME + "]" + ChatColor.AQUA;
-
+	public static final String PLAYER_NAME_ESCAPE = "%p";
+	public static final List<String> TOOLS = new ArrayList<>(Arrays.asList("_PICKAXE", "_AXE", "_SHOVEL", "_HOE", "_SWORD", "TRIDENT"));
+	
 	public static final double LOW_HEALTH_THRESHOLD = 6.5;
-
+	public static final double LOW_FOOD_THRESHOLD = 6;
+	public static final double LOW_AIR_THRESHOLD = 6.5;
 	public static final double BLOCK_CENTER_OFFSET = 0.5;
+	
+	public static final int RANDOMIZER_VALUE_FOR_DEFAULT_PARTICLE_COUNTS = 5;
 
 	public static final float[] PITCH = { 0.5f, 1.0f, 2.0f };
-
-	public static final List<Material> ORES = new ArrayList<>(Arrays.asList(Material.COAL_ORE, Material.DIAMOND_ORE, Material.EMERALD_ORE,
-			Material.GOLD_ORE, Material.IRON_ORE, Material.NETHER_QUARTZ_ORE, Material.LAPIS_ORE, Material.REDSTONE_ORE));
-	public static final List<Material> SIGNS = new ArrayList<>(Arrays.asList(Material.ACACIA_SIGN, Material.ACACIA_WALL_SIGN, Material.BIRCH_SIGN,
-			Material.BIRCH_WALL_SIGN, Material.DARK_OAK_SIGN, Material.DARK_OAK_WALL_SIGN, Material.JUNGLE_SIGN, Material.JUNGLE_WALL_SIGN,
-			Material.OAK_SIGN, Material.OAK_WALL_SIGN, Material.SPRUCE_SIGN, Material.SPRUCE_WALL_SIGN));
-
+	
 	/**
 	 * Interface for storing time values (ms).
 	 */
@@ -38,7 +36,7 @@ public interface Values
 	{
 		public static final long DAY = 0, NOON = 6000, NIGHT = 13000, MIDNIGHT = 18000;
 	}
-	
+
 	/**
 	 * Interface for storing all sign strings that cause signs to do various things.
 	 */

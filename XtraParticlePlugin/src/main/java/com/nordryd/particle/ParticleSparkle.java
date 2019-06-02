@@ -6,6 +6,8 @@ import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.World;
 
+import com.nordryd.util.Values;
+
 /**
  * <p>
  * Class for <b><i>sparkle</i></b> particles with certain characteristics. Based
@@ -14,7 +16,7 @@ import org.bukkit.World;
  * 
  * @author Nordryd
  */
-public class ParticleSparkle extends PluginParticle
+public class ParticleSparkle extends AbstractParticle
 {
 	private ParticleSparkle(Location location, World world, int count) {
 		super(Particle.FIREWORKS_SPARK, location, world, count);
@@ -45,7 +47,7 @@ public class ParticleSparkle extends PluginParticle
 		private Builder(Location location, World world, Random rng) {
 			this.location = location;
 			this.world = world;
-			this.count = (rng.nextInt(6) + 1) * 5;
+			this.count = (rng.nextInt(Values.RANDOMIZER_VALUE_FOR_DEFAULT_PARTICLE_COUNTS) + 1) * Values.RANDOMIZER_VALUE_FOR_DEFAULT_PARTICLE_COUNTS;
 		}
 
 		/**

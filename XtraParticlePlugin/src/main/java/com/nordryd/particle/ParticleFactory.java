@@ -14,7 +14,7 @@ import com.nordryd.util.Values;
  * 
  * @author Nordryd
  */
-public class ParticleHandler
+public class ParticleFactory
 {
 	private final FileConfiguration config;
 
@@ -24,20 +24,22 @@ public class ParticleHandler
 	 * @param pluginConfig
 	 *            Plugin configuration.
 	 */
-	public ParticleHandler(FileConfiguration pluginConfig) {
+	public ParticleFactory(FileConfiguration pluginConfig) {
 		this.config = pluginConfig;
 	}
 
 	/**
-	 * Spawn a given set of particles. One or more can be given (yay ellipses
-	 * *<i>peepohype</i>*). Pseudo-factory?
+	 * <p>
+	 * Spawn a given set of {@code AbstractParticle}s. One or more can be given (yay
+	 * ellipses *<i>peepohype</i>*).
+	 * </p>
 	 * 
 	 * @param particles
 	 *            The particles to spawn in terms of the plugin's
 	 *            {@code PluginParticle} class.
 	 */
-	public void spawnParticles(final PluginParticle... particles) {
-		for (PluginParticle particle : particles) {
+	public void spawnParticles(final AbstractParticle... particles) {
+		for (AbstractParticle particle : particles) {
 			if (particle instanceof ParticleSparkle) {
 				sparkle((ParticleSparkle) particle);
 			}
@@ -52,6 +54,12 @@ public class ParticleHandler
 			}
 			else if (particle instanceof ParticleDragonBreath) {
 				dragonBreath((ParticleDragonBreath) particle);
+			}
+			else if (particle instanceof ParticleItemCrack) {
+				itemCrack((ParticleItemCrack) particle);
+			}
+			else if (particle instanceof ParticleFlame) {
+				flame((ParticleFlame) particle);
 			}
 			else {
 				System.err.println(Values.PREFIX + " Somehow an invalid particle type was given? o.O");
@@ -93,6 +101,18 @@ public class ParticleHandler
 	private void dragonBreath(final ParticleDragonBreath pDragonBreath) {
 		if (config.getBoolean(Config.DO_DRAGONBREATH.getKey())) {
 			pDragonBreath.getWorld().spawnParticle(pDragonBreath.getParticle(), pDragonBreath.getLocation(), pDragonBreath.getCount());
+		}
+	}
+
+	private void itemCrack(final ParticleItemCrack pItemCrack) {
+		if (config.getBoolean(Config.DO_ITEMCRACK.getKey())) {
+			pItemCrack.getWorld().spawnParticle(pItemCrack.getParticle(), pItemCrack.getLocation(), pItemCrack.getCount(), pItemCrack.getItem());
+		}
+	}
+	
+	private void flame(final ParticleFlame pFlame) {
+		if(config.getBoolean(Config.DO_FLAME.getKey())) {
+			pFlame.getWorld().spawnParticle(pFlame.getParticle(), pFlame.getLocation(), pFlame.getCount());
 		}
 	}
 }

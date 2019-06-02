@@ -8,10 +8,10 @@ import org.bukkit.World;
 
 import com.nordryd.util.Values;
 
-public class ParticleDragonBreath extends AbstractParticle
+public class ParticleFlame extends AbstractParticle
 {
-	private ParticleDragonBreath(Location location, World world, int count) {
-		super(Particle.DRAGON_BREATH, location, world, count);
+	private ParticleFlame(Location location, World world, int count) {
+		super(Particle.FLAME, location, world, count);
 	}
 	
 	public static Builder getBuilder(Location location, World world) {
@@ -28,8 +28,8 @@ public class ParticleDragonBreath extends AbstractParticle
 			this.world = world;
 			this.count = (rng.nextInt(Values.RANDOMIZER_VALUE_FOR_DEFAULT_PARTICLE_COUNTS) + 1) * Values.RANDOMIZER_VALUE_FOR_DEFAULT_PARTICLE_COUNTS;
 		}
-		public ParticleDragonBreath build() {
-			return new ParticleDragonBreath(this.location, this.world, this.count);
+		public ParticleFlame build() {
+			return new ParticleFlame(this.location, this.world, this.count);
 		}
 		
 		public Builder setCount(int count) {

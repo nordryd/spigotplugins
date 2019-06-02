@@ -44,7 +44,7 @@ public class MiscEventListener extends EventListener
 		Player player = eievent.getEnchanter();
 		Block enchantingTable = eievent.getEnchantBlock();
 
-		pHandler.spawnParticles(ParticleEnchanting.getBuilder(player.getLocation().add(0.0, 2.0, 0.0), player.getWorld()).setCount(75).build(),
+		pFactory.spawnParticles(ParticleEnchanting.getBuilder(player.getLocation().add(0.0, 2.0, 0.0), player.getWorld()).setCount(75).build(),
 				ParticleEnchanting.getBuilder(
 						enchantingTable.getLocation().add(Values.BLOCK_CENTER_OFFSET, Values.BLOCK_CENTER_OFFSET + 1, Values.BLOCK_CENTER_OFFSET),
 						enchantingTable.getWorld()).setCount(75).build(),
@@ -57,7 +57,7 @@ public class MiscEventListener extends EventListener
 	public void onItemCraft(CraftItemEvent cievent) {
 		Entity player = cievent.getWhoClicked();
 
-		pHandler.spawnParticles(ParticleSpellEffect.getBuilder(player.getLocation().add(0.0, 1.0, 0.0), player.getWorld())
+		pFactory.spawnParticles(ParticleSpellEffect.getBuilder(player.getLocation().add(0.0, 1.0, 0.0), player.getWorld())
 				.setColors(ParticleColor.RED_VIOLET).setCount(20).build());
 	}
 
@@ -65,7 +65,7 @@ public class MiscEventListener extends EventListener
 	public void onFurnaceSmeltSuccessful(FurnaceSmeltEvent fsevent) {
 		Block furnace = fsevent.getBlock();
 
-		pHandler.spawnParticles(ParticleSpellEffect
+		pFactory.spawnParticles(ParticleSpellEffect
 				.getBuilder(furnace.getLocation().add(Values.BLOCK_CENTER_OFFSET, Values.BLOCK_CENTER_OFFSET, Values.BLOCK_CENTER_OFFSET),
 						furnace.getWorld())
 				.setColors(ParticleColor.ORANGE).build());
@@ -75,7 +75,7 @@ public class MiscEventListener extends EventListener
 	public void onBrew(BrewEvent bevent) {
 		Block brewingStand = bevent.getBlock();
 
-		pHandler.spawnParticles(ParticleSpellEffect.getBuilder(brewingStand.getLocation(), brewingStand.getWorld())
+		pFactory.spawnParticles(ParticleSpellEffect.getBuilder(brewingStand.getLocation(), brewingStand.getWorld())
 				.setColors(ParticleColor.RED_VIOLET, ParticleColor.LAVENDAR, ParticleColor.VIOLET).build());
 	}
 }

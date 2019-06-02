@@ -1,8 +1,12 @@
 package com.nordryd.event.entity;
 
+import java.util.Optional;
+
+import org.bukkit.Effect;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -10,6 +14,8 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityBreedEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.entity.EntityTargetEvent.TargetReason;
+import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.SpawnerSpawnEvent;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -18,8 +24,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.nordryd.enums.Metadata;
 import com.nordryd.enums.ParticleColor;
 import com.nordryd.event.EventListener;
+import com.nordryd.particle.ParticleFlame;
 import com.nordryd.particle.ParticleSparkle;
 import com.nordryd.particle.ParticleSpellEffect;
+import com.nordryd.util.PluginUtility;
 
 /**
  * <p>
@@ -40,7 +48,7 @@ public class EntityEventListener extends EventListener
 	public EntityEventListener(JavaPlugin jPlugin) {
 		super(jPlugin);
 	}
-	
+
 	@EventHandler
 	public void onEntityShootBow(EntityShootBowEvent esbevent) {
 		Entity arrow = esbevent.getProjectile(), shooter = esbevent.getEntity();
@@ -51,45 +59,64 @@ public class EntityEventListener extends EventListener
 			}
 		}
 	}
-	
+
 	@EventHandler
 	public void onProjectileHitEvent(ProjectileHitEvent pjevent) {
 		Projectile projectile = pjevent.getEntity();
 		if (projectile.hasMetadata(Metadata.FIRED_FROM_ENCHANTED_WEAPON.getKey())) {
-			pHandler.spawnParticles(ParticleSparkle.getBuilder(projectile.getLocation(), projectile.getWorld()).setCount(10).build());
+			pFactory.spawnParticles(ParticleSparkle.getBuilder(projectile.getLocation(), projectile.getWorld()).setCount(10).build());
 		}
 	}
-	
+
 	@EventHandler
-	public void onCreatureSpawn(CreatureSpawnEvent esevent) {
+	public void onMobSpawn(CreatureSpawnEvent esevent) {
 		Entity entity = esevent.getEntity();
-		pHandler.spawnParticles(
+		pFactory.spawnParticles(
 				ParticleSpellEffect.getBuilder(entity.getLocation(), entity.getWorld()).setColors(ParticleColor.CYAN).setCount(15).build());
 	}
 
 	@EventHandler
-	public void onCreatureSpawnerSpawn(SpawnerSpawnEvent ssevent) {
+	public void onHostileMobAggro(EntityTargetLivingEntityEvent etleevent) {
+		if (Optional.ofNullable(etleevent.getTarget()).isPresent() && (etleevent.getEntity() instanceof LivingEntity)) {
+			LivingEntity attacker = (LivingEntity) etleevent.getEntity(), target = etleevent.getTarget();
+
+			if ((!attacker.getType().equals(EntityType.VILLAGER)) && (!etleevent.getReason().equals(TargetReason.TARGET_ATTACKED_ENTITY))) {
+
+				attacker.getWorld().playEffect(attacker.getEyeLocation(), Effect.MOBSPAWNER_FLAMES, 0);
+
+				if (target.getType().equals(EntityType.PLAYER)) {
+					attacker.getWorld().playEffect(attacker.getEyeLocation(), Effect.SMOKE, 0);
+				}
+			}
+		}
+	}
+
+	@EventHandler
+	public void onMobSpawnerSpawn(SpawnerSpawnEvent ssevent) {
 		Entity entity = ssevent.getEntity();
 		CreatureSpawner spawner = ssevent.getSpawner();
 
-		pHandler.spawnParticles(
-				ParticleSpellEffect.getBuilder(entity.getLocation(), entity.getWorld()).setColors(ParticleColor.MAGENTA).setCount(15).build(),
-				ParticleSparkle.getBuilder(spawner.getLocation(), spawner.getWorld()).setCount(15).build());
+		pFactory.spawnParticles(
+				ParticleSpellEffect.getBuilder(entity.getLocation().add(0, 1, 0), entity.getWorld()).setColors(ParticleColor.MAGENTA).setCount(15)
+						.build(),
+				ParticleFlame.getBuilder(entity.getLocation().add(0, 1, 0), entity.getWorld()).setCount(20).build(),
+				ParticleSpellEffect.getBuilder(PluginUtility.getCenteredBlockLocation(spawner.getLocation()), spawner.getWorld())
+						.setColors(ParticleColor.BLACK, ParticleColor.RED, ParticleColor.GRAY).setCount(10).build());
 	}
-	
+
 	@EventHandler
 	public void onEntityBreed(EntityBreedEvent ebevent) {
 		Entity entity = ebevent.getEntity();
 
-		pHandler.spawnParticles(ParticleSpellEffect.getBuilder(entity.getLocation(), entity.getWorld())
+		pFactory.spawnParticles(ParticleSpellEffect.getBuilder(entity.getLocation(), entity.getWorld())
 				.setColors(ParticleColor.IVORY, ParticleColor.MAGENTA).build());
 	}
-	
+
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent edevent) {
 		Entity entity = edevent.getEntity();
 
-		pHandler.spawnParticles(ParticleSpellEffect.getBuilder(entity.getLocation().add(0.0, 1.0, 0.0), entity.getWorld()).setCount(25)
+		pFactory.spawnParticles(ParticleSpellEffect.getBuilder(entity.getLocation().add(0.0, 1.0, 0.0), entity.getWorld()).setCount(25)
 				.setColors(ParticleColor.RED).build());
 	}
 }

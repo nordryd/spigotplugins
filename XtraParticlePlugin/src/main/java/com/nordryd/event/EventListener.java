@@ -1,5 +1,7 @@
 package com.nordryd.event;
 
+import java.util.Random;
+
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -7,7 +9,7 @@ import com.nordryd.event.block.BlockEventListener;
 import com.nordryd.event.entity.EntityEventListener;
 import com.nordryd.event.entity.player.PlayerEventListener;
 import com.nordryd.event.misc.MiscEventListener;
-import com.nordryd.particle.ParticleHandler;
+import com.nordryd.particle.ParticleFactory;
 
 /**
  * <p>
@@ -19,7 +21,8 @@ import com.nordryd.particle.ParticleHandler;
 public abstract class EventListener implements Listener
 {
 	protected final JavaPlugin jPlugin;
-	protected final ParticleHandler pHandler;
+	protected final ParticleFactory pFactory;
+	protected final Random rng;
 
 	/**
 	 * Constructor.
@@ -29,7 +32,8 @@ public abstract class EventListener implements Listener
 	 */
 	protected EventListener(JavaPlugin jPlugin) {
 		this.jPlugin = jPlugin;
-		this.pHandler = new ParticleHandler(jPlugin.getConfig());
+		this.pFactory = new ParticleFactory(jPlugin.getConfig());
+		this.rng = new Random();
 	}
 
 	/**

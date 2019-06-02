@@ -6,7 +6,9 @@ import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.World;
 
-public class ParticleEnchanting extends PluginParticle
+import com.nordryd.util.Values;
+
+public class ParticleEnchanting extends AbstractParticle
 {
 	private ParticleEnchanting(Location location, World world, int count) {
 		super(Particle.ENCHANTMENT_TABLE, location, world, count);
@@ -24,7 +26,7 @@ public class ParticleEnchanting extends PluginParticle
 		private Builder(Location location, World world, Random rng) {
 			this.location = location;
 			this.world = world;
-			this.count = (rng.nextInt(6) + 1) * 5;
+			this.count = (rng.nextInt(Values.RANDOMIZER_VALUE_FOR_DEFAULT_PARTICLE_COUNTS) + 1) * Values.RANDOMIZER_VALUE_FOR_DEFAULT_PARTICLE_COUNTS;
 		}
 		public ParticleEnchanting build() {
 			return new ParticleEnchanting(this.location, this.world, this.count);

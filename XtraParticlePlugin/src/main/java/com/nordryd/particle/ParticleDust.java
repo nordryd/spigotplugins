@@ -8,6 +8,7 @@ import org.bukkit.Particle;
 import org.bukkit.World;
 
 import com.nordryd.enums.ParticleColor;
+import com.nordryd.util.Values;
 
 /**
  * <p>
@@ -17,7 +18,7 @@ import com.nordryd.enums.ParticleColor;
  * 
  * @author Nordryd
  */
-public class ParticleDust extends PluginParticle
+public class ParticleDust extends AbstractParticle
 {
 	private final int size;
 	private final Color color;
@@ -54,8 +55,8 @@ public class ParticleDust extends PluginParticle
 		private Builder(Location location, World world, Random rng) {
 			this.location = location;
 			this.world = world;
-			this.count = (rng.nextInt(6) + 1) * 5;
-			this.size = (rng.nextInt(6) + 1) * 5;
+			this.count = rng.nextInt(Values.RANDOMIZER_VALUE_FOR_DEFAULT_PARTICLE_COUNTS + 1) + Values.RANDOMIZER_VALUE_FOR_DEFAULT_PARTICLE_COUNTS;
+			this.size = rng.nextInt(Values.RANDOMIZER_VALUE_FOR_DEFAULT_PARTICLE_COUNTS + 1) + Values.RANDOMIZER_VALUE_FOR_DEFAULT_PARTICLE_COUNTS;
 			this.color = ParticleColor.RED.getColorFromRGB();
 		}
 
@@ -68,10 +69,10 @@ public class ParticleDust extends PluginParticle
 
 		/**
 		 * Set the amount of particles to spawn.
+		 * 
 		 * @param count
-		 * 			The amount of particles to spawn.
-		 * @return
-		 * 			This {@code Builder}.
+		 *            The amount of particles to spawn.
+		 * @return This {@code Builder}.
 		 */
 		public Builder setCount(int count) {
 			this.count = count;
@@ -80,10 +81,10 @@ public class ParticleDust extends PluginParticle
 
 		/**
 		 * Set size of the dust cloud(s).
+		 * 
 		 * @param size
-		 * 			The size of the dust cloud(s).
-		 * @return
-		 * 			This {@code Builder}.
+		 *            The size of the dust cloud(s).
+		 * @return This {@code Builder}.
 		 */
 		public Builder setSize(int size) {
 			this.size = size;
@@ -92,10 +93,10 @@ public class ParticleDust extends PluginParticle
 
 		/**
 		 * Set the color of the dust cloud(s).
+		 * 
 		 * @param color
-		 * 			The desired color of the dust cloud(s).
-		 * @return
-		 * 			This {@code Builder}.
+		 *            The desired color of the dust cloud(s).
+		 * @return This {@code Builder}.
 		 */
 		public Builder setColor(ParticleColor color) {
 			this.color = color.getColorFromRGB();

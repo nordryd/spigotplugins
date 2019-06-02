@@ -14,7 +14,7 @@ import com.nordryd.util.UpdateChecker;
  * Main class for <b>XtraParticlePlugin</b>.
  * </p>
  * <p>
- * Function pointers:<br>
+ * TODO Function pointers:<br>
  * Consumer&lt;Runnable&gt; -&gt; runnable class
  * </p>
  * 
