@@ -149,7 +149,7 @@ public class PlayerEventListener extends EventListener
 			if (jPlugin.getConfig().getBoolean(Config.DO_MOB_GORE_PARTICLES.getKey())) {
 				ParticleFactory.spawnParticles(ParticleItemCrack
 						.getBuilder(entity.getLocation().add(0, entity.getHeight() * 0.75, 0), entity.getWorld(), IUtility.getBloodColor(entity))
-						.setCount(20).build());
+						.setCount(50).build());
 
 				ItemStack tool = ((Player) edbeevent.getDamager()).getInventory().getItemInMainHand();
 

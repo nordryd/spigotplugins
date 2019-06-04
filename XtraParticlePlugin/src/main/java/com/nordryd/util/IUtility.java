@@ -76,7 +76,7 @@ public interface IUtility
 	 */
 	public static ItemStack getBloodColor(LivingEntity entity) {
 		if (entity.getType().toString().contains("ENDER") || entity.getType().equals(EntityType.SHULKER)) {
-			return new ItemStack(Material.PURPUR_BLOCK);
+			return new ItemStack(Material.PURPLE_WOOL);
 		}
 
 		if ((entity instanceof Flying) || entity.getType().equals(EntityType.SNOWMAN)) {
@@ -85,7 +85,7 @@ public interface IUtility
 
 		if (entity.getType().equals(EntityType.IRON_GOLEM)
 				|| (entity.getType().toString().contains("SKELETON") && !(entity instanceof WitherSkeleton))) {
-			return new ItemStack(Material.STONE);
+			return new ItemStack(Material.GRAY_WOOL);
 		}
 
 		if (entity.getType().equals(EntityType.VEX)) {
@@ -101,19 +101,19 @@ public interface IUtility
 		}
 
 		if (entity.getType().equals(EntityType.WITCH)) {
-			return new ItemStack(Material.DIAMOND);
+			return new ItemStack(Material.MAGENTA_WOOL);
 		}
 
 		if (entity.getType().toString().contains("WITHER") || entity.getType().equals(EntityType.SILVERFISH) || (entity instanceof Spider)
 				|| entity.getType().equals(EntityType.SQUID)) {
-			return new ItemStack(Material.OBSIDIAN);
+			return new ItemStack(Material.BLACK_WOOL);
 		}
 
 		if ((entity instanceof Illager) || entity.getType().equals(EntityType.CREEPER)) {
 			return new ItemStack(Material.LIME_WOOL);
 		}
 
-		return new ItemStack(Material.REDSTONE_BLOCK);
+		return new ItemStack(Material.RED_WOOL);
 	}
 
 	/**
