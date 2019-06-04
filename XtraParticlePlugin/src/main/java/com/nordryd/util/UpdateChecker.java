@@ -41,10 +41,10 @@ public class UpdateChecker extends Thread
 			}
 		}
 		catch (MalformedURLException mue) {
-			System.err.println(Values.PREFIX + " MalformedURLException occurred. Please check URL.");
+			System.err.println(IValues.PREFIX + " MalformedURLException occurred. Please check URL.");
 		}
 		catch (IOException ie) {
-			System.err.println(Values.PREFIX + " IOException occurred.");
+			System.err.println(IValues.PREFIX + " IOException occurred.");
 		}
 	}
 	

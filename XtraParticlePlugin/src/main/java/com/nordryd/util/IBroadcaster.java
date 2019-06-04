@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
  * 
  * @author Nordryd
  */
-public interface Broadcaster
+public interface IBroadcaster
 {
 	/**
 	 * Broadcast a message with {@link Bukkit#broadcastMessage(String)} prepending
@@ -21,7 +21,7 @@ public interface Broadcaster
 	 *            The message to be broadcast.
 	 */
 	public static void broadcastMessage(String message) {
-		Bukkit.broadcastMessage(Values.PREFIX + " " + message);
+		Bukkit.broadcastMessage(IValues.PREFIX + " " + message);
 	}
 
 	/**
@@ -35,7 +35,7 @@ public interface Broadcaster
 	 */
 	public static void sendMessage(Player player, String... messages) {
 		for(String message : messages) {
-			player.sendMessage(Values.PREFIX + " " + message);
+			player.sendMessage(IValues.PREFIX + " " + message);
 		}
 	}
 }

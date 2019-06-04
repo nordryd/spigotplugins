@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.ChatColor;
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.EntityTargetEvent.TargetReason;
 
 /**
@@ -15,7 +16,7 @@ import org.bukkit.event.entity.EntityTargetEvent.TargetReason;
  * 
  * @author Nordryd
  */
-public interface Values
+public interface IValues
 {
 	public static final String PREFIX = ChatColor.DARK_AQUA + "[" + Reference.PLUGIN_NAME + "]" + ChatColor.AQUA;
 	public static final String PLAYER_NAME_ESCAPE = "%p";
@@ -32,6 +33,9 @@ public interface Values
 
 	public static final List<TargetReason> INVALID_HOSTILE_REASONS = new ArrayList<>(
 			Arrays.asList(TargetReason.TARGET_ATTACKED_ENTITY, TargetReason.TEMPT, TargetReason.FOLLOW_LEADER));
+
+	public static final List<EntityType> ENDER_ENTITIES = new ArrayList<>(
+			Arrays.asList(EntityType.ENDER_DRAGON, EntityType.ENDERMAN, EntityType.SHULKER, EntityType.ENDERMITE));
 
 	/**
 	 * Interface for storing time values (ms).

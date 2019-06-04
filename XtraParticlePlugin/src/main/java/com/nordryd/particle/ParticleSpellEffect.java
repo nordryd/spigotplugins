@@ -10,7 +10,7 @@ import org.bukkit.Particle;
 import org.bukkit.World;
 
 import com.nordryd.enums.ParticleColor;
-import com.nordryd.util.Values;
+import com.nordryd.util.IValues;
 
 /**
  * <p>
@@ -57,7 +57,7 @@ public class ParticleSpellEffect extends AbstractParticle
 		private Builder(Location location, World world, Random rng) {
 			this.location = location;
 			this.world = world;
-			this.count = (rng.nextInt(Values.RANDOMIZER_VALUE_FOR_DEFAULT_PARTICLE_COUNTS) + 1) * Values.RANDOMIZER_VALUE_FOR_DEFAULT_PARTICLE_COUNTS;
+			this.count = (rng.nextInt(IValues.RANDOMIZER_VALUE_FOR_DEFAULT_PARTICLE_COUNTS) + 1) * IValues.RANDOMIZER_VALUE_FOR_DEFAULT_PARTICLE_COUNTS;
 		}
 
 		/**

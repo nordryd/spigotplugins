@@ -1,10 +1,9 @@
 package com.nordryd.particle;
 
 import org.bukkit.Particle.DustOptions;
-import org.bukkit.configuration.file.FileConfiguration;
 
 import com.nordryd.enums.ParticleColor;
-import com.nordryd.util.Values;
+import com.nordryd.util.IValues;
 
 /**
  * <p>
@@ -15,18 +14,6 @@ import com.nordryd.util.Values;
  */
 public class ParticleFactory
 {
-	private final FileConfiguration config;
-
-	/**
-	 * Constructor.
-	 * 
-	 * @param pluginConfig
-	 *            Plugin configuration.
-	 */
-	public ParticleFactory(FileConfiguration pluginConfig) {
-		this.config = pluginConfig;
-	}
-
 	/**
 	 * <p>
 	 * Spawn a given set of {@code AbstractParticle}s. One or more can be given (yay
@@ -37,97 +24,67 @@ public class ParticleFactory
 	 *            The particles to spawn in terms of the plugin's
 	 *            {@code PluginParticle} class.
 	 */
-	public void spawnParticles(final AbstractParticle... particles) {
-		spawnParticles(true, particles);
-	}
-	
-	/**
-	 * <p>
-	 * Spawn a given set of {@code AbstractParticle}s. One or more can be given (yay
-	 * ellipses *<i>peepohype</i>*).
-	 * </p>
-	 * 
-	 * @param configValue
-	 *            The configuration value associated with particle's event.
-	 * @param particles
-	 *            The particles to spawn in terms of the plugin's
-	 *            {@code PluginParticle} class.
-	 */
-	public void spawnParticles(final boolean configValue, final AbstractParticle... particles) {
+	public static void spawnParticles(final AbstractParticle... particles) {
 		for (AbstractParticle particle : particles) {
 			if (particle instanceof ParticleSparkle) {
-				sparkle(((ParticleSparkle) particle), configValue);
+				sparkle(((ParticleSparkle) particle));
 			}
 			else if (particle instanceof ParticleDust) {
-				dust(((ParticleDust) particle), configValue);
+				dust(((ParticleDust) particle));
 			}
 			else if (particle instanceof ParticleSpellEffect) {
-				spellEffect(((ParticleSpellEffect) particle), configValue);
+				spellEffect(((ParticleSpellEffect) particle));
 			}
 			else if (particle instanceof ParticleEnchanting) {
-				enchanting(((ParticleEnchanting) particle), configValue);
+				enchanting(((ParticleEnchanting) particle));
 			}
 			else if (particle instanceof ParticleDragonBreath) {
-				dragonBreath(((ParticleDragonBreath) particle), configValue);
+				dragonBreath(((ParticleDragonBreath) particle));
 			}
 			else if (particle instanceof ParticleItemCrack) {
-				itemCrack(((ParticleItemCrack) particle), configValue);
+				itemCrack(((ParticleItemCrack) particle));
 			}
 			else if (particle instanceof ParticleFlame) {
-				flame(((ParticleFlame) particle), configValue);
+				flame(((ParticleFlame) particle));
 			}
 			else {
-				System.err.println(Values.PREFIX + " Somehow an invalid particle type was given? o.O");
+				System.err.println(IValues.PREFIX + " Somehow an invalid particle type was given? o.O");
 			}
 		}
 	}
 
-	private void sparkle(final ParticleSparkle pSparkle, final boolean configValue) {
-		if (configValue) {
-
-			pSparkle.getWorld().spawnParticle(pSparkle.getParticle(), pSparkle.getLocation(), pSparkle.getCount());
-		}
+	private static void sparkle(final ParticleSparkle pSparkle) {
+		pSparkle.getWorld().spawnParticle(pSparkle.getParticle(), pSparkle.getLocation(), pSparkle.getCount());
 	}
 
-	private void dust(final ParticleDust pDust, final boolean configValue) {
-		if (configValue) {
+	private static void dust(final ParticleDust pDust) {
+		pDust.getWorld().spawnParticle(pDust.getParticle(), pDust.getLocation(), pDust.getCount(),
+				new DustOptions(pDust.getColor(), pDust.getSize()));
 
-			pDust.getWorld().spawnParticle(pDust.getParticle(), pDust.getLocation(), pDust.getCount(),
-					new DustOptions(pDust.getColor(), pDust.getSize()));
-		}
 	}
 
-	private void spellEffect(final ParticleSpellEffect pSpellEffect, final boolean configValue) {
-		if (configValue) {
-			for (int count = 0; count < pSpellEffect.getCount(); count++) {
-				ParticleColor color = pSpellEffect.getColor();
-				pSpellEffect.getWorld().spawnParticle(pSpellEffect.getParticle(), pSpellEffect.getLocation(), 0, color.getNormalizedRed(),
-						color.getNormalizedGreen(), color.getNormalizedBlue(), 1);
-			}
+	private static void spellEffect(final ParticleSpellEffect pSpellEffect) {
+		for (int count = 0; count < pSpellEffect.getCount(); count++) {
+			ParticleColor color = pSpellEffect.getColor();
+			pSpellEffect.getWorld().spawnParticle(pSpellEffect.getParticle(), pSpellEffect.getLocation(), 0, color.getNormalizedRed(),
+					color.getNormalizedGreen(), color.getNormalizedBlue(), 1);
 		}
+
 	}
 
-	private void enchanting(final ParticleEnchanting pEnchanting, final boolean configValue) {
-		if (configValue) {
-			pEnchanting.getWorld().spawnParticle(pEnchanting.getParticle(), pEnchanting.getLocation(), pEnchanting.getCount());
-		}
+	private static void enchanting(final ParticleEnchanting pEnchanting) {
+		pEnchanting.getWorld().spawnParticle(pEnchanting.getParticle(), pEnchanting.getLocation(), pEnchanting.getCount());
 	}
 
-	private void dragonBreath(final ParticleDragonBreath pDragonBreath, final boolean configValue) {
-		if (configValue) {
-			pDragonBreath.getWorld().spawnParticle(pDragonBreath.getParticle(), pDragonBreath.getLocation(), pDragonBreath.getCount());
-		}
+	private static void dragonBreath(final ParticleDragonBreath pDragonBreath) {
+		pDragonBreath.getWorld().spawnParticle(pDragonBreath.getParticle(), pDragonBreath.getLocation(), pDragonBreath.getCount());
 	}
 
-	private void itemCrack(final ParticleItemCrack pItemCrack, final boolean configValue) {
-		if (configValue) {
-			pItemCrack.getWorld().spawnParticle(pItemCrack.getParticle(), pItemCrack.getLocation(), pItemCrack.getCount(), pItemCrack.getItem());
-		}
+	private static void itemCrack(final ParticleItemCrack pItemCrack) {
+		pItemCrack.getWorld().spawnParticle(pItemCrack.getParticle(), pItemCrack.getLocation(), pItemCrack.getCount(), pItemCrack.getItem());
 	}
 
-	private void flame(final ParticleFlame pFlame, final boolean configValue) {
-		if (configValue) {
-			pFlame.getWorld().spawnParticle(pFlame.getParticle(), pFlame.getLocation(), pFlame.getCount());
-		}
+	private static void flame(final ParticleFlame pFlame) {
+		pFlame.getWorld().spawnParticle(pFlame.getParticle(), pFlame.getLocation(), pFlame.getCount());
 	}
 }

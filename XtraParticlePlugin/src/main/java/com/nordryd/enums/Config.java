@@ -6,7 +6,7 @@ import java.util.Arrays;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.nordryd.util.Values;
+import com.nordryd.util.IValues;
 
 /**
  * <p>
@@ -23,23 +23,24 @@ import com.nordryd.util.Values;
  */
 public enum Config
 {
-	DO_SPARKLE("doSparkles", true),
-	DO_DUST("doDust", true),
-	DO_SPELLEFFECT("doSpellEffect", true),
-	DO_ENCHANTING("doEnchanting", true),
-	DO_DRAGONBREATH("doDragonBreath", true),
-	DO_ITEMCRACK("doItemCrack", true),
-	DO_FLAME("doFlame", true),
-	DO_MOB_AGGRO("doMobAggro", true),
-	DO_MOB_GORE("doMobGore", true),
+	DO_ENCHANTED_WEAPON_PARTICLES("doEnchantedWeaponParticles", true),
+	DO_ENCHANTED_TOOL_PARTICLES("doEnchantedToolParticles", true),
+	DO_ORE_BREAK_PARTICLES("doOreBreakParticles", true),
+	DO_LEAF_DECAY_PARTICLES("doLeafDecayParticles", true),
+	DO_REDSTONE_PARTICLES("doRedstoneParticles", true),
+	DO_DING_PARTICLES("doDingParticles", true),
+	DO_ENTITY_DEATH_PARTICLES("doEntityDeathParticles", true),
+	DO_MOB_AGGRO_PARTICLES("doMobAggroParticles", true),
+	DO_MOB_GORE_PARTICLES("doMobGoreParticles", true),
+	DO_LOW_HEALTH_EFFECTS("doLowHealthEffects", true),
 	DO_CUSTOM_LOGIN_MESSAGES("doCustomLoginMessages", true),
 	DO_CUSTOM_LOGOUT_MESSAGES("doCustomLogoutMessages", true),
 	LOGIN_MESSAGES("loginMessages",
-			new ArrayList<String>(Arrays.asList(ChatColor.AQUA + Values.PLAYER_NAME_ESCAPE + ChatColor.DARK_AQUA + " has joined the game",
-					ChatColor.DARK_AQUA + "Who the hell invited " + ChatColor.AQUA + Values.PLAYER_NAME_ESCAPE + ChatColor.DARK_AQUA + "?"))),
+			new ArrayList<String>(Arrays.asList(ChatColor.AQUA + IValues.PLAYER_NAME_ESCAPE + ChatColor.DARK_AQUA + " has joined the game",
+					ChatColor.DARK_AQUA + "Who the hell invited " + ChatColor.AQUA + IValues.PLAYER_NAME_ESCAPE + ChatColor.DARK_AQUA + "?"))),
 	LOGOUT_MESSAGES("logoutMessages",
-			new ArrayList<String>(Arrays.asList(ChatColor.AQUA + Values.PLAYER_NAME_ESCAPE + ChatColor.DARK_AQUA + " has left the game",
-					ChatColor.DARK_AQUA + "Thank god " + ChatColor.AQUA + Values.PLAYER_NAME_ESCAPE + ChatColor.DARK_AQUA + " is gone")));
+			new ArrayList<String>(Arrays.asList(ChatColor.AQUA + IValues.PLAYER_NAME_ESCAPE + ChatColor.DARK_AQUA + " has left the game",
+					ChatColor.DARK_AQUA + "Thank god " + ChatColor.AQUA + IValues.PLAYER_NAME_ESCAPE + ChatColor.DARK_AQUA + " is gone")));
 
 	private final String key;
 	private final Object defaultValue;
