@@ -19,7 +19,7 @@ import com.nordryd.event.misc.MiscEventListener;
  */
 public abstract class EventListener implements Listener
 {
-	protected final JavaPlugin jPlugin;
+	protected final JavaPlugin plugin;
 	protected final Random rng;
 
 	/**
@@ -29,7 +29,7 @@ public abstract class EventListener implements Listener
 	 *            {@code JavaPlugin}
 	 */
 	protected EventListener(JavaPlugin jPlugin) {
-		this.jPlugin = jPlugin;
+		this.plugin = jPlugin;
 		this.rng = new Random();
 	}
 
