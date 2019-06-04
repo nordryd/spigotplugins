@@ -24,7 +24,6 @@ import com.nordryd.particle.ParticleItemCrack;
 import com.nordryd.particle.ParticleSparkle;
 import com.nordryd.particle.ParticleSpellEffect;
 import com.nordryd.util.IUtility;
-import com.nordryd.util.IValues;
 
 /**
  * <p>
@@ -67,7 +66,6 @@ public class BlockEventListener extends EventListener
 	 * 
 	 * @param brevent
 	 *        {@link BlockRedstoneEvent}
-	 */
 	@EventHandler
 	public void onRedstone(BlockRedstoneEvent brevent) {
 		if (jPlugin.getConfig().getBoolean(Config.DO_REDSTONE_PARTICLES.getKey()) && (brevent.getOldCurrent() == 0)) {
@@ -139,7 +137,7 @@ public class BlockEventListener extends EventListener
 					colors.add(ParticleColor.TOMATO);
 				}
 				ParticleFactory.spawnParticles(ParticleSpellEffect
-						.getBuilder(IUtility.getCenteredBlockLocation(block.getLocation()), block.getWorld()).setColors(colors).setCount(40).build());
+						.getBuilder(IUtility.getCenteredBlockLocation(block.getLocation()), block.getWorld()).setColors(colors).setCount(50).build());
 			}
 
 			if (!player.getInventory().getItemInMainHand().getEnchantments().isEmpty()) {
