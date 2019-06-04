@@ -2,7 +2,6 @@ package com.nordryd.particle;
 
 import org.bukkit.Effect;
 import org.bukkit.Particle;
-import org.bukkit.Particle.DustOptions;
 
 import com.nordryd.enums.ParticleColor;
 import com.nordryd.util.IValues;
@@ -31,9 +30,6 @@ public class ParticleFactory
 			if (particle instanceof ParticleSparkle) {
 				sparkle(((ParticleSparkle) particle));
 			}
-			else if (particle instanceof ParticleDust) {
-				dust(((ParticleDust) particle));
-			}
 			else if (particle instanceof ParticleSpellEffect) {
 				spellEffect(((ParticleSpellEffect) particle));
 			}
@@ -57,11 +53,6 @@ public class ParticleFactory
 
 	private static void sparkle(final ParticleSparkle pSparkle) {
 		pSparkle.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, pSparkle.getLocation(), pSparkle.getCount());
-	}
-
-	private static void dust(final ParticleDust pDust) {
-		pDust.getWorld().spawnParticle(Particle.REDSTONE, pDust.getLocation(), pDust.getCount(), new DustOptions(pDust.getColor(), pDust.getSize()));
-
 	}
 
 	private static void spellEffect(final ParticleSpellEffect pSpellEffect) {
