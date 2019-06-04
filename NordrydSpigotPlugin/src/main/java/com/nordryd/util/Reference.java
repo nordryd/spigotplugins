@@ -10,7 +10,7 @@ package com.nordryd.util;
  */
 public interface Reference
 {
-	public static final String PLUGIN_NAME = "SpigotPlugin";
+	public static final String PLUGIN_NAME = "SparklePlugin";
 	public static final String CURRENT_VERSION = "1.7";
 	
 	public static final String DEV_PLAYER_NAME = "Nordryd";

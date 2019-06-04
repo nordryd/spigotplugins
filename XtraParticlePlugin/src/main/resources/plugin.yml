@@ -1,0 +1,4 @@
+name: XtraParticlePlugin
+main: com.nordryd.Main
+version: 1.0
+api-version: 1.14
