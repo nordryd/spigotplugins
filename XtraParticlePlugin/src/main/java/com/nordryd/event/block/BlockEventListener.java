@@ -11,13 +11,14 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.block.LeavesDecayEvent;
 import org.bukkit.event.block.SpongeAbsorbEvent;
+import org.bukkit.event.entity.EntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.nordryd.enums.Config;
 import com.nordryd.enums.ParticleColor;
 import com.nordryd.event.EventListener;
-import com.nordryd.particle.ParticleDust;
+import com.nordryd.event.entity.player.PlayerEventListener;
 import com.nordryd.particle.ParticleFactory;
 import com.nordryd.particle.ParticleItemCrack;
 import com.nordryd.particle.ParticleSparkle;
@@ -39,7 +40,7 @@ public class BlockEventListener extends EventListener
 	 * Constructor.
 	 * 
 	 * @param plugin
-	 *            {@link JavaPlugin}
+	 *        {@link JavaPlugin}
 	 */
 	public BlockEventListener(JavaPlugin jPlugin) {
 		super(jPlugin);
@@ -49,15 +50,15 @@ public class BlockEventListener extends EventListener
 	 * Handler for when a leaf block decays.
 	 * 
 	 * @param ldevent
-	 *            {@link LeavesDecayEvent}
+	 *        {@link LeavesDecayEvent}
 	 */
 	@EventHandler
 	public void onLeafDecay(LeavesDecayEvent ldevent) {
 		if (jPlugin.getConfig().getBoolean(Config.DO_LEAF_DECAY_PARTICLES.getKey())) {
 			Block leaf = ldevent.getBlock();
 
-			ParticleFactory
-					.spawnParticles(ParticleDust.getBuilder(leaf.getLocation(), leaf.getWorld()).setColor(ParticleColor.GREEN).setSize(3).build());
+			ParticleFactory.spawnParticles(ParticleSpellEffect.getBuilder(leaf.getLocation(), leaf.getWorld())
+					.setColors(ParticleColor.GREEN, ParticleColor.SEA_GREEN, ParticleColor.SPRING_GREEN).build());
 		}
 	}
 
@@ -65,7 +66,7 @@ public class BlockEventListener extends EventListener
 	 * Handler for when a redstone block becomes active.
 	 * 
 	 * @param brevent
-	 *            {@link BlockRedstoneEvent}
+	 *        {@link BlockRedstoneEvent}
 	 */
 	@EventHandler
 	public void onRedstone(BlockRedstoneEvent brevent) {
@@ -81,7 +82,7 @@ public class BlockEventListener extends EventListener
 	 * Handler for when a sponge absorbs water.
 	 * 
 	 * @param saevent
-	 *            {@link SpongeAbsorbEvent}
+	 *        {@link SpongeAbsorbEvent}
 	 */
 	@EventHandler
 	public void onSpongeAbsorb(SpongeAbsorbEvent saevent) {
@@ -96,7 +97,7 @@ public class BlockEventListener extends EventListener
 	 * Handler when a block breaks.
 	 * 
 	 * @param bbevent
-	 *            {@link BlockBreakEvent}.
+	 *        {@link BlockBreakEvent}.
 	 */
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent bbevent) {
@@ -137,11 +138,8 @@ public class BlockEventListener extends EventListener
 					colors.add(ParticleColor.RED);
 					colors.add(ParticleColor.TOMATO);
 				}
-				ParticleFactory.spawnParticles(
-						ParticleDust.getBuilder(IUtility.getCenteredBlockLocation(block.getLocation()), block.getWorld()).setColor(colors.get(0))
-								.setSize(3).build(),
-						ParticleSpellEffect.getBuilder(IUtility.getCenteredBlockLocation(block.getLocation()), block.getWorld()).setColors(colors)
-								.setCount(40).build());
+				ParticleFactory.spawnParticles(ParticleSpellEffect
+						.getBuilder(IUtility.getCenteredBlockLocation(block.getLocation()), block.getWorld()).setColors(colors).setCount(40).build());
 			}
 
 			if (!player.getInventory().getItemInMainHand().getEnchantments().isEmpty()) {
