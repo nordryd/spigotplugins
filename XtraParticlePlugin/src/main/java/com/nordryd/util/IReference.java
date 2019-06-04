@@ -7,7 +7,7 @@ package com.nordryd.util;
  * 
  * @author Nordryd
  */
-public interface Reference
+public interface IReference
 {
 	public static final String PLUGIN_NAME = "XtraParticlePlugin";
 	public static final String CURRENT_VERSION = "1.7";
@@ -20,9 +20,9 @@ public interface Reference
 	 */
 	public static interface InfoMessages
 	{
-		public static final String ON_ENABLE = Reference.PLUGIN_NAME + " started. Hello, world!";
+		public static final String ON_ENABLE = IReference.PLUGIN_NAME + " started. Hello, world!";
 		public static final String CONTACT = "Please contact " + Dev.DISCORD + " on discord with any problems.";
-		public static final String ON_DISABLE = Reference.PLUGIN_NAME + " stopped. Goodbye, world!";
+		public static final String ON_DISABLE = IReference.PLUGIN_NAME + " stopped. Goodbye, world!";
 	}
 
 	/**

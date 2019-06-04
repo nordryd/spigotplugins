@@ -33,8 +33,8 @@ public enum Config
 	DO_MOB_AGGRO_PARTICLES("doMobAggroParticles", true),
 	DO_MOB_GORE_PARTICLES("doMobGoreParticles", true),
 	DO_LOW_HEALTH_EFFECTS("doLowHealthEffects", true),
-	DO_CUSTOM_LOGIN_MESSAGES("doCustomLoginMessages", true),
-	DO_CUSTOM_LOGOUT_MESSAGES("doCustomLogoutMessages", true),
+	DO_CUSTOM_JOIN_MESSAGES("doCustomJoinMessages", true),
+	DO_CUSTOM_LEAVE_MESSAGES("doCustomLeaveMessages", true),
 	LOGIN_MESSAGES("loginMessages",
 			new ArrayList<String>(Arrays.asList(ChatColor.AQUA + IValues.PLAYER_NAME_ESCAPE + ChatColor.DARK_AQUA + " has joined the game",
 					ChatColor.DARK_AQUA + "Who the hell invited " + ChatColor.AQUA + IValues.PLAYER_NAME_ESCAPE + ChatColor.DARK_AQUA + "?"))),
@@ -67,7 +67,7 @@ public enum Config
 	 * Initializes all the configutation values with their respective defaults.
 	 * 
 	 * @param plugin
-	 *            {@code JavaPlugin} to add config values to.
+	 *            {@link JavaPlugin} to add config values to.
 	 */
 	public static void addDefaultConfig(JavaPlugin plugin) {
 		for (Config configDefault : Config.values()) {

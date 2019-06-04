@@ -28,6 +28,15 @@ public enum Metadata
 		return key;
 	}
 
+	/**
+	 * Get a {@link FixedMetadataValue} based on the plugin and value given.
+	 * 
+	 * @param jPlugin
+	 *            {@link JavaPlugin}
+	 * @param value
+	 *            Value for this metadata.
+	 * @return A {@link FixedMetadataValue} object
+	 */
 	public static MetadataValue getMetadataValue(JavaPlugin jPlugin, Object value) {
 		return new FixedMetadataValue(jPlugin, value);
 	}

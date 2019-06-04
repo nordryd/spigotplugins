@@ -3,7 +3,6 @@ package com.nordryd.particle;
 import java.util.Random;
 
 import org.bukkit.Location;
-import org.bukkit.Particle;
 import org.bukkit.World;
 
 import com.nordryd.util.IValues;
@@ -19,7 +18,7 @@ import com.nordryd.util.IValues;
 public class ParticleSparkle extends AbstractParticle
 {
 	private ParticleSparkle(Location location, World world, int count) {
-		super(Particle.FIREWORKS_SPARK, location, world, count);
+		super(location, world, count);
 	}
 
 	/**

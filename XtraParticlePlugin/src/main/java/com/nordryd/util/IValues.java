@@ -18,7 +18,7 @@ import org.bukkit.event.entity.EntityTargetEvent.TargetReason;
  */
 public interface IValues
 {
-	public static final String PREFIX = ChatColor.DARK_AQUA + "[" + Reference.PLUGIN_NAME + "]" + ChatColor.AQUA;
+	public static final String PREFIX = ChatColor.DARK_AQUA + "[" + IReference.PLUGIN_NAME + "]" + ChatColor.AQUA;
 	public static final String PLAYER_NAME_ESCAPE = "%p";
 	public static final List<String> TOOLS = new ArrayList<>(Arrays.asList("_PICKAXE", "_AXE", "_SHOVEL", "_HOE", "_SWORD", "TRIDENT"));
 

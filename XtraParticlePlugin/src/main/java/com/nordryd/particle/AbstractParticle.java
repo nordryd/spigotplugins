@@ -13,15 +13,12 @@ import org.bukkit.World;
  */
 public abstract class AbstractParticle
 {
-	private final Particle particle;
 	private final Location location;
 	private final World world;
 	private final int count;
 
 	/**
 	 * Constructor.
-	 * @param particle
-	 * 			{@code Particle} type to spawn. This is from {@link org.bukkit.Particle}.
 	 * @param location
 	 * 			{@code Location} at which to particle.
 	 * @param world
@@ -29,18 +26,10 @@ public abstract class AbstractParticle
 	 * @param count
 	 * 			The amount of particles.
 	 */
-	protected AbstractParticle(Particle particle, Location location, World world, int count) {
-		this.particle = particle;
+	protected AbstractParticle(Location location, World world, int count) {
 		this.location = location;
 		this.world = world;
 		this.count = count;
-	}
-
-	/**
-	 * @return the {@code Particle} type.
-	 */
-	public Particle getParticle() {
-		return particle;
 	}
 
 	/**

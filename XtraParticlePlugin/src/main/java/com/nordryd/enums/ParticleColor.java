@@ -66,10 +66,6 @@ public enum ParticleColor
 		return blue;
 	}
 
-	public Color getColorFromRGB() {
-		return Color.fromRGB(red, green, blue);
-	}
-
 	/**
 	 * @return Normalized <b>red</b> value &isin; [0, 1].
 	 */
@@ -89,5 +85,12 @@ public enum ParticleColor
 	 */
 	public double getNormalizedBlue() {
 		return blue / 255.0;
+	}
+
+	/**
+	 * @return {@link Color} object based on the {@link ParticleColor}'s RGB values.
+	 */
+	public Color getColorFromRGB() {
+		return Color.fromRGB(red, green, blue);
 	}
 }

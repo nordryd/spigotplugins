@@ -19,10 +19,10 @@ import com.nordryd.util.IValues;
 
 /**
  * <p>
- * Class to handle all miscellaneous {@code Event}s.
+ * Class to handle all miscellaneous {@link Event}s.
  * </p>
  * <p>
- * {@code EventHandler}s may be placed here until refactored to be grouped with
+ * {@link EventHandler}s may be placed here until refactored to be grouped with
  * other methods.
  * </p>
  * 
@@ -34,26 +34,39 @@ public class MiscEventListener extends EventListener
 	 * Constructor.
 	 * 
 	 * @param plugin
-	 *            {@code JavaPlugin}
+	 *            {@link JavaPlugin}
 	 */
 	public MiscEventListener(JavaPlugin jPlugin) {
 		super(jPlugin);
 	}
 
+	/**
+	 * Handler for when an item is enchanted.
+	 * 
+	 * @param eievent
+	 *            {@link EnchantItemEvent}
+	 */
 	@EventHandler
 	public void onItemEnchanted(EnchantItemEvent eievent) {
 		Player player = eievent.getEnchanter();
 		Block enchantingTable = eievent.getEnchantBlock();
 
-		ParticleFactory.spawnParticles(ParticleEnchanting.getBuilder(player.getLocation().add(0.0, 2.0, 0.0), player.getWorld()).setCount(75).build(),
-				ParticleEnchanting.getBuilder(
-						enchantingTable.getLocation().add(IValues.BLOCK_CENTER_OFFSET, IValues.BLOCK_CENTER_OFFSET + 1, IValues.BLOCK_CENTER_OFFSET),
-						enchantingTable.getWorld()).setCount(75).build(),
-				ParticleSpellEffect.getBuilder(
-						enchantingTable.getLocation().add(IValues.BLOCK_CENTER_OFFSET, IValues.BLOCK_CENTER_OFFSET + 1, IValues.BLOCK_CENTER_OFFSET),
-						enchantingTable.getWorld()).setColors(ParticleColor.values()).setCount(75).build());
+		ParticleFactory
+				.spawnParticles(ParticleEnchanting.getBuilder(player.getLocation().add(0.0, 2.0, 0.0), player.getWorld()).setCount(75).build(),
+						ParticleEnchanting.getBuilder(enchantingTable.getLocation().add(IValues.BLOCK_CENTER_OFFSET, IValues.BLOCK_CENTER_OFFSET + 1,
+								IValues.BLOCK_CENTER_OFFSET), enchantingTable.getWorld()).setCount(75).build(),
+						ParticleSpellEffect
+								.getBuilder(enchantingTable.getLocation().add(IValues.BLOCK_CENTER_OFFSET, IValues.BLOCK_CENTER_OFFSET + 1,
+										IValues.BLOCK_CENTER_OFFSET), enchantingTable.getWorld())
+								.setColors(ParticleColor.values()).setCount(75).build());
 	}
 
+	/**
+	 * Handler for when an item is crafted.
+	 * 
+	 * @param cievent
+	 *            {@link CraftItemEvent}
+	 */
 	@EventHandler
 	public void onItemCraft(CraftItemEvent cievent) {
 		Entity player = cievent.getWhoClicked();
@@ -62,6 +75,12 @@ public class MiscEventListener extends EventListener
 				.setColors(ParticleColor.RED_VIOLET).setCount(20).build());
 	}
 
+	/**
+	 * Handler for when a furnace successfully smelts something.
+	 * 
+	 * @param fsevent
+	 *            {@link FurnaceSmeltEvent}
+	 */
 	@EventHandler
 	public void onFurnaceSmeltSuccessful(FurnaceSmeltEvent fsevent) {
 		Block furnace = fsevent.getBlock();
@@ -72,6 +91,12 @@ public class MiscEventListener extends EventListener
 				.setColors(ParticleColor.ORANGE).build());
 	}
 
+	/**
+	 * Handler for when a potion is successfully brewed in a brewing stand.
+	 * 
+	 * @param bevent
+	 *            {@link BrewEvent}
+	 */
 	@EventHandler
 	public void onBrew(BrewEvent bevent) {
 		Block brewingStand = bevent.getBlock();

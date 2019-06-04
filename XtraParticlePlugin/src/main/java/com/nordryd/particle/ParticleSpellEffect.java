@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Random;
 
 import org.bukkit.Location;
-import org.bukkit.Particle;
 import org.bukkit.World;
 
 import com.nordryd.enums.ParticleColor;
@@ -26,7 +25,7 @@ public class ParticleSpellEffect extends AbstractParticle
 	private final Random rng;
 
 	private ParticleSpellEffect(Location location, World world, int count, List<ParticleColor> colors) {
-		super(Particle.SPELL_MOB, location, world, count);
+		super(location, world, count);
 		this.rng = new Random();
 		this.colors = colors;
 	}

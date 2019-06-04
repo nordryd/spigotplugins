@@ -1,5 +1,7 @@
 package com.nordryd.particle;
 
+import org.bukkit.Effect;
+import org.bukkit.Particle;
 import org.bukkit.Particle.DustOptions;
 
 import com.nordryd.enums.ParticleColor;
@@ -16,13 +18,13 @@ public class ParticleFactory
 {
 	/**
 	 * <p>
-	 * Spawn a given set of {@code AbstractParticle}s. One or more can be given (yay
+	 * Spawn a given set of {@link AbstractParticle}s. One or more can be given (yay
 	 * ellipses *<i>peepohype</i>*).
 	 * </p>
 	 * 
 	 * @param particles
 	 *            The particles to spawn in terms of the plugin's
-	 *            {@code PluginParticle} class.
+	 *            {@link AbstractParticle} class.
 	 */
 	public static void spawnParticles(final AbstractParticle... particles) {
 		for (AbstractParticle particle : particles) {
@@ -54,37 +56,36 @@ public class ParticleFactory
 	}
 
 	private static void sparkle(final ParticleSparkle pSparkle) {
-		pSparkle.getWorld().spawnParticle(pSparkle.getParticle(), pSparkle.getLocation(), pSparkle.getCount());
+		pSparkle.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, pSparkle.getLocation(), pSparkle.getCount());
 	}
 
 	private static void dust(final ParticleDust pDust) {
-		pDust.getWorld().spawnParticle(pDust.getParticle(), pDust.getLocation(), pDust.getCount(),
-				new DustOptions(pDust.getColor(), pDust.getSize()));
+		pDust.getWorld().spawnParticle(Particle.REDSTONE, pDust.getLocation(), pDust.getCount(), new DustOptions(pDust.getColor(), pDust.getSize()));
 
 	}
 
 	private static void spellEffect(final ParticleSpellEffect pSpellEffect) {
 		for (int count = 0; count < pSpellEffect.getCount(); count++) {
 			ParticleColor color = pSpellEffect.getColor();
-			pSpellEffect.getWorld().spawnParticle(pSpellEffect.getParticle(), pSpellEffect.getLocation(), 0, color.getNormalizedRed(),
+			pSpellEffect.getWorld().spawnParticle(Particle.SPELL_MOB, pSpellEffect.getLocation(), 0, color.getNormalizedRed(),
 					color.getNormalizedGreen(), color.getNormalizedBlue(), 1);
 		}
 
 	}
 
 	private static void enchanting(final ParticleEnchanting pEnchanting) {
-		pEnchanting.getWorld().spawnParticle(pEnchanting.getParticle(), pEnchanting.getLocation(), pEnchanting.getCount());
+		pEnchanting.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, pEnchanting.getLocation(), pEnchanting.getCount());
 	}
 
 	private static void dragonBreath(final ParticleDragonBreath pDragonBreath) {
-		pDragonBreath.getWorld().spawnParticle(pDragonBreath.getParticle(), pDragonBreath.getLocation(), pDragonBreath.getCount());
+		pDragonBreath.getWorld().spawnParticle(Particle.DRAGON_BREATH, pDragonBreath.getLocation(), pDragonBreath.getCount());
 	}
 
 	private static void itemCrack(final ParticleItemCrack pItemCrack) {
-		pItemCrack.getWorld().spawnParticle(pItemCrack.getParticle(), pItemCrack.getLocation(), pItemCrack.getCount(), pItemCrack.getItem());
+		pItemCrack.getWorld().spawnParticle(Particle.ITEM_CRACK, pItemCrack.getLocation(), pItemCrack.getCount(), pItemCrack.getItem());
 	}
 
 	private static void flame(final ParticleFlame pFlame) {
-		pFlame.getWorld().spawnParticle(pFlame.getParticle(), pFlame.getLocation(), pFlame.getCount());
+		pFlame.getWorld().playEffect(pFlame.getLocation(), Effect.MOBSPAWNER_FLAMES, 0);
 	}
 }

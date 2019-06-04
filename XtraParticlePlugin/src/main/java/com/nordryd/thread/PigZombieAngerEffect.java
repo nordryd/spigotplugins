@@ -6,10 +6,22 @@ import org.bukkit.scheduler.BukkitRunnable;
 import com.nordryd.particle.ParticleFactory;
 import com.nordryd.particle.ParticleFlame;
 
+/**
+ * <p>
+ * Class to handle pig zombies getting pissed off
+ * </p>
+ * 
+ * @author Nordryd
+ */
 public class PigZombieAngerEffect extends BukkitRunnable
 {
 	private final PigZombie pigZombie;
 
+	/**
+	 * Constructor.
+	 * @param pigZombie
+	 * 			{@link PigZombie} that is pissed off.
+	 */
 	public PigZombieAngerEffect(final PigZombie pigZombie) {
 		this.pigZombie = pigZombie;
 	}
@@ -23,7 +35,7 @@ public class PigZombieAngerEffect extends BukkitRunnable
 		}
 	}
 
-	public void stop() {
+	private void stop() {
 		cancel();
 	}
 }

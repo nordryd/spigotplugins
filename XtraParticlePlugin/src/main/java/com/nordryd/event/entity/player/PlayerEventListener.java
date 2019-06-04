@@ -6,6 +6,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -13,12 +14,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLevelChangeEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.nordryd.enums.Config;
@@ -35,9 +38,9 @@ import com.nordryd.util.IValues;
 
 /**
  * <p>
- * Class to handle all {@code PlayerEvent}s, or events that specifically involve
- * players (like {@code EntityEvent}s that are only handled for
- * {@code EntityType.PLAYER}.
+ * Class to handle all {@link PlayerEvent}s, or events that specifically involve
+ * players (like {@link EntityEvent}s that are only handled for
+ * {@code EntityType.PLAYER}).
  * </p>
  * 
  * @author Nordryd
@@ -54,11 +57,17 @@ public class PlayerEventListener extends EventListener
 		super(jPlugin);
 	}
 
+	/**
+	 * Handler for when a {@link Player} joins the game.
+	 * 
+	 * @param pjevent
+	 *            {@link PlayerJoinEvent}
+	 */
 	@EventHandler
-	public void onPlayerLogin(PlayerJoinEvent pjevent) {
+	public void onPlayerJoin(PlayerJoinEvent pjevent) {
 		Player player = pjevent.getPlayer();
 
-		if (jPlugin.getConfig().getBoolean(Config.DO_CUSTOM_LOGIN_MESSAGES.getKey())) {
+		if (jPlugin.getConfig().getBoolean(Config.DO_CUSTOM_JOIN_MESSAGES.getKey())) {
 			List<String> possibleMessages = jPlugin.getConfig().getStringList(Config.LOGIN_MESSAGES.getKey());
 
 			pjevent.setJoinMessage(possibleMessages.get(rng.nextInt(possibleMessages.size())).replace(IValues.PLAYER_NAME_ESCAPE, player.getName()));
@@ -71,17 +80,29 @@ public class PlayerEventListener extends EventListener
 		ParticleFactory.spawnParticles(ParticleSparkle.getBuilder(player.getLocation(), player.getWorld()).setCount(50).build());
 	}
 
+	/**
+	 * Handler for when a {@link Player} leaves the game.
+	 * 
+	 * @param pqevent
+	 *            {@link PlayerQuitEvent}
+	 */
 	@EventHandler
 	public void onPlayerLogout(PlayerQuitEvent pqevent) {
 		Player player = pqevent.getPlayer();
 
-		if (jPlugin.getConfig().getBoolean(Config.DO_CUSTOM_LOGOUT_MESSAGES.getKey())) {
+		if (jPlugin.getConfig().getBoolean(Config.DO_CUSTOM_LEAVE_MESSAGES.getKey())) {
 			List<String> possibleMessages = jPlugin.getConfig().getStringList(Config.LOGOUT_MESSAGES.getKey());
 
 			pqevent.setQuitMessage(possibleMessages.get(rng.nextInt(possibleMessages.size())).replace(IValues.PLAYER_NAME_ESCAPE, player.getName()));
 		}
 	}
 
+	/**
+	 * Handler for when a {@link Player} respawns.
+	 * 
+	 * @param prevent
+	 *            {@link PlayerRespawnEvent}
+	 */
 	@EventHandler
 	public void onPlayerRespawn(PlayerRespawnEvent prevent) {
 		Player player = prevent.getPlayer();
@@ -89,6 +110,12 @@ public class PlayerEventListener extends EventListener
 		ParticleFactory.spawnParticles(ParticleSparkle.getBuilder(player.getLocation(), player.getWorld()).setCount(50).build());
 	}
 
+	/**
+	 * Handler for when a {@link Player} dings.
+	 * 
+	 * @param plcevent
+	 *            {@link PlayerLevelChangeEvent}
+	 */
 	@EventHandler
 	public void onDing(PlayerLevelChangeEvent plcevent) {
 		if (jPlugin.getConfig().getBoolean(Config.DO_DING_PARTICLES.getKey())) {
@@ -108,6 +135,12 @@ public class PlayerEventListener extends EventListener
 		}
 	}
 
+	/**
+	 * Handler for when the {@link Player} damages an {@link Entity}.
+	 * 
+	 * @param edbeevent
+	 *            {@link EntityDamageByEntityEvent}
+	 */
 	@EventHandler
 	public void onPlayerAttack(EntityDamageByEntityEvent edbeevent) {
 		if (edbeevent.getDamager().getType().equals(EntityType.PLAYER) && (edbeevent.getEntity() instanceof LivingEntity)) {
@@ -122,12 +155,36 @@ public class PlayerEventListener extends EventListener
 
 				if (jPlugin.getConfig().getBoolean(Config.DO_ENCHANTED_WEAPON_PARTICLES.getKey()) && IUtility.isTool(tool.getType())
 						&& (!tool.getEnchantments().isEmpty())) {
-					ParticleFactory.spawnParticles(ParticleSparkle.getBuilder(entity.getLocation().add(0, 1, 0), entity.getWorld()).setCount(3).build());
+					ParticleFactory
+							.spawnParticles(ParticleSparkle.getBuilder(entity.getLocation().add(0, 1, 0), entity.getWorld()).setCount(3).build());
 				}
 			}
 		}
 	}
 
+	/**
+	 * Handler for when the {@link Player} shoots a bow.
+	 * 
+	 * @param esbevent
+	 *            {@link EntityShootBowEvent}
+	 */
+	@EventHandler
+	public void onEntityShootBow(EntityShootBowEvent esbevent) {
+		if (esbevent.getEntity().getType().equals(EntityType.PLAYER)) {
+			Entity arrow = esbevent.getProjectile(), shooter = esbevent.getEntity();
+
+			if (!((Player) shooter).getInventory().getItemInMainHand().getEnchantments().isEmpty()) {
+				arrow.setMetadata(Metadata.FIRED_FROM_ENCHANTED_WEAPON.getKey(), new FixedMetadataValue(jPlugin, 0));
+			}
+		}
+	}
+
+	/**
+	 * Handler for when the {@link Player} is hit and takes damage.
+	 * 
+	 * @param edevent
+	 *            {@link EntityDamageEvent}
+	 */
 	@EventHandler
 	public void onPlayerDamaged(EntityDamageEvent edevent) {
 		if (jPlugin.getConfig().getBoolean(Config.DO_LOW_HEALTH_EFFECTS.getKey()) && edevent.getEntityType().equals(EntityType.PLAYER)) {
@@ -135,13 +192,25 @@ public class PlayerEventListener extends EventListener
 		}
 	}
 
+	/**
+	 * Handler for when the {@link Player} regains health.
+	 * 
+	 * @param erhevent
+	 *            {@link EntityRegainHealthEvent}
+	 */
 	@EventHandler
-	public void onPlayerHealingAboveLowHealthThreshold(EntityRegainHealthEvent erhevent) {
+	public void onPlayerRegainHealth(EntityRegainHealthEvent erhevent) {
 		if (jPlugin.getConfig().getBoolean(Config.DO_LOW_HEALTH_EFFECTS.getKey()) && erhevent.getEntityType().equals(EntityType.PLAYER)) {
 			checkPlayerHealth((Player) erhevent.getEntity());
 		}
 	}
 
+	/**
+	 * Handler for when the {@link Player} empties a bucket.
+	 * 
+	 * @param pbeevent
+	 *            {@link PlayerBucketEmptyEvent}
+	 */
 	@EventHandler
 	public void onBucketEmpty(PlayerBucketEmptyEvent pbeevent) {
 		Player player = pbeevent.getPlayer();

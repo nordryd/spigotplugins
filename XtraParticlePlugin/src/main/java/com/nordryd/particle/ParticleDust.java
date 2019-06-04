@@ -4,7 +4,6 @@ import java.util.Random;
 
 import org.bukkit.Color;
 import org.bukkit.Location;
-import org.bukkit.Particle;
 import org.bukkit.World;
 
 import com.nordryd.enums.ParticleColor;
@@ -12,8 +11,7 @@ import com.nordryd.util.IValues;
 
 /**
  * <p>
- * Class for <b><i>dust</i></b> particles with certain characteristics. Based on
- * <b>REDSTONE</b> particles.
+ * Class for <b><i>dust</i></b> particles with certain characteristics.
  * </p>
  * 
  * @author Nordryd
@@ -24,18 +22,18 @@ public class ParticleDust extends AbstractParticle
 	private final Color color;
 
 	private ParticleDust(Location location, World world, int count, int size, Color color) {
-		super(Particle.REDSTONE, location, world, count);
+		super(location, world, count);
 		this.size = size;
 		this.color = color;
 	}
 
 	/**
-	 * Get a {@code Builder} to get an instance of {@code ParticleDust}.
+	 * Get a {@link Builder} to get an instance of {@link ParticleDust}.
 	 * 
 	 * @param location
-	 *            The {@code Location} to spawn the particle at.
+	 *            The {@link Location} to spawn the particle at.
 	 * @param world
-	 *            The {@code World} to spawn the particle at.
+	 *            The {@link World} to spawn the particle at.
 	 * @return A new Builder.
 	 */
 	public static Builder getBuilder(Location location, World world) {
@@ -43,7 +41,7 @@ public class ParticleDust extends AbstractParticle
 	}
 
 	/**
-	 * Builder for {@code ParticleDust}.
+	 * Builder for {@link ParticleDust}.
 	 */
 	public static class Builder
 	{
@@ -57,11 +55,11 @@ public class ParticleDust extends AbstractParticle
 			this.world = world;
 			this.count = rng.nextInt(IValues.RANDOMIZER_VALUE_FOR_DEFAULT_PARTICLE_COUNTS + 1) + IValues.RANDOMIZER_VALUE_FOR_DEFAULT_PARTICLE_COUNTS;
 			this.size = rng.nextInt(IValues.RANDOMIZER_VALUE_FOR_DEFAULT_PARTICLE_COUNTS + 1) + IValues.RANDOMIZER_VALUE_FOR_DEFAULT_PARTICLE_COUNTS;
-			this.color = ParticleColor.RED.getColorFromRGB();
+			this.color = ParticleColor.values()[rng.nextInt(ParticleColor.values().length)].getColorFromRGB();
 		}
 
 		/**
-		 * @return A new instance of {@code ParticleDust} based on the Builder's fields.
+		 * @return A new instance of {@link ParticleDust} based on the Builder's fields.
 		 */
 		public ParticleDust build() {
 			return new ParticleDust(this.location, this.world, this.count, this.size, this.color);
@@ -72,7 +70,7 @@ public class ParticleDust extends AbstractParticle
 		 * 
 		 * @param count
 		 *            The amount of particles to spawn.
-		 * @return This {@code Builder}.
+		 * @return This {@link Builder}.
 		 */
 		public Builder setCount(int count) {
 			this.count = count;
@@ -84,7 +82,7 @@ public class ParticleDust extends AbstractParticle
 		 * 
 		 * @param size
 		 *            The size of the dust cloud(s).
-		 * @return This {@code Builder}.
+		 * @return This {@link Builder}.
 		 */
 		public Builder setSize(int size) {
 			this.size = size;
@@ -96,7 +94,7 @@ public class ParticleDust extends AbstractParticle
 		 * 
 		 * @param color
 		 *            The desired color of the dust cloud(s).
-		 * @return This {@code Builder}.
+		 * @return This {@link Builder}.
 		 */
 		public Builder setColor(ParticleColor color) {
 			this.color = color.getColorFromRGB();

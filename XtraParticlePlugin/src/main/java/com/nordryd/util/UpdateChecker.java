@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 
 /**
  * <p>
- * Thread class to check for updates to the Spigot API.
+ * {@link Thread} class to check for updates to the Spigot API.
  * </p>
  * 
  * @author Nordryd
@@ -28,16 +28,16 @@ public class UpdateChecker extends Thread
 		URLConnection conn = null;
 
 		try {
-			conn = new URL(Reference.API_LINK).openConnection();
+			conn = new URL(IReference.API_LINK).openConnection();
 
 			BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 			logger.info("Checking for updates...");
 
-			if (reader.readLine().equals(Reference.CURRENT_VERSION)) {
+			if (reader.readLine().equals(IReference.CURRENT_VERSION)) {
 				logger.info("No updates available atm.");
 			}
 			else {
-				logger.info("There's an update! Download it at " + Reference.RESOURCE_URL + ".");
+				logger.info("There's an update! Download it at " + IReference.RESOURCE_URL + ".");
 			}
 		}
 		catch (MalformedURLException mue) {
@@ -47,7 +47,13 @@ public class UpdateChecker extends Thread
 			System.err.println(IValues.PREFIX + " IOException occurred.");
 		}
 	}
-	
+
+	/**
+	 * Checks the Spigot API database for updates.
+	 * 
+	 * @param logger
+	 *            The {@link Logger} to log messages to.
+	 */
 	public static void checkForUpdates(Logger logger) {
 		UpdateChecker updateChecker = new UpdateChecker(logger);
 		updateChecker.start();

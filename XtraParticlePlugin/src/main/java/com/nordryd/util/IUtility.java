@@ -31,7 +31,7 @@ public interface IUtility
 	 * <b>True</b> if the material given is that of a tool.
 	 * 
 	 * @param material
-	 *            {@code Material}
+	 *            {@link Material}
 	 * @return If the given material is a tool or not.
 	 */
 	public static boolean isTool(Material material) {
@@ -59,8 +59,8 @@ public interface IUtility
 	 * location, rather than its logical origin.
 	 * 
 	 * @param location
-	 *            {@code Location} of the block.
-	 * @return The {@code Location} geometric center of the given block.
+	 *            {@link Location} of the block.
+	 * @return The {@link Location} geometric center of the given block.
 	 */
 	public static Location getCenteredBlockLocation(Location location) {
 		return location.add(IValues.BLOCK_CENTER_OFFSET, IValues.BLOCK_CENTER_OFFSET, IValues.BLOCK_CENTER_OFFSET);
@@ -70,8 +70,8 @@ public interface IUtility
 	 * Gives the blood color of the given living entity.
 	 * 
 	 * @param entity
-	 *            {@code LivingEntity}
-	 * @return The {@code ItemStack} with the correct color to act as the entity's
+	 *            {@link LivingEntity}
+	 * @return The {@link ItemStack} with the correct color to act as the entity's
 	 *         blood.
 	 */
 	public static ItemStack getBloodColor(LivingEntity entity) {
@@ -121,8 +121,8 @@ public interface IUtility
 	 * mobs from having unnecessary particles.
 	 * 
 	 * @param entity
-	 *            {@code LivingEntity} to check.
-	 * @return If the {@code LivingEntity} can attack or not.
+	 *            {@link LivingEntity} to check.
+	 * @return If the {@link LivingEntity} can attack or not.
 	 */
 	public static boolean canAttack(LivingEntity entity) {
 		if (!((entity instanceof Creature) || (entity instanceof Flying) || (entity instanceof Slime))) {
