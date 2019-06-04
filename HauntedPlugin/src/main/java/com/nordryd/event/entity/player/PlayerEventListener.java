@@ -36,7 +36,6 @@ public class PlayerEventListener extends EventListener
 		petevent.setHatching(false);
 		Spirit spirit = new Spirit(IUtility.getWorldServerFromWorld(petevent.getEgg().getWorld()), petevent.getEgg().getLocation(),
 				"please kill the pig");
-		
 		// BukkitTask task = new SpiritThread(plugin,
 		// petevent.getEgg().getLocation()).runTask(plugin);
 	}
