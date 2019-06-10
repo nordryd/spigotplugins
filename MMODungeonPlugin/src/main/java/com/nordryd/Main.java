@@ -5,7 +5,7 @@ import java.util.logging.Logger;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.nordryd.enums.Config;
-import com.nordryd.event.misc.MiscEventListener;
+import com.nordryd.event.EventListener;
 import com.nordryd.util.IReference.InfoMessages;
 import com.nordryd.util.UpdateChecker;
 
@@ -28,7 +28,7 @@ public class Main extends JavaPlugin
 		UpdateChecker.checkForUpdates(logger);
 		Config.addDefaultConfig(this);
 
-		MiscEventListener.initializeEventListeners(this);
+		EventListener.initializeEventListeners(this);
 	}
 
 	@Override
