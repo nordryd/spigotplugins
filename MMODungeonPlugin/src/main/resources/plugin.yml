@@ -2,3 +2,17 @@ name: MMODungeonPlugin
 main: com.nordryd.Main
 version: 1.0
 api-version: 1.14
+commands:
+   mmod.demo:
+      description: This is a demo command.
+      usage: Usage = /mmod.demo [player]
+      permission: mmod.admin
+      permission-message: You don't have permission to use mmod.demo
+permissions:
+  mmod.admin:
+    description: Gives access to all commands.
+    default: op
+    children:
+      mmod.user: true
+  mmod.user:
+    description: Gives access to commands that do not enable grieving.

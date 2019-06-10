@@ -1,10 +1,7 @@
-package com.nordryd.event.entity;
+package com.nordryd.event;
 
 import org.bukkit.event.entity.EntityEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import com.nordryd.event.EventListener;
-import com.nordryd.event.entity.player.PlayerEventListener;
 
 /**
  * <p>

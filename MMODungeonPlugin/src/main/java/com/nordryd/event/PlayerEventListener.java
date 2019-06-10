@@ -1,4 +1,4 @@
-package com.nordryd.event.entity.player;
+package com.nordryd.event;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
@@ -15,7 +15,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.nordryd.enums.Config;
 import com.nordryd.enums.Metadata;
 import com.nordryd.enums.ParticleColor;
-import com.nordryd.event.EventListener;
 import com.nordryd.particle.ParticleFactory;
 import com.nordryd.particle.ParticleSpellEffect;
 import com.nordryd.util.IValues;
@@ -50,9 +49,7 @@ public class PlayerEventListener extends EventListener
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent pjevent) {
 		Player player = pjevent.getPlayer();
-
 		player.setMetadata(Metadata.PLAYER_HEALTH_LOW.getKey(), Metadata.getMetadataValue(jPlugin, false));
-
 		checkPlayerHealth(player);
 	}
 

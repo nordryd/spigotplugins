@@ -2,6 +2,8 @@ package com.nordryd.enums;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.nordryd.annotation.GameRegistration;
+
 /**
  * <p>
  * Enum for all strings and default values for the plugin configuration, as well
@@ -17,41 +19,54 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public enum Config
 {
-	DO_LOW_HEALTH_EFFECTS("doLowHealthEffects", true);
+    /**
+     * <p>
+     * If low health effects are active.
+     * </p>
+     * 
+     * <p>
+     * Default: <b><i>TRUE</i></b>
+     * </p>
+     */
+    DO_LOW_HEALTH_EFFECTS("doLowHealthEffects", true);
 
-	private final String key;
-	private final Object defaultValue;
+    private final String key;
+    private final Object defaultValue;
 
-	private Config(String key, Object defaultValue) {
-		this.key = key;
-		this.defaultValue = defaultValue;
-	}
+    private Config(String key, Object defaultValue) {
+        this.key = key;
+        this.defaultValue = defaultValue;
+    }
 
-	public String getKey() {
-		return key;
-	}
+    /**
+     * @return The config key.
+     */
+    public String getKey() {
+        return key;
+    }
 
-	public Object getDefault() {
-		return defaultValue;
-	}
+    @Override
+    public String toString() {
+        return this.key;
+    }
 
-	@Override
-	public String toString() {
-		return this.key;
-	}
+    private Object getDefault() {
+        return defaultValue;
+    }
 
-	/**
-	 * Initializes all the configutation values with their respective defaults.
-	 * 
-	 * @param plugin
-	 *        {@link JavaPlugin} to add config values to.
-	 */
-	public static void addDefaultConfig(JavaPlugin plugin) {
-		for (Config configDefault : Config.values()) {
-			plugin.getConfig().addDefault(configDefault.getKey(), configDefault.getDefault());
-		}
+    /**
+     * Initializes all the configutation values with their respective defaults.
+     * 
+     * @param plugin
+     *        {@link JavaPlugin} to add config values to.
+     */
+    @GameRegistration
+    public static void registerDefaultConfig(JavaPlugin plugin) {
+        for (Config configDefault : Config.values()) {
+            plugin.getConfig().addDefault(configDefault.getKey(), configDefault.getDefault());
+        }
 
-		plugin.getConfig().options().copyDefaults(true);
-		plugin.saveConfig();
-	}
+        plugin.getConfig().options().copyDefaults(true);
+        plugin.saveConfig();
+    }
 }
