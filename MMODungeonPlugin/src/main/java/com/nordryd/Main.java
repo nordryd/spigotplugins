@@ -2,6 +2,7 @@ package com.nordryd;
 
 import java.util.logging.Logger;
 
+import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.nordryd.enums.Commands;
@@ -10,6 +11,7 @@ import com.nordryd.event.CommandEventListener;
 import com.nordryd.event.EventListener;
 import com.nordryd.util.IReference.InfoMessages;
 import com.nordryd.util.UpdateChecker;
+import com.nordryd.world.CustomChunkGenerator;
 
 /**
  * <p>
@@ -37,5 +39,10 @@ public class Main extends JavaPlugin
     @Override
     public void onDisable() {
         logger.info(InfoMessages.ON_DISABLE);
+    }
+
+    @Override
+    public ChunkGenerator getDefaultWorldGenerator(String worldName, String id) {
+        return new CustomChunkGenerator();
     }
 }

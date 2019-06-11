@@ -1,5 +1,7 @@
 package com.nordryd.event;
 
+import java.util.Optional;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
@@ -99,10 +101,12 @@ public class PlayerEventListener extends EventListener
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent pievent) {
-        if (pievent.getItem().getItemMeta().getDisplayName().equals(RegionTool.NAME)) {
-            if(pievent.getAction().equals(Action.LEFT_CLICK_BLOCK) || pievent.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-                pievent.setCancelled(true);
-                
+        if (Optional.ofNullable(pievent.getItem()).isPresent()) {
+            if (pievent.getItem().getItemMeta().getDisplayName().equals(RegionTool.NAME)) {
+                if (pievent.getAction().equals(Action.LEFT_CLICK_BLOCK) || pievent.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+                    pievent.setCancelled(true);
+
+                }
             }
         }
     }

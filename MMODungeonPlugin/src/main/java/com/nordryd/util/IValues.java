@@ -17,6 +17,8 @@ import com.nordryd.util.annotation.PluginUtility;
 public interface IValues
 {
     public static final String PREFIX = ChatColor.DARK_AQUA + "[" + IReference.PLUGIN_NAME + "]" + ChatColor.AQUA;
+    
+    public static final int CHUNK_SIZE = 16;
 
     public static final double DEFAULT_LOW_HEALTH_THRESHOLD = 6.5;
     public static final double BLOCK_CENTER_OFFSET = 0.5;
