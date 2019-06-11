@@ -1,4 +1,4 @@
-package com.nordryd.annotation;
+package com.nordryd.util.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,8 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * <p>
- * Annotation for a class (typically an interface) whose only purpose is utility
- * and reference, with no derived classes.
+ * Annotation for a method involving registration.
  * </p>
  * 
  * <p>
@@ -19,6 +18,6 @@ import java.lang.annotation.Target;
  * @author Nordryd
  */
 @Retention(RetentionPolicy.CLASS)
-@Target(ElementType.TYPE)
-public @interface PluginUtility {
+@Target(ElementType.METHOD)
+public @interface GameRegistration {
 }

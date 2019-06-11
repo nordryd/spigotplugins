@@ -4,8 +4,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.nordryd.annotation.GameRegistration;
 import com.nordryd.util.IValues.ICmdStrings;
+import com.nordryd.util.annotation.GameRegistration;
 
 /**
  * <p>
@@ -25,7 +25,7 @@ public enum Commands
     /**
      * Just a demo command for testing.
      */
-    DEMO("demo", 1, true);
+    REGION_EDITING_TOOL("region_edit_tool", 0, true);
 
     private final String command;
     private final int params;
@@ -82,5 +82,7 @@ public enum Commands
         for (Commands command : Commands.values()) {
             jPlugin.getCommand(command.getCommand()).setExecutor(cExecutor);
         }
+
+        jPlugin.getLogger().info(ANSIColor.PURPLE.getSeq() + "Commands registered successfully!" + ANSIColor.RESET.getSeq());
     }
 }

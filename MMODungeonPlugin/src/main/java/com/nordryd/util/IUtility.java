@@ -2,7 +2,7 @@ package com.nordryd.util;
 
 import org.bukkit.Location;
 
-import com.nordryd.annotation.PluginUtility;
+import com.nordryd.util.annotation.PluginUtility;
 
 /**
  * <p>

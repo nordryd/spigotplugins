@@ -2,12 +2,13 @@ name: MMODungeonPlugin
 main: com.nordryd.Main
 version: 1.0
 api-version: 1.14
+load: startup
 commands:
-   mmod.demo:
-      description: This is a demo command.
-      usage: Usage = /mmod.demo [player]
+   mmod.region_edit_tool:
+      description: Gives the player a region editing tool.
+      usage: Usage = /mmod.region_edit_tool
       permission: mmod.admin
-      permission-message: You don't have permission to use mmod.demo
+      permission-message: You don't have permission to use mmod.region_edit_tool
 permissions:
   mmod.admin:
     description: Gives access to all commands.

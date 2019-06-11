@@ -1,6 +1,7 @@
 package com.nordryd.util;
 
-import com.nordryd.annotation.PluginUtility;
+import com.nordryd.enums.ANSIColor;
+import com.nordryd.util.annotation.PluginUtility;
 
 /**
  * <p>
@@ -26,9 +27,12 @@ public interface IReference
     @PluginUtility
     public static interface InfoMessages
     {
-        public static final String ON_ENABLE = IReference.PLUGIN_NAME + " started. Hello, world!";
-        public static final String CONTACT = "Please contact " + Dev.DISCORD + " on discord with any problems.";
-        public static final String ON_DISABLE = IReference.PLUGIN_NAME + " stopped. Goodbye, world!";
+        public static final String ON_ENABLE = ANSIColor.CYAN.getSeq() + IReference.PLUGIN_NAME + " started. Hello, world!"
+                + ANSIColor.RESET.getSeq();
+        public static final String CONTACT = ANSIColor.CYAN.getSeq() + "Please contact " + Dev.DISCORD + " on discord with any problems."
+                + ANSIColor.RESET.getSeq();
+        public static final String ON_DISABLE = ANSIColor.CYAN.getSeq() + IReference.PLUGIN_NAME + " stopped. Goodbye, world!"
+                + ANSIColor.RESET.getSeq();
     }
 
     /**
@@ -40,7 +44,6 @@ public interface IReference
     public static interface Dev
     {
         public static final String PLAYER_NAME = "Nordryd";
-        public static final String SIGO_PLAYER_NAME = "daniesings";
         public static final String DISCORD = "Nordryd#9298";
     }
 }

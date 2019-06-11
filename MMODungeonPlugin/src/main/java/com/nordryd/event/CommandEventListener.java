@@ -1,6 +1,5 @@
 package com.nordryd.event;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -8,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.nordryd.enums.Commands;
+import com.nordryd.item.RegionTool;
 
 /**
  * <p>
@@ -28,17 +28,15 @@ public class CommandEventListener extends EventListener implements CommandExecut
         super(jPlugin);
     }
 
-    // Console = ConsoleCommandSender
     @Override
     public boolean onCommand(CommandSender cSender, Command cmd, String label, String[] args) {
         if (cSender instanceof Player) {
-            if (label.equalsIgnoreCase(Commands.DEMO.getCommand()) && Commands.DEMO.isIssuedCommandValid(cSender, args.length)) {
-                Bukkit.broadcastMessage(args[0] + " has issued the " + label + " command!");
+            if (label.equalsIgnoreCase(Commands.REGION_EDITING_TOOL.getCommand())
+                    && Commands.REGION_EDITING_TOOL.isIssuedCommandValid(cSender, args.length)) {
+                
+                ((Player)cSender).getInventory().addItem(new RegionTool());
                 return true;
             }
-        }
-        else {
-
         }
 
         return false;

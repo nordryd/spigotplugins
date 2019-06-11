@@ -4,7 +4,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.nordryd.annotation.PluginUtility;
+import com.nordryd.util.annotation.PluginUtility;
 
 /**
  * <p>
@@ -40,7 +40,6 @@ public interface IMetadata
     public static final String PLAYER_IS_INSTANCED = "playerInstanceID";
     public static final String PLAYER_PARTY_ID = "playerPartyID";
 
-    public static final String DUNGEON_EDIT_TOOL = "dungeonEditTool";
     public static final String DUNGEON_ID = "dungeonID";
 
     public static final String TANK_BLOCK = "tankBlock", HEALER_BLOCK = "healerBlock", DAMAGE_BLOCK = "damageBlock";

@@ -2,8 +2,8 @@ package com.nordryd.enums;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.nordryd.annotation.GameRegistration;
 import com.nordryd.util.IValues;
+import com.nordryd.util.annotation.GameRegistration;
 
 /**
  * <p>
@@ -69,16 +69,18 @@ public enum Config
     /**
      * Initializes all the configutation values with their respective defaults.
      * 
-     * @param plugin
+     * @param jPlugin
      *        {@link JavaPlugin} to add config values to.
      */
     @GameRegistration
-    public static void registerDefaultConfig(JavaPlugin plugin) {
+    public static void registerDefaultConfig(JavaPlugin jPlugin) {
         for (Config configDefault : Config.values()) {
-            plugin.getConfig().addDefault(configDefault.getKey(), configDefault.getDefault());
+            jPlugin.getConfig().addDefault(configDefault.getKey(), configDefault.getDefault());
         }
 
-        plugin.getConfig().options().copyDefaults(true);
-        plugin.saveConfig();
+        jPlugin.getConfig().options().copyDefaults(true);
+        jPlugin.saveConfig();
+
+        jPlugin.getLogger().info(ANSIColor.GREEN.getSeq() + "Config registered successfully!" + ANSIColor.RESET.getSeq());
     }
 }

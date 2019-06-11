@@ -5,15 +5,18 @@ import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.player.PlayerEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.nordryd.enums.Config;
 import com.nordryd.enums.ParticleColor;
+import com.nordryd.item.RegionTool;
 import com.nordryd.particle.ParticleFactory;
 import com.nordryd.particle.ParticleSpellEffect;
 import com.nordryd.util.IMetadata;
@@ -91,6 +94,16 @@ public class PlayerEventListener extends EventListener
         else if (player.getMetadata(IMetadata.PLAYER_HEALTH_LOW).get(0).asBoolean()
                 && (player.getHealth() > jPlugin.getConfig().getDouble(Config.LOW_HEALTH_THRESHOLD.getKey()))) {
             player.setMetadata(IMetadata.PLAYER_HEALTH_LOW, IMetadata.getMetadataValue(jPlugin, false));
+        }
+    }
+
+    @EventHandler
+    public void onPlayerInteract(PlayerInteractEvent pievent) {
+        if (pievent.getItem().getItemMeta().getDisplayName().equals(RegionTool.NAME)) {
+            if(pievent.getAction().equals(Action.LEFT_CLICK_BLOCK) || pievent.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+                pievent.setCancelled(true);
+                
+            }
         }
     }
 }

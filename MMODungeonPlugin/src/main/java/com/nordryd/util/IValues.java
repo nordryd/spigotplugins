@@ -2,8 +2,8 @@ package com.nordryd.util;
 
 import org.bukkit.ChatColor;
 
-import com.nordryd.annotation.PluginUtility;
 import com.nordryd.enums.Commands;
+import com.nordryd.util.annotation.PluginUtility;
 
 /**
  * <p>
