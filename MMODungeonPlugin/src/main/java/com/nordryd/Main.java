@@ -6,7 +6,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.nordryd.enums.Commands;
 import com.nordryd.enums.Config;
-import com.nordryd.event.CommandListener;
+import com.nordryd.event.CommandEventListener;
 import com.nordryd.event.EventListener;
 import com.nordryd.util.IReference.InfoMessages;
 import com.nordryd.util.UpdateChecker;
@@ -30,7 +30,7 @@ public class Main extends JavaPlugin
         UpdateChecker.checkForUpdates(logger);
 
         Config.registerDefaultConfig(this);
-        Commands.registerCommands(this, new CommandListener(this));
+        Commands.registerCommands(this, new CommandEventListener(this));
         EventListener.registerEventListeners(this);
     }
 

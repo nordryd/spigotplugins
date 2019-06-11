@@ -16,30 +16,32 @@ import com.nordryd.annotation.GameRegistration;
  */
 public abstract class EventListener implements Listener
 {
-	protected final JavaPlugin jPlugin;
-	protected final Random rng;
+    protected final JavaPlugin jPlugin;
+    protected final Random rng;
 
-	/**
-	 * Constructor.
-	 * 
-	 * @param plugin
-	 *            {@code JavaPlugin}
-	 */
-	protected EventListener(JavaPlugin jPlugin) {
-		this.jPlugin = jPlugin;
-		this.rng = new Random();
-	}
+    /**
+     * Constructor.
+     * 
+     * @param plugin
+     *        {@code JavaPlugin}
+     */
+    protected EventListener(JavaPlugin jPlugin) {
+        this.jPlugin = jPlugin;
+        this.rng = new Random();
+    }
 
-	/**
-	 * Called to initialize all {@code EventListener}s in the plugin.
-	 * 
-	 * @param jPlugin
-	 *            {@code JavaPlugin}
-	 */
-	@GameRegistration
-	public static void registerEventListeners(JavaPlugin jPlugin) {
-		jPlugin.getServer().getPluginManager().registerEvents(new PlayerEventListener(jPlugin), jPlugin);
-		jPlugin.getServer().getPluginManager().registerEvents(new EntityEventListener(jPlugin), jPlugin);
-		jPlugin.getServer().getPluginManager().registerEvents(new BlockEventListener(jPlugin), jPlugin);
-	}
+    /**
+     * Called to initialize all {@code EventListener}s in the plugin.
+     * 
+     * @param jPlugin
+     *        {@code JavaPlugin}
+     */
+    @GameRegistration
+    public static void registerEventListeners(JavaPlugin jPlugin) {
+        jPlugin.getServer().getPluginManager().registerEvents(new PlayerEventListener(jPlugin), jPlugin);
+        jPlugin.getServer().getPluginManager().registerEvents(new EntityEventListener(jPlugin), jPlugin);
+        jPlugin.getServer().getPluginManager().registerEvents(new BlockEventListener(jPlugin), jPlugin);
+        jPlugin.getServer().getPluginManager().registerEvents(new CommandEventListener(jPlugin), jPlugin);
+        jPlugin.getServer().getPluginManager().registerEvents(new ServerEventListener(jPlugin), jPlugin);
+    }
 }

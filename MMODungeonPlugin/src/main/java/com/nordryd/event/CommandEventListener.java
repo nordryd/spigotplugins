@@ -16,7 +16,7 @@ import com.nordryd.enums.Commands;
  * 
  * @author Nordryd
  */
-public class CommandListener extends EventListener implements CommandExecutor
+public class CommandEventListener extends EventListener implements CommandExecutor
 {
     /**
      * Constructor.
@@ -24,7 +24,7 @@ public class CommandListener extends EventListener implements CommandExecutor
      * @param plugin
      *        {@link JavaPlugin}
      */
-    public CommandListener(JavaPlugin jPlugin) {
+    public CommandEventListener(JavaPlugin jPlugin) {
         super(jPlugin);
     }
 
@@ -36,6 +36,9 @@ public class CommandListener extends EventListener implements CommandExecutor
                 Bukkit.broadcastMessage(args[0] + " has issued the " + label + " command!");
                 return true;
             }
+        }
+        else {
+
         }
 
         return false;

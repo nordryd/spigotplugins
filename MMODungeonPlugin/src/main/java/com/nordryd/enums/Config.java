@@ -3,6 +3,7 @@ package com.nordryd.enums;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.nordryd.annotation.GameRegistration;
+import com.nordryd.util.IValues;
 
 /**
  * <p>
@@ -28,7 +29,18 @@ public enum Config
      * Default: <b><i>TRUE</i></b>
      * </p>
      */
-    DO_LOW_HEALTH_EFFECTS("doLowHealthEffects", true);
+    DO_LOW_HEALTH_EFFECTS("doLowHealthEffects", true),
+
+    /**
+     * <p>
+     * The threshold at which health is considered low.
+     * </p>
+     * 
+     * <p>
+     * Default: <b><i>6.5</i></b>
+     * </p>
+     */
+    LOW_HEALTH_THRESHOLD("lowHealthThreshold", IValues.DEFAULT_LOW_HEALTH_THRESHOLD);
 
     private final String key;
     private final Object defaultValue;
