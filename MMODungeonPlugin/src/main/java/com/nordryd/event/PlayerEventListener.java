@@ -19,6 +19,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.nordryd.enums.Config;
 import com.nordryd.enums.ParticleColor;
 import com.nordryd.item.RegionTool;
+import com.nordryd.item.ToolHandler;
 import com.nordryd.particle.ParticleFactory;
 import com.nordryd.particle.ParticleSpellEffect;
 import com.nordryd.util.IMetadata;
@@ -103,10 +104,13 @@ public class PlayerEventListener extends EventListener
     public void onPlayerInteract(PlayerInteractEvent pievent) {
         if (Optional.ofNullable(pievent.getItem()).isPresent()) {
             if (pievent.getItem().getItemMeta().getDisplayName().equals(RegionTool.NAME)) {
-                if (pievent.getAction().equals(Action.LEFT_CLICK_BLOCK) || pievent.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-                    pievent.setCancelled(true);
+                if (pievent.getAction() == Action.RIGHT_CLICK_BLOCK) {
+                    ToolHandler.onRegionToolUse(pievent.getClickedBlock().getLocation(), pievent.getClickedBlock());
+                }
+                else {
 
                 }
+                pievent.setCancelled(true);
             }
         }
     }

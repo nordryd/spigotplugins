@@ -4,16 +4,33 @@ version: 1.0
 api-version: 1.14
 load: startup
 commands:
+   mmod.help:
+      description: Lists all plugin commands.
+      usage: Usage = /mmod.help
+      permission: mmod.user
    mmod.region_edit_tool:
       description: Gives the player a region editing tool.
       usage: Usage = /mmod.region_edit_tool
       permission: mmod.admin
       permission-message: You don't have permission to use mmod.region_edit_tool
+   mmod.create_test_world:
+      description: Creates a new world. FOR TESTING.
+      usage: Usage = /mmod.create_new_world
+      permission: mmod.admin
+      permission-message: You don't have permission to use mmod.create_new_world
+   mmod.list_instances:
+      description: Lists all active instances.
+      usage: Usage = /mmod.list_instances
+      permission: mmod.user
+   mmod.port_to_world:
+      description: Teleports the player to the specified world. Use ./mmod.list_instances to get all the active world names.
+      usage: Usage = /mmod.port_to_world [world_name]
+      permission: mmod.user
 permissions:
-  mmod.admin:
-    description: Gives access to all commands.
-    default: op
-    children:
-      mmod.user: true
-  mmod.user:
-    description: Gives access to commands that do not enable grieving.
+   mmod.admin:
+      description: Gives access to all commands.
+      default: op
+      children:
+         mmod.user: true
+   mmod.user:
+      description: Gives access to commands that do not enable grieving.

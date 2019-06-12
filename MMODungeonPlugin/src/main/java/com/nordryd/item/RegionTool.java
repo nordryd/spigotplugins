@@ -20,8 +20,8 @@ public class RegionTool extends ItemStack implements IPluginTool
         ItemMeta meta = this.getItemMeta();
         meta.addEnchant(Enchantment.DURABILITY, 100, true);
         meta.setDisplayName(NAME);
-        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_PLACED_ON);
+
         this.setItemMeta(meta);
     }
 }

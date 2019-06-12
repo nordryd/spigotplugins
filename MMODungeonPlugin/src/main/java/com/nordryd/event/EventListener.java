@@ -3,6 +3,7 @@ package com.nordryd.event;
 import java.util.Random;
 
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.nordryd.enums.ANSIColor;
@@ -39,12 +40,14 @@ public abstract class EventListener implements Listener
      */
     @GameRegistration
     public static void registerEventListeners(JavaPlugin jPlugin) {
-        jPlugin.getServer().getPluginManager().registerEvents(new PlayerEventListener(jPlugin), jPlugin);
-        jPlugin.getServer().getPluginManager().registerEvents(new EntityEventListener(jPlugin), jPlugin);
-        jPlugin.getServer().getPluginManager().registerEvents(new BlockEventListener(jPlugin), jPlugin);
-        jPlugin.getServer().getPluginManager().registerEvents(new CommandEventListener(jPlugin), jPlugin);
-        jPlugin.getServer().getPluginManager().registerEvents(new ServerEventListener(jPlugin), jPlugin);
-
+        PluginManager pluginManager = jPlugin.getServer().getPluginManager();
+        
+        pluginManager.registerEvents(new PlayerEventListener(jPlugin), jPlugin);
+        pluginManager.registerEvents(new EntityEventListener(jPlugin), jPlugin);
+        pluginManager.registerEvents(new BlockEventListener(jPlugin), jPlugin);
+        pluginManager.registerEvents(new CommandEventListener(jPlugin), jPlugin);
+        pluginManager.registerEvents(new ServerEventListener(jPlugin), jPlugin);
+        
         jPlugin.getLogger().info(ANSIColor.YELLOW.getSeq() + "EventListeners registered successfully!" + ANSIColor.RESET.getSeq());
     }
 }

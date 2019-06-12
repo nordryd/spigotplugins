@@ -10,7 +10,7 @@ import com.nordryd.util.IValues;
 
 /**
  * <p>
- * Class for all {@link ServerEvents}.
+ * Class for all {@link ServerEvent}s.
  * </p>
  * 
  * @author Nordryd

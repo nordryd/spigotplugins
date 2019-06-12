@@ -4,8 +4,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.nordryd.util.IReference;
 import com.nordryd.util.IValues.ICmdStrings;
 import com.nordryd.util.annotation.GameRegistration;
+
+import net.md_5.bungee.api.ChatColor;
 
 /**
  * <p>
@@ -22,10 +25,11 @@ import com.nordryd.util.annotation.GameRegistration;
  */
 public enum Commands
 {
-    /**
-     * Just a demo command for testing.
-     */
-    REGION_EDITING_TOOL("region_edit_tool", 0, true);
+    HELP("help", 0, false),
+    REGION_EDITING_TOOL("region_edit_tool", 0, true),
+    CREATE_NEW_WORLD("create_test_world", 0, true),
+    LIST_INSTANCES("list_instances", 0, false),
+    PORT_TO_WORLD("port_to_world", 1, false);
 
     private final String command;
     private final int params;
@@ -58,6 +62,19 @@ public enum Commands
      */
     public boolean isIssuedCommandValid(CommandSender cSender, int args) {
         return (this.params == args) && (this.isAdminCmd ? cSender.isOp() : true);
+    }
+
+    /**
+     * @return A list of all the registered plugin commands.
+     */
+    public static String getAllCommands() {
+        StringBuilder builder = new StringBuilder(ChatColor.AQUA + IReference.PLUGIN_NAME + " Commands:\n");
+
+        for (Commands command : Commands.values()) {
+            builder.append("/" + command.getCommand() + "\n");
+        }
+
+        return builder.toString().substring(0, builder.toString().length() - 1);
     }
 
     /**
