@@ -41,6 +41,20 @@ public class CommandEventListener extends EventListener implements CommandExecut
 
     }
 
+    /**
+     * TODO: create_new_world will become start_party (or something that initializes
+     * the instance) TODO: port_to_world will become start_instance
+     * 
+     * TODO: need commands for party management (get party, promote to leader
+     * (coloring leader differently as such), leave party, kick from party, disband
+     * party, view party, choose_instance)
+     * 
+     * TODO: need commands for instance management (start_instance, tp_out,
+     * tp_back_to_dungeon (detect if player was dced or dungeon was interrupted, and
+     * say if the request is invalid)
+     * 
+     * TODO: study how WoW instancing works, and try to replicate it.
+     */
     @Override
     public boolean onCommand(CommandSender cSender, Command cmd, String label, String[] args) {
         if (cSender instanceof Player) {
@@ -58,15 +72,14 @@ public class CommandEventListener extends EventListener implements CommandExecut
             else if (label.equalsIgnoreCase(Commands.CREATE_NEW_WORLD.getCommand())
                     && Commands.CREATE_NEW_WORLD.isIssuedCommandValid(cSender, args.length)) {
                 player.sendMessage("World being created. Players will be immobilized during this time.");
-                String instanceName = "test";
-                InstanceManager.createInstance(instanceName);
+                String name = "test";
+                InstanceManager.createInstance(name);
 
-                player.sendMessage("New world, " + InstanceManager.getInstanceFromName("instance_" + instanceName).get().getName() + ", created!");
                 return true;
             }
             else if (label.equalsIgnoreCase(Commands.LIST_INSTANCES.getCommand())
                     && Commands.LIST_INSTANCES.isIssuedCommandValid(cSender, args.length)) {
-                player.sendMessage(InstanceManager.getListOfWorldNames());
+                player.sendMessage(InstanceManager.getActiveInstanceNames());
                 return true;
             }
             else if (label.equalsIgnoreCase(Commands.PORT_TO_WORLD.getCommand())

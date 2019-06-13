@@ -2,6 +2,7 @@ package com.nordryd.enums;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.nordryd.enums.ColorEnumHandler.ANSIColor;
 import com.nordryd.util.IValues;
 import com.nordryd.util.annotation.GameRegistration;
 
@@ -81,6 +82,6 @@ public enum Config
         jPlugin.getConfig().options().copyDefaults(true);
         jPlugin.saveConfig();
 
-        jPlugin.getLogger().info(ANSIColor.GREEN.getSeq() + "Config registered successfully!" + ANSIColor.RESET.getSeq());
+        jPlugin.getLogger().info(ANSIColor.GREEN + "Config registered successfully!" + ANSIColor.RESET);
     }
 }

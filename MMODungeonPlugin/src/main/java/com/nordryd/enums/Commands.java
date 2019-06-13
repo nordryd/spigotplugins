@@ -4,6 +4,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.nordryd.enums.ColorEnumHandler.ANSIColor;
 import com.nordryd.util.IReference;
 import com.nordryd.util.IValues.ICmdStrings;
 import com.nordryd.util.annotation.GameRegistration;
@@ -100,6 +101,6 @@ public enum Commands
             jPlugin.getCommand(command.getCommand()).setExecutor(cExecutor);
         }
 
-        jPlugin.getLogger().info(ANSIColor.PURPLE.getSeq() + "Commands registered successfully!" + ANSIColor.RESET.getSeq());
+        jPlugin.getLogger().info(ANSIColor.PURPLE + "Commands registered successfully!" + ANSIColor.RESET);
     }
 }

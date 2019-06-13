@@ -1,6 +1,6 @@
 package com.nordryd.util;
 
-import com.nordryd.enums.ANSIColor;
+import com.nordryd.enums.ColorEnumHandler.ANSIColor;
 import com.nordryd.util.annotation.PluginUtility;
 
 /**
@@ -27,12 +27,12 @@ public interface IReference
     @PluginUtility
     public static interface InfoMessages
     {
-        public static final String ON_ENABLE = ANSIColor.CYAN.getSeq() + IReference.PLUGIN_NAME + " started. Hello, world!"
-                + ANSIColor.RESET.getSeq();
-        public static final String CONTACT = ANSIColor.CYAN.getSeq() + "Please contact " + Dev.DISCORD + " on discord with any problems."
-                + ANSIColor.RESET.getSeq();
-        public static final String ON_DISABLE = ANSIColor.CYAN.getSeq() + IReference.PLUGIN_NAME + " stopped. Goodbye, world!"
-                + ANSIColor.RESET.getSeq();
+        public static final String ON_ENABLE = ANSIColor.CYAN + IReference.PLUGIN_NAME + " started. Hello, world!"
+                + ANSIColor.RESET;
+        public static final String CONTACT = ANSIColor.CYAN + "Please contact " + Dev.DISCORD + " on discord with any problems."
+                + ANSIColor.RESET;
+        public static final String ON_DISABLE = ANSIColor.CYAN + IReference.PLUGIN_NAME + " stopped. Goodbye, world!"
+                + ANSIColor.RESET;
     }
 
     /**

@@ -32,7 +32,7 @@ public class CustomChunkGenerator extends ChunkGenerator
 
     // Difference between highest & lowest possible heights of the world
     // TODO try to make this different for each biome?
-    private static final int DEFAULT_MULTIPLIER = 7;
+    private static final int DEFAULT_MULTIPLIER = 0;
 
     // How much to alter the amplitude/frequency between each octave
     private static final double NOISE_AMPLITUDE = 0.5, NOISE_FREQUENCY = 0.5;
@@ -63,7 +63,7 @@ public class CustomChunkGenerator extends ChunkGenerator
                 currentHeight = (int) ((generator.noise((chunkX * IValues.CHUNK_SIZE) + x, (chunkZ * IValues.CHUNK_SIZE) + z, NOISE_AMPLITUDE,
                         NOISE_FREQUENCY) * DEFAULT_MULTIPLIER) + MINIMUM_HEIGHT);
 
-                // Set spawn in the first chunk
+                // Set spawn in the first chunk to be at the height of the first chunk
                 if ((x == 0) && (z == 0)) {
                     world.setSpawnLocation(x, currentHeight + 1, z);
                 }

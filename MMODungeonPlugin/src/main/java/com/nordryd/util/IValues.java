@@ -18,6 +18,12 @@ public interface IValues
 {
     public static final String PREFIX = ChatColor.DARK_AQUA + "[" + IReference.PLUGIN_NAME + "]" + ChatColor.AQUA;
     
+    /**
+     * Yes, it has the underscore with it.
+     */
+    public static final String WORLD_PREFIX = "rootworld_";
+    public static final String HOMEWORLD_STRING = "homeworld";
+    
     public static final int CHUNK_SIZE = 16;
 
     public static final double DEFAULT_LOW_HEALTH_THRESHOLD = 6.5;
