@@ -8,11 +8,20 @@ commands:
       description: Lists all plugin commands.
       usage: Usage = /mmod.help
       permission: mmod.user
+   mmod.instances:
+      description: Lists all available instances, along with their details.
+      usage: Usage = /mmod.instances
+      permission: mmod.user
    mmod.region_edit_tool:
       description: Gives the player a region editing tool.
       usage: Usage = /mmod.region_edit_tool
       permission: mmod.admin
       permission-message: You don't have permission to use mmod.region_edit_tool
+   mmod.instance_edit_tool:
+      description: Enables instance editing mode in instance worlds
+      usage: Usage = /mmod.instance_edit_tool
+      permission: mmod.admin
+      permission-message: You don't have permission to use mmod.instance_edit_tool
    mmod.create_test_world:
       description: Creates a new world. FOR TESTING.
       usage: Usage = /mmod.create_new_world
@@ -22,9 +31,9 @@ commands:
       description: Lists all active instances.
       usage: Usage = /mmod.list_instances
       permission: mmod.user
-   mmod.port_to_world:
+   mmod.port:
       description: Teleports the player to the specified world. Use ./mmod.list_instances to get all the active world names.
-      usage: Usage = /mmod.port_to_world [world_name]
+      usage: Usage = /mmod.port [world_name]
       permission: mmod.user
 permissions:
    mmod.admin:

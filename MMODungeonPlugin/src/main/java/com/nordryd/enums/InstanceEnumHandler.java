@@ -4,19 +4,19 @@ import org.bukkit.ChatColor;
 
 /**
  * <p>
- * Dungeon difficulty along with their modifiers.
+ * Interface containing any enum that involves instance attributes.
  * </p>
  * 
  * @author Nordryd
  */
-public interface DungeonEnumHandler
+public interface InstanceEnumHandler
 {
     /**
      * <p>
      * Enum for any possible instance statuses.
      * </p>
      */
-    public enum Status
+    public enum InstanceStatus
     {
         AWAITING, ACTIVE, CANCELLED, ENDED;
     }
@@ -26,9 +26,25 @@ public interface DungeonEnumHandler
      * Enum for the available dungeon difficulties.
      * </p>
      */
-    public enum Difficulty
+    public enum InstanceDifficulty
     {
-        NORMAL, HEROIC, MYTHIC;
+        EASY(ChatColor.GREEN), MEDIUM(ChatColor.YELLOW, ChatColor.ITALIC), HARD(ChatColor.RED, ChatColor.ITALIC, ChatColor.BOLD);
+
+        private final String prefix;
+
+        private InstanceDifficulty(ChatColor... colors) {
+            String prefix = "";
+            for (ChatColor color : colors) {
+                prefix += (color + "");
+            }
+
+            this.prefix = prefix;
+        }
+
+        @Override
+        public String toString() {
+            return prefix + super.toString() + ChatColor.RESET;
+        }
     }
 
     /**
@@ -36,7 +52,7 @@ public interface DungeonEnumHandler
      * Enum for the different instance variants.
      * </p>
      */
-    public enum Type
+    public enum InstanceType
     {
         /**
          * Travel through an designated area and fight various bosses.
@@ -56,32 +72,38 @@ public interface DungeonEnumHandler
      * chosen in a lobby with special blocks (or signs?)
      * </p>
      */
-    public enum PlayerRole
+    public enum InstancePlayerRole
     {
         /**
          * Protects other party members from taking damage.
          */
-        TANK(ChatColor.LIGHT_PURPLE + "tank"),
+        TANK(ChatColor.LIGHT_PURPLE),
 
         /**
          * Mends other party members' wounds.
          */
-        HEALER(ChatColor.AQUA + "healer"),
+        HEALER(ChatColor.AQUA),
 
         /**
          * Deals damage to enemies.
          */
-        DAMAGE(ChatColor.RED + "damage");
+        DAMAGE(ChatColor.RED);
 
         private String string;
 
-        private PlayerRole(String string) {
+        private InstancePlayerRole(ChatColor... colors) {
+            String string = "";
+
+            for (ChatColor color : colors) {
+                string += (color + "");
+            }
+
             this.string = string;
         }
 
         @Override
         public String toString() {
-            return this.string;
+            return this.string + super.toString() + ChatColor.RESET;
         }
     }
 }

@@ -19,7 +19,10 @@ import net.md_5.bungee.api.ChatColor;
  * <p>
  * This only stores information about each command. Commands must be added to
  * <i>plugin.yml</i> manually.<br>
- * TODO Can that be changed? Generate {@code plugin.yml}?
+ * TODO: Can that be changed? Generate {@code plugin.yml}?
+ * </p>
+ * <p>
+ * TODO: TAB COMPLETE IMPLEMENTATIONs
  * </p>
  * 
  * @author Nordryd
@@ -27,10 +30,12 @@ import net.md_5.bungee.api.ChatColor;
 public enum Commands
 {
     HELP("help", 0, false),
-    REGION_EDITING_TOOL("region_edit_tool", 0, true),
     CREATE_NEW_WORLD("create_test_world", 0, true),
     LIST_INSTANCES("list_instances", 0, false),
-    PORT_TO_WORLD("port_to_world", 1, false);
+    PORT("port", 1, false),
+    INSTANCES("instances", 0, false),
+    REGION_EDIT_TOOL("region_edit_tool", 0, true),
+    INSTANCE_EDIT_TOOL("instance_edit_tool", 0, true);
 
     private final String command;
     private final int params;

@@ -16,10 +16,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.nordryd.enums.ColorEnumHandler.ParticleColor;
 import com.nordryd.enums.Config;
-import com.nordryd.enums.ParticleColor;
-import com.nordryd.item.RegionTool;
-import com.nordryd.item.ToolHandler;
+import com.nordryd.item.AbstractTool;
+import com.nordryd.item.AbstractToolHandler;
 import com.nordryd.particle.ParticleFactory;
 import com.nordryd.particle.ParticleSpellEffect;
 import com.nordryd.util.IMetadata;
@@ -47,7 +47,15 @@ public class PlayerEventListener extends EventListener
     }
 
     /**
+     * <p>
      * Handler for when a {@link Player} joins the game.
+     * </p>
+     * <p>
+     * TODO: Players spawn at 0,0 as per the custom generators. This is incorrect.
+     * This will be handled by their "homeworld_location" parameter. Set their
+     * location to that if their instance has been deleted.
+     * </p>
+     *
      * 
      * @param pjevent
      *        {@link PlayerJoinEvent}
@@ -56,6 +64,7 @@ public class PlayerEventListener extends EventListener
     public void onPlayerJoin(PlayerJoinEvent pjevent) {
         Player player = pjevent.getPlayer();
         player.setMetadata(IMetadata.PLAYER_HEALTH_LOW, IMetadata.getMetadataValue(jPlugin, false));
+        player.setMetadata(IMetadata.PLAYER_INSTANCE_EDIT_MODE, IMetadata.getMetadataValue(jPlugin, false));
         checkPlayerHealth(player);
     }
 
@@ -103,9 +112,9 @@ public class PlayerEventListener extends EventListener
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent pievent) {
         if (Optional.ofNullable(pievent.getItem()).isPresent()) {
-            if (pievent.getItem().getItemMeta().getDisplayName().equals(RegionTool.NAME)) {
+            if (pievent.getItem().getItemMeta().getDisplayName().equals(AbstractTool.ABSTRACT_TOOL_DISPLAY_NAMES.get("Region Edit Tool"))) {
                 if (pievent.getAction() == Action.RIGHT_CLICK_BLOCK) {
-                    ToolHandler.onRegionToolUse(pievent.getClickedBlock().getLocation(), pievent.getClickedBlock());
+                    AbstractToolHandler.onRegionEditToolUse(pievent.getClickedBlock().getLocation(), pievent.getClickedBlock());
                 }
                 else {
 

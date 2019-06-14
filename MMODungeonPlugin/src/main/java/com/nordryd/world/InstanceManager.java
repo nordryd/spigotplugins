@@ -1,37 +1,46 @@
 package com.nordryd.world;
 
-import java.util.HashMap;
+import java.io.File;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import com.nordryd.enums.Commands;
+import com.nordryd.enums.Instances;
+import com.nordryd.util.IUtility;
 import com.nordryd.util.IValues;
 
 import net.md_5.bungee.api.ChatColor;
 
 public class InstanceManager
 {
-    /**
-     * <p>
-     * All active instances, whether it's an arena or a dungeon.
-     * </p>
-     * <p>
-     * Entry = &lt;Instance ID, World with it's associated instanceOfInstanceID&gt;
-     * </p>
-     */
-    public static final Map<Long, List<World>> ACTIVE_INSTANCES = new HashMap<>();
-
-    public static void createInstance(String instanceName) {
-        Bukkit.createWorld(new WorldCreator(IValues.WORLD_PREFIX + instanceName).generator(new CustomChunkGenerator()).generateStructures(false));
+    // TODO: Use this to enable the saving and reloading of instance worlds upon server start/stop
+    public static void initializeInstance(JavaPlugin jPlugin) {
+        FileConfiguration instanceYaml = YamlConfiguration.loadConfiguration(new File(jPlugin.getDataFolder() + "/instances.yml"));
     }
 
+    public static void createInstance(String instanceName) {
+        Bukkit.createWorld(new WorldCreator(IValues.WORLD_PREFIX + instanceName).generator(new SkyGenerator()).generateStructures(false));
+    }
+    
     public static List<World> getInstances() {
         return Bukkit.getWorlds();
+    }
+    
+    public static String getAvailableInstances() {
+        String string = ChatColor.BLUE + "" + ChatColor.UNDERLINE + "Available Instances:\n" + ChatColor.RESET;
+        
+        for(Instances instance : Instances.values()) {
+            string += instance.toString() + "\n";
+        }
+        
+        return string;
     }
 
     public static String getActiveInstanceNames() {
@@ -39,12 +48,12 @@ public class InstanceManager
                 + ChatColor.BLUE + IValues.HOMEWORLD_STRING + "\n");
 
         for (World world : Bukkit.getWorlds().subList(1, Bukkit.getWorlds().size())) {
-            if (!isWorldNetherOrEnd(world.getName())) {
+            if (!IUtility.isWorldNetherOrEnd(world.getName())) {
                 builder.append(world.getName().substring(IValues.WORLD_PREFIX.length()) + "\n");
             }
         }
 
-        return builder.append(ChatColor.RESET + "Use " + ChatColor.GREEN + "/" + Commands.PORT_TO_WORLD.getCommand() + ChatColor.RESET
+        return builder.append(ChatColor.RESET + "Use " + ChatColor.GREEN + "/" + Commands.PORT.getCommand() + ChatColor.RESET
                 + " [world name] to port to one of these worlds.").toString();
     }
 
@@ -52,20 +61,14 @@ public class InstanceManager
         String name = (instanceName.equals(IValues.HOMEWORLD_STRING)) ? IValues.WORLD_PREFIX.substring(0, IValues.WORLD_PREFIX.length() - 1)
                 : IValues.WORLD_PREFIX + instanceName;
 
-        if (!isWorldNetherOrEnd(name)) {
+        if (!IUtility.isWorldNetherOrEnd(name)) {
             for (World instance : Bukkit.getWorlds()) {
-                Bukkit.broadcastMessage(name + " " + instance.getName());
                 if (instance.getName().equals(name)) {
-                    Bukkit.broadcastMessage("match found");
                     return Optional.ofNullable(instance);
                 }
             }
         }
 
         return Optional.empty();
-    }
-
-    private static boolean isWorldNetherOrEnd(final String worldName) {
-        return worldName.equalsIgnoreCase(IValues.WORLD_PREFIX + "nether") || worldName.equalsIgnoreCase(IValues.WORLD_PREFIX + "the_end");
     }
 }

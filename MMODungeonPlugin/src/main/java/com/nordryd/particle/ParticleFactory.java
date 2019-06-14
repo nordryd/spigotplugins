@@ -4,7 +4,7 @@ import org.bukkit.Effect;
 import org.bukkit.Particle;
 import org.bukkit.Particle.DustOptions;
 
-import com.nordryd.enums.ParticleColor;
+import com.nordryd.enums.ColorEnumHandler.ParticleColor;
 import com.nordryd.util.IValues;
 
 /**

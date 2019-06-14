@@ -8,7 +8,7 @@ import java.util.Random;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-import com.nordryd.enums.ParticleColor;
+import com.nordryd.enums.ColorEnumHandler.ParticleColor;
 import com.nordryd.util.IValues;
 
 /**

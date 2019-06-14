@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.inventory.ItemStack;
 
 import com.nordryd.world.RegionBuilder;
 
@@ -17,24 +18,31 @@ import com.nordryd.world.RegionBuilder;
  * 
  * @author Nordryd
  */
-public class ToolHandler
+public class AbstractToolHandler
 {
     private static Optional<RegionBuilder> regionBuilder = Optional.empty();
 
     /**
-     * Handler for the RegionTool
+     * Handler for the <b>Region Edit Tool</b>
      * 
      * @param location
      *        The {@link Location} of the block.
      * @param block
      *        The {@link Block}
      */
-    public static void onRegionToolUse(Location location, Block block) {
+    public static void onRegionEditToolUse(Location location, Block block) {
         if (!regionBuilder.isPresent()) {
             regionBuilder = Optional.ofNullable(new RegionBuilder(location, block));
         }
         else {
             regionBuilder.get().addPoint(location, block);
         }
+    }
+
+    /**
+     * Handler for the <b>Instance Edit Tool</b>
+     */
+    public static void onInstanceEditToolUse() {
+
     }
 }

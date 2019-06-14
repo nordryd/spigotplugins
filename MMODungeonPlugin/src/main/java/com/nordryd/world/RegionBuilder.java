@@ -15,6 +15,10 @@ import net.md_5.bungee.api.ChatColor;
  * <p>
  * Use this to moldularly build regions with the PointBlock tool
  * </p>
+ * <p>
+ * TODO: There's a chunk.setRegion() method available. Check that out for
+ * setting regions?
+ * </p>
  * 
  * @author Nordryd
  */
@@ -67,7 +71,7 @@ public class RegionBuilder
             originalBlocks.put(location, block.getType());
         }
     }
-    
+
     /**
      * @return If this region has been completed.
      */

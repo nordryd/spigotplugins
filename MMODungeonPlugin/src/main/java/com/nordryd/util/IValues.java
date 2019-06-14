@@ -17,6 +17,7 @@ import com.nordryd.util.annotation.PluginUtility;
 public interface IValues
 {
     public static final String PREFIX = ChatColor.DARK_AQUA + "[" + IReference.PLUGIN_NAME + "]" + ChatColor.AQUA;
+    public static final String TOOL_NAME_FORMAT = ChatColor.LIGHT_PURPLE + "MMOD:" + ChatColor.AQUA;
     
     /**
      * Yes, it has the underscore with it.

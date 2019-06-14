@@ -27,11 +27,11 @@ public class Main extends JavaPlugin
         logger.info(InfoMessages.ON_ENABLE);
         logger.info(InfoMessages.CONTACT);
 
-        UpdateChecker.checkForUpdates(logger);
-
         Config.registerDefaultConfig(this);
         Commands.registerCommands(this, new CommandEventListener(this));
         EventListener.registerEventListeners(this);
+        
+        UpdateChecker.checkForUpdates(logger);
     }
 
     @Override

@@ -21,7 +21,7 @@ import com.nordryd.util.annotation.PluginUtility;
 public interface IMetadata
 {
     public static final String PLAYER_HEALTH_LOW = "playerHealthLow";
-    public static final String PLAYER_DUNGEON_EDIT_MODE = "playerDungeonEditMode";
+    public static final String PLAYER_INSTANCE_EDIT_MODE = "playerInstanceEditMode";
 
     /**
      * <p>
@@ -39,6 +39,8 @@ public interface IMetadata
      */
     public static final String PLAYER_IS_INSTANCED = "playerInstanceID";
     public static final String PLAYER_PARTY_ID = "playerPartyID";
+    
+    public static final String INSTANCE_BLOCK_BREAKABLE = "instanceBlockBreakable";
 
     public static final String DUNGEON_ID = "dungeonID";
 
