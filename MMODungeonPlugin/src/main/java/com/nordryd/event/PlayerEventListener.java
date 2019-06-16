@@ -51,11 +51,14 @@ public class PlayerEventListener extends EventListener
      * Handler for when a {@link Player} joins the game.
      * </p>
      * <p>
-     * TODO: Players spawn at 0,0 as per the custom generators. This is incorrect.
-     * This will be handled by their "homeworld_location" parameter. Set their
-     * location to that if their instance has been deleted.
+     * TODO: Players spawn at (0,0) as per the custom generators if their world goes
+     * away. This is incorrect. This will be handled by their "homeworld_location"
+     * parameter. Set their location to that if their instance has been deleted.
      * </p>
      *
+     * <p>
+     * TODO: Messages & FX for when certain editing modes are enabled/disabled
+     * </p>
      * 
      * @param pjevent
      *        {@link PlayerJoinEvent}

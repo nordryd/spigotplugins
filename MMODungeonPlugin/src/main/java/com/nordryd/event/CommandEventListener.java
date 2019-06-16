@@ -70,7 +70,7 @@ public class CommandEventListener extends EventListener implements CommandExecut
                     && Commands.CREATE_NEW_WORLD.isIssuedCommandValid(cSender, args.length)) {
                 player.sendMessage("World being created. Players will be immobilized during this time.");
                 String name = "test";
-                InstanceManager.createInstance(name);
+                InstanceManager.createInstance(name, jPlugin);
 
                 return true;
             }
@@ -100,6 +100,7 @@ public class CommandEventListener extends EventListener implements CommandExecut
                 }
                 return true;
             }
+            // TODO: DETECT IF PLAYER HAS TOOL ALREADY
             else if (label.equalsIgnoreCase(Commands.REGION_EDIT_TOOL.getCommand())
                     && Commands.REGION_EDIT_TOOL.isIssuedCommandValid(cSender, args.length)) {
                 player.getInventory().addItem(new RegionEditTool());

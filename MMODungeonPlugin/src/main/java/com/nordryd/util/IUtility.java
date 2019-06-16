@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 import com.nordryd.util.annotation.PluginUtility;
 
@@ -53,5 +54,20 @@ public interface IUtility
     public static boolean isInstanceWorld(World world) {
         return !(world.getName().equals(IValues.WORLD_PREFIX.substring(0, IValues.WORLD_PREFIX.length() - 1))
                 || world.getName().equals(IValues.WORLD_PREFIX + "nether") || world.getName().equals(IValues.WORLD_PREFIX + "the_end"));
+    }
+
+    public static boolean isPlayerHoldingItem(Player player, ItemStack item) {
+        if (!item.hasItemMeta()) {
+            return false;
+        }
+
+        return isPlayerHoldingItem(player, item.getItemMeta().getDisplayName());
+    }
+
+    public static boolean isPlayerHoldingItem(Player player, String displayName) {
+        PlayerInventory inventory = player.getInventory();
+
+        return (inventory.getItemInMainHand().hasItemMeta() && inventory.getItemInMainHand().getItemMeta().getDisplayName().equals(displayName))
+                || (inventory.getItemInOffHand().hasItemMeta() && inventory.getItemInOffHand().getItemMeta().getDisplayName().equals(displayName));
     }
 }

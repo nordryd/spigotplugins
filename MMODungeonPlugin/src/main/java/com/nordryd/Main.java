@@ -9,6 +9,7 @@ import com.nordryd.enums.Config;
 import com.nordryd.event.CommandEventListener;
 import com.nordryd.event.EventListener;
 import com.nordryd.util.IReference.InfoMessages;
+import com.nordryd.world.InstanceManager;
 import com.nordryd.util.UpdateChecker;
 
 /**
@@ -30,6 +31,7 @@ public class Main extends JavaPlugin
         Config.registerDefaultConfig(this);
         Commands.registerCommands(this, new CommandEventListener(this));
         EventListener.registerEventListeners(this);
+        InstanceManager.restartInstances(this);
         
         UpdateChecker.checkForUpdates(logger);
     }

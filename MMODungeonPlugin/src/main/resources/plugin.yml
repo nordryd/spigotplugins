@@ -2,7 +2,6 @@ name: MMODungeonPlugin
 main: com.nordryd.Main
 version: 1.0
 api-version: 1.14
-load: startup
 commands:
    mmod.help:
       description: Lists all plugin commands.

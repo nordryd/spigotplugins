@@ -1,5 +1,7 @@
 package com.nordryd.enums;
 
+import java.util.ArrayList;
+
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.nordryd.enums.ColorEnumHandler.ANSIColor;
@@ -41,7 +43,23 @@ public enum Config
      * Default: <b><i>6.5</i></b>
      * </p>
      */
-    LOW_HEALTH_THRESHOLD("lowHealthThreshold", IValues.DEFAULT_LOW_HEALTH_THRESHOLD);
+    LOW_HEALTH_THRESHOLD("lowHealthThreshold", IValues.DEFAULT_LOW_HEALTH_THRESHOLD),
+
+    /**
+     * <p>
+     * Active <b>dungeon</b> instance names. This is a string with all names
+     * separated by spaces.
+     * </p>
+     */
+    DUNGEONS("dungeons", new ArrayList<String>()),
+
+    /**
+     * <p>
+     * Active <b>Arena</b> instance names. This is a string with all names separated
+     * by spaces.
+     * </p>
+     */
+    ARENAS("arenas", new ArrayList<String>());
 
     private final String key;
     private final Object defaultValue;

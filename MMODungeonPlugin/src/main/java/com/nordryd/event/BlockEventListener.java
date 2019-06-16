@@ -3,10 +3,12 @@ package com.nordryd.event;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.nordryd.item.AbstractTool;
+import com.nordryd.item.InstanceEditTool;
 import com.nordryd.util.IUtility;
 
 /**
@@ -36,14 +38,19 @@ public class BlockEventListener extends EventListener
     @EventHandler
     public void onBlockBreak(BlockBreakEvent bbevent) {
         if (IUtility.isInstanceWorld(bbevent.getPlayer().getWorld())) {
-            handleInstanceBlockEvent(bbevent, bbevent.getPlayer());
+            bbevent.setCancelled(!isPlayerHoldingInstanceEditTool(bbevent.getPlayer()));
         }
     }
 
-    private void handleInstanceBlockEvent(BlockBreakEvent bbevent, Player player) {
-        if (!player.getInventory().getItemInMainHand().hasItemMeta() || !player.getInventory().getItemInMainHand().getItemMeta().getDisplayName()
-                .equals(AbstractTool.ABSTRACT_TOOL_DISPLAY_NAMES.get("Instance Edit Tool"))) {
-            bbevent.setCancelled(true);
+    @EventHandler
+    public void onBlockPlace(BlockPlaceEvent bpevent) {
+        if (IUtility.isInstanceWorld(bpevent.getPlayer().getWorld())) {
+            bpevent.setCancelled(!isPlayerHoldingInstanceEditTool(bpevent.getPlayer()));
         }
+    }
+
+    private boolean isPlayerHoldingInstanceEditTool(Player player) {
+        // TODO implement the map as .equals instead, based on display name
+        return IUtility.isPlayerHoldingItem(player, AbstractTool.ABSTRACT_TOOL_DISPLAY_NAMES.get(InstanceEditTool.getUniqueName()));
     }
 }

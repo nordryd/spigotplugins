@@ -1,17 +1,15 @@
 package com.nordryd.world;
 
-import java.io.File;
 import java.util.List;
 import java.util.Optional;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.nordryd.enums.Commands;
+import com.nordryd.enums.Config;
 import com.nordryd.enums.Instances;
 import com.nordryd.util.IUtility;
 import com.nordryd.util.IValues;
@@ -20,26 +18,54 @@ import net.md_5.bungee.api.ChatColor;
 
 public class InstanceManager
 {
-    // TODO: Use this to enable the saving and reloading of instance worlds upon server start/stop
-    public static void initializeInstance(JavaPlugin jPlugin) {
-        FileConfiguration instanceYaml = YamlConfiguration.loadConfiguration(new File(jPlugin.getDataFolder() + "/instances.yml"));
+    /**
+     * TODO: Replace this with when the instance starts, and from there an Instance
+     * param will be given, which will have a getType() method<br>
+     * <br>
+     * 
+     * TODO: this will eventually turn into {@code registerInstance},
+     * {@code startInstance}, and {@code endInstance}
+     */
+    public static void createInstance(String instanceName, JavaPlugin jPlugin) {
+        String name = IValues.WORLD_PREFIX + instanceName;
+        Bukkit.createWorld(new WorldCreator(name).generator(new SkyGenerator()).generateStructures(false));
+
+        List<String> configInstanceList = jPlugin.getConfig().getStringList(Config.ARENAS.getKey());
+        configInstanceList.add(name);
+        jPlugin.getConfig().set(Config.ARENAS.getKey(), configInstanceList);
+        jPlugin.saveConfig();
     }
 
-    public static void createInstance(String instanceName) {
-        Bukkit.createWorld(new WorldCreator(IValues.WORLD_PREFIX + instanceName).generator(new SkyGenerator()).generateStructures(false));
+    // TODO: Refactor to an enum similar to Config. Maybe combine them into a
+    // ConfigEnumHandler
+    public static void restartInstances(JavaPlugin jPlugin) {
+        List<String> dungeonNames = jPlugin.getConfig().getStringList(Config.DUNGEONS.getKey()),
+                arenaNames = jPlugin.getConfig().getStringList(Config.ARENAS.getKey());
+
+        if (!dungeonNames.isEmpty()) {
+            for (String dungeonName : dungeonNames) {
+                Bukkit.createWorld(new WorldCreator(dungeonName));
+            }
+        }
+
+        if (!arenaNames.isEmpty()) {
+            for (String arenaName : arenaNames) {
+                Bukkit.createWorld(new WorldCreator(arenaName));
+            }
+        }
     }
-    
+
     public static List<World> getInstances() {
         return Bukkit.getWorlds();
     }
-    
+
     public static String getAvailableInstances() {
         String string = ChatColor.BLUE + "" + ChatColor.UNDERLINE + "Available Instances:\n" + ChatColor.RESET;
-        
-        for(Instances instance : Instances.values()) {
+
+        for (Instances instance : Instances.values()) {
             string += instance.toString() + "\n";
         }
-        
+
         return string;
     }
 
