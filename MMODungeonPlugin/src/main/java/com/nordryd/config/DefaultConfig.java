@@ -1,12 +1,8 @@
-package com.nordryd.enums;
-
-import java.util.ArrayList;
-
-import org.bukkit.plugin.java.JavaPlugin;
+package com.nordryd.config;
 
 import com.nordryd.enums.ColorEnumHandler.ANSIColor;
+import com.nordryd.util.IConfig;
 import com.nordryd.util.IValues;
-import com.nordryd.util.annotation.GameRegistration;
 
 /**
  * <p>
@@ -21,7 +17,7 @@ import com.nordryd.util.annotation.GameRegistration;
  * 
  * @author Nordryd
  */
-public enum Config
+public enum DefaultConfig implements IConfig
 {
     /**
      * <p>
@@ -43,35 +39,17 @@ public enum Config
      * Default: <b><i>6.5</i></b>
      * </p>
      */
-    LOW_HEALTH_THRESHOLD("lowHealthThreshold", IValues.DEFAULT_LOW_HEALTH_THRESHOLD),
-
-    /**
-     * <p>
-     * Active <b>dungeon</b> instance names. This is a string with all names
-     * separated by spaces.
-     * </p>
-     */
-    DUNGEONS("dungeons", new ArrayList<String>()),
-
-    /**
-     * <p>
-     * Active <b>Arena</b> instance names. This is a string with all names separated
-     * by spaces.
-     * </p>
-     */
-    ARENAS("arenas", new ArrayList<String>());
+    LOW_HEALTH_THRESHOLD("lowHealthThreshold", IValues.DEFAULT_LOW_HEALTH_THRESHOLD);
 
     private final String key;
     private final Object defaultValue;
 
-    private Config(String key, Object defaultValue) {
+    private DefaultConfig(String key, Object defaultValue) {
         this.key = key;
         this.defaultValue = defaultValue;
     }
 
-    /**
-     * @return The config key.
-     */
+    @Override
     public String getKey() {
         return key;
     }
@@ -85,15 +63,9 @@ public enum Config
         return defaultValue;
     }
 
-    /**
-     * Initializes all the configutation values with their respective defaults.
-     * 
-     * @param jPlugin
-     *        {@link JavaPlugin} to add config values to.
-     */
-    @GameRegistration
-    public static void registerDefaultConfig(JavaPlugin jPlugin) {
-        for (Config configDefault : Config.values()) {
+    @Override
+    public void register() {
+        for (DefaultConfig configDefault : DefaultConfig.values()) {
             jPlugin.getConfig().addDefault(configDefault.getKey(), configDefault.getDefault());
         }
 

@@ -22,7 +22,15 @@ import net.md_5.bungee.api.ChatColor;
  */
 public enum Instances
 {
-    STOCKADE("The Stockade", InstanceType.DUNGEON, InstanceDifficulty.EASY), SKY("Sky Arena", InstanceType.ARENA, InstanceDifficulty.EASY);
+    /**
+     * Dungeons
+     */
+    STOCKADE("The Stockade", InstanceType.DUNGEON, InstanceDifficulty.EASY),
+
+    /**
+     * Arenas
+     */
+    SKY("Sky Arena", InstanceType.ARENA, InstanceDifficulty.EASY);
 
     private final String name;
     private final InstanceType type;

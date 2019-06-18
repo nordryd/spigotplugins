@@ -8,8 +8,8 @@ import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.nordryd.config.InstanceConfig;
 import com.nordryd.enums.Commands;
-import com.nordryd.enums.Config;
 import com.nordryd.enums.Instances;
 import com.nordryd.util.IUtility;
 import com.nordryd.util.IValues;
@@ -30,17 +30,17 @@ public class InstanceManager
         String name = IValues.WORLD_PREFIX + instanceName;
         Bukkit.createWorld(new WorldCreator(name).generator(new SkyGenerator()).generateStructures(false));
 
-        List<String> configInstanceList = jPlugin.getConfig().getStringList(Config.ARENAS.getKey());
+        List<String> configInstanceList = InstanceConfig.getConfig().getStringList(InstanceConfig.ARENAS.getKey());
         configInstanceList.add(name);
-        jPlugin.getConfig().set(Config.ARENAS.getKey(), configInstanceList);
-        jPlugin.saveConfig();
+        InstanceConfig.getConfig().set(InstanceConfig.ARENAS.getKey(), configInstanceList);
+        InstanceConfig.save();
     }
 
     // TODO: Refactor to an enum similar to Config. Maybe combine them into a
     // ConfigEnumHandler
     public static void restartInstances(JavaPlugin jPlugin) {
-        List<String> dungeonNames = jPlugin.getConfig().getStringList(Config.DUNGEONS.getKey()),
-                arenaNames = jPlugin.getConfig().getStringList(Config.ARENAS.getKey());
+        List<String> dungeonNames = jPlugin.getConfig().getStringList(InstanceConfig.DUNGEONS.getKey()),
+                arenaNames = jPlugin.getConfig().getStringList(InstanceConfig.ARENAS.getKey());
 
         if (!dungeonNames.isEmpty()) {
             for (String dungeonName : dungeonNames) {
