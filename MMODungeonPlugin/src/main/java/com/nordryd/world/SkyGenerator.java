@@ -61,11 +61,7 @@ public class SkyGenerator extends ChunkGenerator
                         NOISE_FREQUENCY) * DEFAULT_MULTIPLIER) + MINIMUM_HEIGHT);
 
                 if ((chunkX == 0) && (chunkZ == 0)) {
-                    chunk.setBlock(x, generatedHeight, z, Material.GLASS);
-                    if(isOnChunkEdge(x, z)) {
-                        chunk.setBlock(x, generatedHeight + 1, z, Material.GLASS_PANE);
-                        chunk.setBlock(x, generatedHeight + 2, z, Material.GLASS_PANE);
-                    }
+                    chunk.setBlock(x, generatedHeight, z, (isOnChunkEdge(x, z) ? Material.COBBLESTONE : Material.STONE_BRICKS));
                 }
                 else {
                     setBlocksBelowToAir(chunk, generatedHeight, x, z);

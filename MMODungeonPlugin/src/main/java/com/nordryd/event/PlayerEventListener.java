@@ -16,8 +16,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.nordryd.config.DefaultConfig;
 import com.nordryd.enums.ColorEnumHandler.ParticleColor;
+import com.nordryd.enums.Config;
 import com.nordryd.item.AbstractTool;
 import com.nordryd.item.AbstractToolHandler;
 import com.nordryd.particle.ParticleFactory;
@@ -79,7 +79,7 @@ public class PlayerEventListener extends EventListener
      */
     @EventHandler
     public void onPlayerDamaged(EntityDamageEvent edevent) {
-        if (jPlugin.getConfig().getBoolean(DefaultConfig.DO_LOW_HEALTH_EFFECTS.getKey()) && edevent.getEntityType().equals(EntityType.PLAYER)) {
+        if (jPlugin.getConfig().getBoolean(Config.DO_LOW_HEALTH_EFFECTS.getKey()) && edevent.getEntityType().equals(EntityType.PLAYER)) {
             checkPlayerHealth((Player) edevent.getEntity());
         }
     }
@@ -92,14 +92,14 @@ public class PlayerEventListener extends EventListener
      */
     @EventHandler
     public void onPlayerRegainHealth(EntityRegainHealthEvent erhevent) {
-        if (jPlugin.getConfig().getBoolean(DefaultConfig.DO_LOW_HEALTH_EFFECTS.getKey()) && erhevent.getEntityType().equals(EntityType.PLAYER)) {
+        if (jPlugin.getConfig().getBoolean(Config.DO_LOW_HEALTH_EFFECTS.getKey()) && erhevent.getEntityType().equals(EntityType.PLAYER)) {
             checkPlayerHealth((Player) erhevent.getEntity());
         }
     }
 
     private void checkPlayerHealth(Player player) {
         if (!player.getMetadata(IMetadata.PLAYER_HEALTH_LOW).get(0).asBoolean()
-                && (player.getHealth() <= jPlugin.getConfig().getDouble(DefaultConfig.LOW_HEALTH_THRESHOLD.getKey()))) {
+                && (player.getHealth() <= jPlugin.getConfig().getDouble(Config.LOW_HEALTH_THRESHOLD.getKey()))) {
             player.setMetadata(IMetadata.PLAYER_HEALTH_LOW, IMetadata.getMetadataValue(jPlugin, true));
             player.sendMessage(ChatColor.RED + "[WARNING] " + ChatColor.DARK_RED + "Health is low!");
             player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_AMBIENT, 1.0f, IValues.PITCH[1]);
@@ -107,7 +107,7 @@ public class PlayerEventListener extends EventListener
                     .setColors(ParticleColor.RED, ParticleColor.FIREBRICK, ParticleColor.ORANGE).setCount(50).build());
         }
         else if (player.getMetadata(IMetadata.PLAYER_HEALTH_LOW).get(0).asBoolean()
-                && (player.getHealth() > jPlugin.getConfig().getDouble(DefaultConfig.LOW_HEALTH_THRESHOLD.getKey()))) {
+                && (player.getHealth() > jPlugin.getConfig().getDouble(Config.LOW_HEALTH_THRESHOLD.getKey()))) {
             player.setMetadata(IMetadata.PLAYER_HEALTH_LOW, IMetadata.getMetadataValue(jPlugin, false));
         }
     }
