@@ -33,10 +33,14 @@ public class Main extends JavaPlugin
         logger.info(InfoMessages.ON_ENABLE);
         logger.info(InfoMessages.CONTACT);
 
+        InstanceManager.restartInstances();
+
         ConfigManager.registerConfigs(this);
-        Commands.registerCommands(this, new CommandEventListener(this));
+
+        CommandEventListener cmdListener = new CommandEventListener(this);
+        Commands.registerCommands(this, cmdListener, cmdListener);
+
         EventListener.registerEventListeners(this);
-        InstanceManager.restartInstances(this);
 
         UpdateChecker.checkForUpdates(logger);
     }

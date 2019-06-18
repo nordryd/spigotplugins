@@ -66,12 +66,12 @@ public enum DefaultConfig implements IConfig
     @Override
     public void register() {
         for (DefaultConfig configDefault : DefaultConfig.values()) {
-            jPlugin.getConfig().addDefault(configDefault.getKey(), configDefault.getDefault());
+            JPLUGIN.getConfig().addDefault(configDefault.getKey(), configDefault.getDefault());
         }
 
-        jPlugin.getConfig().options().copyDefaults(true);
-        jPlugin.saveConfig();
+        JPLUGIN.getConfig().options().copyDefaults(true);
+        JPLUGIN.saveConfig();
 
-        jPlugin.getLogger().info(ANSIColor.GREEN + "Config registered successfully!" + ANSIColor.RESET);
+        JPLUGIN.getLogger().info(ANSIColor.GREEN + "Config registered successfully!" + ANSIColor.RESET);
     }
 }

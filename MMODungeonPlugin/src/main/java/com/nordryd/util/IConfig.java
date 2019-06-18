@@ -13,7 +13,7 @@ import com.nordryd.Main;
  */
 public interface IConfig
 {
-    public static JavaPlugin jPlugin = Main.getPlugin(Main.class);
+    public static JavaPlugin JPLUGIN = Main.getPlugin(Main.class);
 
     /**
      * @return The key for the config entry.
@@ -30,7 +30,7 @@ public interface IConfig
      * Config.<any enum value>.register(JavaPlugin)
      * </p>
      * 
-     * @param jPlugin
+     * @param JPLUGIN
      *        {@link JavaPlugin
      */
     public void register();

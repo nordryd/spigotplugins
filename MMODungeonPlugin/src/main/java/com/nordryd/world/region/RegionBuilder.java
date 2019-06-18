@@ -1,4 +1,4 @@
-package com.nordryd.world;
+package com.nordryd.world.region;
 
 import java.util.HashMap;
 import java.util.Map;

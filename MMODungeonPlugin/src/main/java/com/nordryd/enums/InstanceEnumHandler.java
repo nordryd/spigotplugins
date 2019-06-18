@@ -63,7 +63,12 @@ public interface InstanceEnumHandler
          * Stay in one room and fight wave after wave of mobs until a pre-determined
          * wave, or until the party is overwhelmed.
          */
-        ARENA;
+        ARENA,
+        
+        /**
+         * Lobby before entering an instance.
+         */
+        LOBBY;
     }
 
     /**

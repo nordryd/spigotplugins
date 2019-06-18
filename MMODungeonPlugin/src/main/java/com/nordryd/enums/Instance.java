@@ -1,7 +1,11 @@
 package com.nordryd.enums;
 
+import org.bukkit.generator.ChunkGenerator;
+
 import com.nordryd.enums.InstanceEnumHandler.InstanceDifficulty;
 import com.nordryd.enums.InstanceEnumHandler.InstanceType;
+import com.nordryd.world.generator.LobbyGenerator;
+import com.nordryd.world.generator.SkyGenerator;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -20,26 +24,33 @@ import net.md_5.bungee.api.ChatColor;
  * 
  * @author Nordryd
  */
-public enum Instances
+public enum Instance
 {
+    /**
+     * Lobby
+     */
+    LOBBY("Lobby", InstanceType.LOBBY, InstanceDifficulty.EASY, new LobbyGenerator()),
+
     /**
      * Dungeons
      */
-    STOCKADE("The Stockade", InstanceType.DUNGEON, InstanceDifficulty.EASY),
+    STOCKADE("the_stockade", InstanceType.DUNGEON, InstanceDifficulty.EASY, new SkyGenerator()),
 
     /**
      * Arenas
      */
-    SKY("Sky Arena", InstanceType.ARENA, InstanceDifficulty.EASY);
+    SKY("sky_arena", InstanceType.ARENA, InstanceDifficulty.EASY, new SkyGenerator());
 
     private final String name;
     private final InstanceType type;
     private final InstanceDifficulty difficulty;
+    private final ChunkGenerator cGenerator;
 
-    private Instances(String name, InstanceType type, InstanceDifficulty difficulty) {
+    private Instance(String name, InstanceType type, InstanceDifficulty difficulty, ChunkGenerator cGenerator) {
         this.name = name;
         this.type = type;
         this.difficulty = difficulty;
+        this.cGenerator = cGenerator;
     }
 
     public String getName() {
@@ -52,6 +63,10 @@ public enum Instances
 
     public InstanceDifficulty getDifficulty() {
         return this.difficulty;
+    }
+
+    public ChunkGenerator getChunkGenerator() {
+        return this.cGenerator;
     }
 
     @Override

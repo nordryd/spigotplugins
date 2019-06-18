@@ -6,7 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 
-import com.nordryd.world.RegionBuilder;
+import com.nordryd.world.region.RegionBuilder;
 
 /**
  * <p>

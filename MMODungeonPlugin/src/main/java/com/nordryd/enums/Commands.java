@@ -1,15 +1,15 @@
 package com.nordryd.enums;
 
+import java.util.Optional;
+
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.nordryd.enums.ColorEnumHandler.ANSIColor;
-import com.nordryd.util.IReference;
-import com.nordryd.util.IValues.ICmdStrings;
+import com.nordryd.util.IValues;
 import com.nordryd.util.annotation.GameRegistration;
-
-import net.md_5.bungee.api.ChatColor;
 
 /**
  * <p>
@@ -21,30 +21,29 @@ import net.md_5.bungee.api.ChatColor;
  * <i>plugin.yml</i> manually.<br>
  * TODO: Can that be changed? Generate {@code plugin.yml}?
  * </p>
- * <p>
- * TODO: TAB COMPLETE IMPLEMENTATIONs
- * </p>
  * 
  * @author Nordryd
  */
 public enum Commands
 {
-    HELP("help", 0, false),
-    CREATE_NEW_WORLD("create_test_world", 0, true),
-    LIST_INSTANCES("list_instances", 0, false),
-    PORT("port", 1, false),
-    INSTANCES("instances", 0, false),
-    REGION_EDIT_TOOL("region_edit_tool", 0, true),
-    INSTANCE_EDIT_TOOL("instance_edit_tool", 0, true);
+    HELP("help", false),
+    PORT("port", false, "Instance Name"),
+    CREATE_TEST_WORLD("create_test_world", true),
+    LIST_INSTANCES("list_instances", false),
+    REGION_EDIT_TOOL("region_edit_tool", true),
+    INSTANCE_EDIT_TOOL("instance_edit_tool", true);
 
-    private final String command;
-    private final int params;
+    private final String command, parameters[];
     private final boolean isAdminCmd;
 
-    private Commands(String command, int params, boolean isAdminCmd) {
-        this.command = ICmdStrings.CMD_PREFIX + command;
-        this.params = params;
+    private Commands(String command, boolean isAdminCmd, String... autocompleteNames) {
+        this.command = command;
         this.isAdminCmd = isAdminCmd;
+        this.parameters = autocompleteNames;
+    }
+
+    private Commands(String command, boolean isAdminCmd) {
+        this(command, isAdminCmd, "");
     }
 
     /**
@@ -55,32 +54,44 @@ public enum Commands
     }
 
     /**
-     * If the issued command is valid, and should be allowed to execute.
-     * 
-     * @param cSender
-     *        {@link CommandSender} to check if they are a server op (if
-     *        applicable).
-     * @param args
-     *        Number of arguments given.
-     * @return <b>TRUE</b> if the {@link CommandSender} has sufficient permission, &
-     *         the number of arguments is correct.<br>
-     *         <b>FALSE</b> if any conditions are <i>not</i> met.
+     * @return The names of each of the command's parameters.
      */
-    public boolean isIssuedCommandValid(CommandSender cSender, int args) {
-        return (this.params == args) && (this.isAdminCmd ? cSender.isOp() : true);
+    public String[] getParameters() {
+        return this.parameters;
+    }
+
+    @Override
+    public String toString() {
+        String string = "/" + IValues.CMD_PREFIX + " ";
+        for (String param : this.parameters) {
+            string += "[" + param + "] ";
+        }
+
+        return string.substring(0, string.length() - 1);
     }
 
     /**
-     * @return A list of all the registered plugin commands.
+     * Validates the given command.
+     * 
+     * @param command
+     *        The command given after /mmod
+     * @param sender
+     *        The command sender.
+     * @param args
+     *        The number of arguments given in the command.
+     * @return An {@link Optional} container with the corresponding command inside.
+     *         Use {@link Optional#get()} to retrieve it.<br>
+     *         If the command is not valid, an empty {@link Optional} will be given
+     *         instead (to prevent the passing around of {@code null}s).
      */
-    public static String getAllCommands() {
-        StringBuilder builder = new StringBuilder(ChatColor.AQUA + IReference.PLUGIN_NAME + " Commands:\n");
-
-        for (Commands command : Commands.values()) {
-            builder.append("/" + command.getCommand() + "\n");
+    public static Optional<Commands> validateCommand(String command, CommandSender sender, int args) {
+        for (Commands cmd : Commands.values()) {
+            if (command.equalsIgnoreCase(cmd.getCommand())) {
+                return (isIssuedCommandValid(cmd, sender, args)) ? Optional.ofNullable(cmd) : Optional.empty();
+            }
         }
 
-        return builder.toString().substring(0, builder.toString().length() - 1);
+        return Optional.empty();
     }
 
     /**
@@ -101,11 +112,19 @@ public enum Commands
      *        {@link CommandExecutor} handler class.
      */
     @GameRegistration
-    public static void registerCommands(JavaPlugin jPlugin, CommandExecutor cExecutor) {
-        for (Commands command : Commands.values()) {
-            jPlugin.getCommand(command.getCommand()).setExecutor(cExecutor);
-        }
+    public static void registerCommands(JavaPlugin jPlugin, CommandExecutor cExecutor, TabCompleter tCompleter) {
+        jPlugin.getCommand(IValues.CMD_PREFIX).setExecutor(cExecutor);
+        jPlugin.getCommand(IValues.CMD_PREFIX).setTabCompleter(tCompleter);
 
         jPlugin.getLogger().info(ANSIColor.PURPLE + "Commands registered successfully!" + ANSIColor.RESET);
+    }
+
+    private static boolean isIssuedCommandValid(Commands cmd, CommandSender sender, int args) {
+        if (cmd.parameters[0].isEmpty()) {
+            return cmd.isAdminCmd ? sender.isOp() : true;
+        }
+        else {
+            return ((cmd.parameters.length + 1) == args) && (cmd.isAdminCmd ? sender.isOp() : true);
+        }
     }
 }

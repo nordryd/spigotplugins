@@ -1,9 +1,10 @@
-package com.nordryd.world;
+package com.nordryd.world.generator;
 
 import java.util.Random;
 
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Biome;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.util.noise.SimplexOctaveGenerator;
 
@@ -17,7 +18,7 @@ import com.nordryd.util.IValues;
  * 
  * @author Nordryd
  */
-public class SkyGenerator extends ChunkGenerator
+public class CustomChunkGenerator extends ChunkGenerator
 {
     // Generally, more octaves -> smoother terrain...?
     private static final int OCTAVES = 8;
@@ -27,7 +28,7 @@ public class SkyGenerator extends ChunkGenerator
 
     // Minimum height of the whole world (each pillar will be jacked up this many
     // blocks, basically)
-    private static final int MINIMUM_HEIGHT = 64;
+    private static final int MINIMUM_HEIGHT = 50;
 
     // Difference between highest & lowest possible heights of the world
     // TODO try to make this different for each biome?
@@ -35,7 +36,13 @@ public class SkyGenerator extends ChunkGenerator
 
     // How much to alter the amplitude/frequency between each octave
     private static final double NOISE_AMPLITUDE = 0.5, NOISE_FREQUENCY = 0.5;
-    private int generatedHeight = MINIMUM_HEIGHT;
+    private int currentHeight = MINIMUM_HEIGHT;
+
+    // Set block materials
+    private static final Material TOP_BLOCK = Material.GRASS_BLOCK;
+    private static final Material SUB_TOP_BLOCK = Material.DIRT;
+    private static final Material FILLER_BLOCK = Material.STONE;
+    private static final Material BEDROCK = Material.BEDROCK;
 
     @Override
     public ChunkData generateChunkData(World world, Random random, int chunkX, int chunkZ, BiomeGrid biome) {
@@ -44,41 +51,45 @@ public class SkyGenerator extends ChunkGenerator
         // Octave generator MUST be placed here.
         SimplexOctaveGenerator generator = new SimplexOctaveGenerator(new Random(world.getSeed()), OCTAVES);
 
-        // Larger scale = steeper terrain
+        // Larger scale = steeper terrain (0 = superflat?)
         generator.setScale(SCALE);
-
-        // Set spawn in the first chunk to be at the height of the origin chunk chunk
-        world.setSpawnLocation(IValues.CHUNK_SIZE / 2, generatedHeight + 1, IValues.CHUNK_SIZE / 2);
 
         // Generating the chunk's heights and blocks, doing each (x,z) as a "pillar"
         for (int x = 0; x < IValues.CHUNK_SIZE; x++) {
             for (int z = 0; z < IValues.CHUNK_SIZE; z++) {
-
                 // 15 & 50 bc the multiplier is the difference between the highest and lowest
                 // possible heights of the world, and 50 is the min height of the whole world
                 // (can be changed if desired)
-                generatedHeight = (int) ((generator.noise((chunkX * IValues.CHUNK_SIZE) + x, (chunkZ * IValues.CHUNK_SIZE) + z, NOISE_AMPLITUDE,
+                currentHeight = (int) ((generator.noise((chunkX * IValues.CHUNK_SIZE) + x, (chunkZ * IValues.CHUNK_SIZE) + z, NOISE_AMPLITUDE,
                         NOISE_FREQUENCY) * DEFAULT_MULTIPLIER) + MINIMUM_HEIGHT);
 
-                if ((chunkX == 0) && (chunkZ == 0)) {
-                    chunk.setBlock(x, generatedHeight, z, (isOnChunkEdge(x, z) ? Material.COBBLESTONE : Material.STONE_BRICKS));
+                // Set spawn in the first chunk to be at the height of the first chunk
+                if ((x == 0) && (z == 0)) {
+                    world.setSpawnLocation(x, currentHeight + 1, z);
+                }
+
+                // After getting the height, we can build the pillar
+                // The top block
+                if (biome.getBiome(x, z) == Biome.RIVER) {
+                    chunk.setBlock(x, currentHeight, z, Material.WATER);
                 }
                 else {
-                    setBlocksBelowToAir(chunk, generatedHeight, x, z);
+                    chunk.setBlock(x, currentHeight, z, TOP_BLOCK);
                 }
+
+                // The sub top block
+                chunk.setBlock(x, currentHeight - 1, z, SUB_TOP_BLOCK);
+
+                // The rest of the pillar until the very bottom
+                for (int height = (currentHeight - 2); height > 0; height--) {
+                    chunk.setBlock(x, height, z, FILLER_BLOCK);
+                }
+
+                // The bedrock butt of the pillar
+                chunk.setBlock(x, 0, z, BEDROCK);
             }
         }
 
         return chunk;
-    }
-
-    private boolean isOnChunkEdge(int x, int z) {
-        return (x == 0) || (x == IValues.CHUNK_SIZE - 1) || (z == 0) || (z == IValues.CHUNK_SIZE - 1);
-    }
-
-    private void setBlocksBelowToAir(ChunkData chunk, int height, int x, int z) {
-        for (int y = height; y >= 0; y--) {
-            chunk.setBlock(x, y, z, Material.AIR);
-        }
     }
 }

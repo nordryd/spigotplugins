@@ -3,36 +3,9 @@ main: com.nordryd.Main
 version: 1.0
 api-version: 1.14
 commands:
-   mmod.help:
-      description: Lists all plugin commands.
-      usage: Usage = /mmod.help
-      permission: mmod.user
-   mmod.instances:
-      description: Lists all available instances, along with their details.
-      usage: Usage = /mmod.instances
-      permission: mmod.user
-   mmod.region_edit_tool:
-      description: Gives the player a region editing tool.
-      usage: Usage = /mmod.region_edit_tool
-      permission: mmod.admin
-      permission-message: You don't have permission to use mmod.region_edit_tool
-   mmod.instance_edit_tool:
-      description: Enables instance editing mode in instance worlds
-      usage: Usage = /mmod.instance_edit_tool
-      permission: mmod.admin
-      permission-message: You don't have permission to use mmod.instance_edit_tool
-   mmod.create_test_world:
-      description: Creates a new world. FOR TESTING.
-      usage: Usage = /mmod.create_new_world
-      permission: mmod.admin
-      permission-message: You don't have permission to use mmod.create_new_world
-   mmod.list_instances:
-      description: Lists all active instances.
-      usage: Usage = /mmod.list_instances
-      permission: mmod.user
-   mmod.port:
-      description: Teleports the player to the specified world. Use ./mmod.list_instances to get all the active world names.
-      usage: Usage = /mmod.port [world_name]
+   mmod:
+      description: Base for all MMODungeonPlugin commands.
+      usage: Usage = /mmod [command to use]
       permission: mmod.user
 permissions:
    mmod.admin:

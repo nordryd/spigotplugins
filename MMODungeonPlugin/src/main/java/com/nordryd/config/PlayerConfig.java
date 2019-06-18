@@ -12,36 +12,26 @@ import com.nordryd.util.IConfig;
 
 /**
  * <p>
- * Enum for all config values for instances. This file will store active
- * instances in case of a server restart.
+ * Enum for storing player information needed for when they log back in
  * </p>
  * 
  * @author Nordryd
  */
-public enum InstanceConfig implements IConfig
+public enum PlayerConfig implements IConfig
 {
     /**
      * <p>
-     * Active <b>dungeon</b> instance names. This is a string with all names
-     * separated by spaces.
+     * Stores player data needed for when the player logs back in
      * </p>
      */
-    DUNGEONS("dungeons"),
-
-    /**
-     * <p>
-     * Active <b>Arena</b> instance names. This is a string with all names separated
-     * by spaces.
-     * </p>
-     */
-    ARENAS("arenas");
+    PLAYERS("players");
 
     private final String key;
 
-    private static final File FILE;
+    private static final File file;
     private static final FileConfiguration CONFIG;
 
-    private InstanceConfig(String name) {
+    private PlayerConfig(String name) {
         this.key = name;
     }
 
@@ -64,7 +54,7 @@ public enum InstanceConfig implements IConfig
 
         save();
 
-        JPLUGIN.getLogger().info(ANSIColor.GREEN + "InstanceConfig registered successfully!" + ANSIColor.RESET);
+        JPLUGIN.getLogger().info(ANSIColor.GREEN + "PlayerConfig registered successfully!" + ANSIColor.RESET);
     }
 
     /**
@@ -72,11 +62,11 @@ public enum InstanceConfig implements IConfig
      */
     public static void save() {
         try {
-            CONFIG.save(FILE);
-            JPLUGIN.getLogger().info(ANSIColor.GREEN + "The instance.yml file has been saved" + ANSIColor.RESET);
+            CONFIG.save(file);
+            JPLUGIN.getLogger().info(ANSIColor.GREEN + "The players.yml file has been saved" + ANSIColor.RESET);
         }
         catch (IOException ioe) {
-            JPLUGIN.getLogger().info(ANSIColor.RED + "Could not save instance.yml" + ANSIColor.RESET);
+            JPLUGIN.getLogger().info(ANSIColor.RED + "Could not save players.yml" + ANSIColor.RESET);
         }
     }
 
@@ -92,11 +82,11 @@ public enum InstanceConfig implements IConfig
             JPLUGIN.getDataFolder().mkdir();
         }
 
-        FILE = new File(JPLUGIN.getDataFolder(), "instance.yml");
+        file = new File(JPLUGIN.getDataFolder(), "instance.yml");
 
-        if (!FILE.exists()) {
+        if (!file.exists()) {
             try {
-                FILE.createNewFile();
+                file.createNewFile();
                 JPLUGIN.getLogger().info(ANSIColor.GREEN + "The instance.yml file has been created" + ANSIColor.RESET);
             }
             catch (IOException ioe) {
@@ -104,6 +94,6 @@ public enum InstanceConfig implements IConfig
             }
         }
 
-        CONFIG = YamlConfiguration.loadConfiguration(FILE);
+        CONFIG = YamlConfiguration.loadConfiguration(file);
     }
 }

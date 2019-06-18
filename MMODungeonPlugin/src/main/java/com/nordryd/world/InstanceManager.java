@@ -1,20 +1,18 @@
 package com.nordryd.world;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import com.nordryd.config.InstanceConfig;
-import com.nordryd.enums.Commands;
-import com.nordryd.enums.Instances;
+import com.nordryd.enums.Instance;
+import com.nordryd.enums.InstanceEnumHandler.InstanceType;
 import com.nordryd.util.IUtility;
 import com.nordryd.util.IValues;
-
-import net.md_5.bungee.api.ChatColor;
 
 public class InstanceManager
 {
@@ -26,21 +24,23 @@ public class InstanceManager
      * TODO: this will eventually turn into {@code registerInstance},
      * {@code startInstance}, and {@code endInstance}
      */
-    public static void createInstance(String instanceName, JavaPlugin jPlugin) {
-        String name = IValues.WORLD_PREFIX + instanceName;
-        Bukkit.createWorld(new WorldCreator(name).generator(new SkyGenerator()).generateStructures(false));
+    public static void createInstance(Instance instance) {
+        String name = IValues.WORLD_PREFIX + instance.getName();
+        Bukkit.createWorld(new WorldCreator(name).generator(instance.getChunkGenerator()).generateStructures(false));
 
-        List<String> configInstanceList = InstanceConfig.getConfig().getStringList(InstanceConfig.ARENAS.getKey());
-        configInstanceList.add(name);
-        InstanceConfig.getConfig().set(InstanceConfig.ARENAS.getKey(), configInstanceList);
-        InstanceConfig.save();
+        if (!instance.getType().equals(InstanceType.LOBBY)) {
+            InstanceConfig respectiveConfig = instance.getType().equals(InstanceType.ARENA) ? InstanceConfig.ARENAS : InstanceConfig.DUNGEONS;
+
+            List<String> configInstanceList = InstanceConfig.getConfig().getStringList(respectiveConfig.getKey());
+            configInstanceList.add(name);
+            InstanceConfig.getConfig().set(respectiveConfig.getKey(), configInstanceList);
+            InstanceConfig.save();
+        }
     }
 
-    // TODO: Refactor to an enum similar to Config. Maybe combine them into a
-    // ConfigEnumHandler
-    public static void restartInstances(JavaPlugin jPlugin) {
-        List<String> dungeonNames = jPlugin.getConfig().getStringList(InstanceConfig.DUNGEONS.getKey()),
-                arenaNames = jPlugin.getConfig().getStringList(InstanceConfig.ARENAS.getKey());
+    public static void restartInstances() {
+        List<String> dungeonNames = InstanceConfig.getConfig().getStringList(InstanceConfig.DUNGEONS.getKey()),
+                arenaNames = InstanceConfig.getConfig().getStringList(InstanceConfig.ARENAS.getKey());
 
         if (!dungeonNames.isEmpty()) {
             for (String dungeonName : dungeonNames) {
@@ -55,35 +55,21 @@ public class InstanceManager
         }
     }
 
-    public static List<World> getInstances() {
-        return Bukkit.getWorlds();
-    }
-
-    public static String getAvailableInstances() {
-        String string = ChatColor.BLUE + "" + ChatColor.UNDERLINE + "Available Instances:\n" + ChatColor.RESET;
-
-        for (Instances instance : Instances.values()) {
-            string += instance.toString() + "\n";
-        }
-
-        return string;
-    }
-
-    public static String getActiveInstanceNames() {
-        StringBuilder builder = new StringBuilder(ChatColor.BLUE + "" + ChatColor.UNDERLINE + "Active Instances:\n" + ChatColor.RESET + ""
-                + ChatColor.BLUE + IValues.HOMEWORLD_STRING + "\n");
+    public static List<String> getInstanceNames() {
+        List<String> worldNames = new ArrayList<>();
+        worldNames.add(IValues.HOMEWORLD_STRING);
 
         for (World world : Bukkit.getWorlds().subList(1, Bukkit.getWorlds().size())) {
             if (!IUtility.isWorldNetherOrEnd(world.getName())) {
-                builder.append(world.getName().substring(IValues.WORLD_PREFIX.length()) + "\n");
+                worldNames.add(world.getName().substring(IValues.WORLD_PREFIX.length(), world.getName().length()));
             }
         }
 
-        return builder.append(ChatColor.RESET + "Use " + ChatColor.GREEN + "/" + Commands.PORT.getCommand() + ChatColor.RESET
-                + " [world name] to port to one of these worlds.").toString();
+        return worldNames;
     }
 
     public static Optional<World> getInstanceFromName(String instanceName) {
+        Bukkit.broadcastMessage(instanceName);
         String name = (instanceName.equals(IValues.HOMEWORLD_STRING)) ? IValues.WORLD_PREFIX.substring(0, IValues.WORLD_PREFIX.length() - 1)
                 : IValues.WORLD_PREFIX + instanceName;
 

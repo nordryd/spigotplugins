@@ -1,19 +1,21 @@
 package com.nordryd.event;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.server.TabCompleteEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.nordryd.enums.Commands;
-import com.nordryd.item.InstanceEditTool;
-import com.nordryd.item.RegionEditTool;
+import com.nordryd.enums.Instance;
 import com.nordryd.util.IUtility;
 import com.nordryd.util.IValues;
 import com.nordryd.world.InstanceManager;
@@ -27,7 +29,7 @@ import net.md_5.bungee.api.ChatColor;
  * 
  * @author Nordryd
  */
-public class CommandEventListener extends EventListener implements CommandExecutor
+public class CommandEventListener extends EventListener implements CommandExecutor, TabCompleter
 {
     /**
      * Constructor.
@@ -59,36 +61,40 @@ public class CommandEventListener extends EventListener implements CommandExecut
      * TODO: study how WoW instancing works, and try to replicate it.
      */
     @Override
-    public boolean onCommand(CommandSender cSender, Command cmd, String label, String[] args) {
-        if (cSender instanceof Player) {
-            Player player = (Player) cSender;
-            if (label.equalsIgnoreCase(Commands.HELP.getCommand()) && Commands.HELP.isIssuedCommandValid(cSender, args.length)) {
-                player.sendMessage(Commands.getAllCommands());
-                return true;
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        if ((sender instanceof Player) && (label.equalsIgnoreCase(IValues.CMD_PREFIX))) {
+            Player player = (Player) sender;
+
+            Optional<Commands> validatedCmd = Commands.validateCommand(((args.length == 0) ? "" : args[0]), sender, args.length);
+            if (!validatedCmd.isPresent()) {
+                return false;
             }
-            else if (label.equalsIgnoreCase(Commands.CREATE_NEW_WORLD.getCommand())
-                    && Commands.CREATE_NEW_WORLD.isIssuedCommandValid(cSender, args.length)) {
-                player.sendMessage("World being created. Players will be immobilized during this time.");
-                String name = "test";
-                InstanceManager.createInstance(name, jPlugin);
+
+            switch (validatedCmd.get()) {
+            case HELP:
+                String string = ChatColor.BLUE + "" + ChatColor.UNDERLINE + "Available Commands:\n" + ChatColor.RESET;
+
+                for (Commands command : Commands.values()) {
+                    string += ChatColor.AQUA + command.toString() + "\n";
+                }
+
+                player.sendMessage(string.substring(0, string.length() - 1));
 
                 return true;
-            }
-            else if (label.equalsIgnoreCase(Commands.LIST_INSTANCES.getCommand())
-                    && Commands.LIST_INSTANCES.isIssuedCommandValid(cSender, args.length)) {
-                player.sendMessage(InstanceManager.getActiveInstanceNames());
+            case LIST_INSTANCES:
+                String str = ChatColor.BLUE + "" + ChatColor.UNDERLINE + "Available Commands:\n" + ChatColor.RESET;
+
+                for (String s : InstanceManager.getInstanceNames()) {
+                    str += ChatColor.AQUA + s + "\n";
+                }
+
+                player.sendMessage(str.substring(0, str.length() - 1));
 
                 return true;
-            }
-            else if (label.equalsIgnoreCase(Commands.INSTANCES.getCommand()) && Commands.INSTANCES.isIssuedCommandValid(cSender, args.length)) {
-                player.sendMessage(InstanceManager.getAvailableInstances());
-                return true;
-            }
-            else if (label.equalsIgnoreCase(Commands.PORT.getCommand()) && Commands.PORT.isIssuedCommandValid(cSender, args.length)) {
-                // TODO WORLDS NOT MAINTAINED PAST RESTART
-                Optional<World> world = InstanceManager.getInstanceFromName(args[0]);
+            case PORT:
+                Optional<World> world = InstanceManager.getInstanceFromName(args[1]);
                 if (world.isPresent()) {
-                    if (args[0].equals(IValues.HOMEWORLD_STRING) && IUtility.isWorldNetherOrEnd(player.getWorld().getName())) {
+                    if (args[1].equals(IValues.HOMEWORLD_STRING) && IUtility.isWorldNetherOrEnd(player.getWorld().getName())) {
                         player.sendMessage(ChatColor.RED + "Yeah, no. Nice try. Stop trying to cheat & take the portal :P");
                         return true;
                     }
@@ -96,24 +102,39 @@ public class CommandEventListener extends EventListener implements CommandExecut
                     player.teleport(world.get().getSpawnLocation());
                 }
                 else {
-                    player.sendMessage(ChatColor.RED + "The world " + args[0] + " does not exist!");
+                    player.sendMessage(ChatColor.RED + "The world " + args[1] + " does not exist!");
                 }
+
                 return true;
+            case CREATE_TEST_WORLD:
+                player.sendMessage("World being created. Players will be immobilized during this time.");
+                InstanceManager.createInstance(Instance.SKY);
+
+                return true;
+            default:
+                return false;
             }
-            // TODO: DETECT IF PLAYER HAS TOOL ALREADY
-            else if (label.equalsIgnoreCase(Commands.REGION_EDIT_TOOL.getCommand())
-                    && Commands.REGION_EDIT_TOOL.isIssuedCommandValid(cSender, args.length)) {
-                player.getInventory().addItem(new RegionEditTool());
-                return true;
-            }
-            else if (label.equalsIgnoreCase(Commands.INSTANCE_EDIT_TOOL.getCommand())
-                    && Commands.INSTANCE_EDIT_TOOL.isIssuedCommandValid(cSender, args.length)) {
-                player.sendMessage(ChatColor.BLUE + "Keep the tool in offhand/mainhand to enable editing mode");
-                player.getInventory().addItem(new InstanceEditTool());
-                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
+        if (sender instanceof Player) {
+            if (cmd.getName().equalsIgnoreCase(IValues.CMD_PREFIX)) {
+                List<String> commands = new ArrayList<>();
+                for (Commands command : Commands.values()) {
+                    commands.add(command.getCommand());
+                }
+
+                if (args[0].equals(Commands.PORT.getCommand())) {
+                    return InstanceManager.getInstanceNames();
+                }
+
+                return commands;
             }
         }
 
-        return false;
+        return null;
     }
 }
