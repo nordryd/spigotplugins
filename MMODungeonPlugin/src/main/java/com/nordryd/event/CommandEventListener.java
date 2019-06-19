@@ -10,12 +10,12 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.server.TabCompleteEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.nordryd.enums.Commands;
 import com.nordryd.enums.Instance;
+import com.nordryd.item.InstanceEditTool;
+import com.nordryd.item.RegionEditTool;
 import com.nordryd.util.IUtility;
 import com.nordryd.util.IValues;
 import com.nordryd.world.InstanceManager;
@@ -39,11 +39,6 @@ public class CommandEventListener extends EventListener implements CommandExecut
      */
     public CommandEventListener(JavaPlugin jPlugin) {
         super(jPlugin);
-    }
-
-    @EventHandler
-    public void onTabComplete(TabCompleteEvent tcevent) {
-
     }
 
     /**
@@ -110,6 +105,13 @@ public class CommandEventListener extends EventListener implements CommandExecut
                 player.sendMessage("World being created. Players will be immobilized during this time.");
                 InstanceManager.createInstance(Instance.SKY);
 
+                return true;
+            case REGION_EDIT_TOOL:
+                player.getInventory().addItem(new RegionEditTool());
+                return true;
+            case INSTANCE_EDIT_TOOL:
+                player.sendMessage(ChatColor.BLUE + "Keep the tool in offhand/mainhand to enable editing mode");
+                player.getInventory().addItem(new InstanceEditTool());
                 return true;
             default:
                 return false;
