@@ -11,6 +11,7 @@ import com.nordryd.enums.ColorEnumHandler.ANSIColor;
 import com.nordryd.instance.LobbyManager;
 import com.nordryd.player.PlayerEventListener;
 import com.nordryd.util.annotation.GameRegistration;
+import com.nordryd.world.WorldEventListener;
 
 /**
  * <p>

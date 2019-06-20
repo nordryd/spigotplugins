@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
+import org.bukkit.WorldType;
 import org.bukkit.entity.Player;
 
 import com.nordryd.config.InstanceConfig;
@@ -31,18 +32,18 @@ public class InstanceManager
         String name = IValues.WORLD_PREFIX + instance.getName();
         World world;
         if (instance.getChunkGenerator() == null) {
-            world = Bukkit.createWorld(new WorldCreator(name).generateStructures(false).seed(400055));
+            world = Bukkit.createWorld(new WorldCreator(name).generateStructures(false).seed(400055).type(WorldType.FLAT));
             if (instance.getType().equals(InstanceType.LOBBY)) {
                 LobbyGenerator.generateLobby(world);
+                world.setAutoSave(false);
+                world.setTime(instance.getTime());
+                world.setSpawnFlags(false, false);
+                world.setStorm(true);
             }
         }
         else {
             world = Bukkit.createWorld(new WorldCreator(name).generator(instance.getChunkGenerator()).generateStructures(false));
         }
-
-        world.setTime(instance.getTime());
-        world.setSpawnFlags(false, false);
-        world.setStorm(true);
 
         if (!instance.getType().equals(InstanceType.LOBBY)) {
             InstanceConfig respectiveConfig = instance.getType().equals(InstanceType.ARENA) ? InstanceConfig.ARENAS : InstanceConfig.DUNGEONS;
