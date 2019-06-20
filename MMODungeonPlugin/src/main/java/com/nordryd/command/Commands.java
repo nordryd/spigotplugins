@@ -1,7 +1,8 @@
-package com.nordryd.enums;
+package com.nordryd.command;
 
 import java.util.Optional;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -27,11 +28,12 @@ import com.nordryd.util.annotation.GameRegistration;
 public enum Commands
 {
     HELP("help", false),
-    PORT("port", false, "Instance Name"),
-    CREATE_TEST_WORLD("create_test_world", true),
+    START_INSTANCE("start_instance", false),
+    END_INSTANCE("end_instance", false),
     LIST_INSTANCES("list_instances", false),
     REGION_EDIT_TOOL("region_edit_tool", true),
-    INSTANCE_EDIT_TOOL("instance_edit_tool", true);
+    INSTANCE_EDIT_TOOL("instance_edit_tool", true),
+    PARTY_CHAT("party_chat", false);
 
     private final String command, parameters[];
     private final boolean isAdminCmd;
@@ -62,9 +64,12 @@ public enum Commands
 
     @Override
     public String toString() {
-        String string = "/" + IValues.CMD_PREFIX + " ";
-        for (String param : this.parameters) {
-            string += "[" + param + "] ";
+        String string = "/" + IValues.CMD_PREFIX + " " + this.command + " ";
+
+        if (!this.parameters[0].isEmpty()) {
+            for (String param : this.parameters) {
+                string += "[" + param + "] ";
+            }
         }
 
         return string.substring(0, string.length() - 1);
@@ -87,7 +92,13 @@ public enum Commands
     public static Optional<Commands> validateCommand(String command, CommandSender sender, int args) {
         for (Commands cmd : Commands.values()) {
             if (command.equalsIgnoreCase(cmd.getCommand())) {
-                return (isIssuedCommandValid(cmd, sender, args)) ? Optional.ofNullable(cmd) : Optional.empty();
+                boolean isValid = isIssuedCommandValid(cmd, sender, args);
+
+                if (!isValid) {
+                    sender.sendMessage(ChatColor.DARK_RED + "Usage:" + ChatColor.RED + cmd + ChatColor.RESET);
+                }
+
+                return isValid ? Optional.ofNullable(cmd) : Optional.empty();
             }
         }
 
@@ -116,7 +127,7 @@ public enum Commands
         jPlugin.getCommand(IValues.CMD_PREFIX).setExecutor(cExecutor);
         jPlugin.getCommand(IValues.CMD_PREFIX).setTabCompleter(tCompleter);
 
-        jPlugin.getLogger().info(ANSIColor.PURPLE + "Commands registered successfully!" + ANSIColor.RESET);
+        jPlugin.getLogger().info(ANSIColor.BLUE + "Commands registered successfully!" + ANSIColor.RESET);
     }
 
     private static boolean isIssuedCommandValid(Commands cmd, CommandSender sender, int args) {

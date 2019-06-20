@@ -1,4 +1,4 @@
-package com.nordryd.event;
+package com.nordryd.player;
 
 import java.util.Optional;
 
@@ -14,10 +14,12 @@ import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.nordryd.config.DefaultConfig;
 import com.nordryd.enums.ColorEnumHandler.ParticleColor;
+import com.nordryd.event.EventListener;
 import com.nordryd.item.AbstractTool;
 import com.nordryd.item.AbstractToolHandler;
 import com.nordryd.particle.ParticleFactory;
@@ -55,10 +57,6 @@ public class PlayerEventListener extends EventListener
      * away. This is incorrect. This will be handled by their "homeworld_location"
      * parameter. Set their location to that if their instance has been deleted.
      * </p>
-     *
-     * <p>
-     * TODO: Messages & FX for when certain editing modes are enabled/disabled
-     * </p>
      * 
      * @param pjevent
      *        {@link PlayerJoinEvent}
@@ -68,7 +66,16 @@ public class PlayerEventListener extends EventListener
         Player player = pjevent.getPlayer();
         player.setMetadata(IMetadata.PLAYER_HEALTH_LOW, IMetadata.getMetadataValue(jPlugin, false));
         player.setMetadata(IMetadata.PLAYER_INSTANCE_EDIT_MODE, IMetadata.getMetadataValue(jPlugin, false));
+
+        // TODO check if player is instanced, if they are check if the instance is still
+        // active, if it is port them there, else port them to their return_location
+
         checkPlayerHealth(player);
+    }
+
+    @EventHandler
+    public void onPlayerExit(PlayerQuitEvent pqevent) {
+        PlayerManager.storeExitingPlayerWorld(pqevent.getPlayer());
     }
 
     /**

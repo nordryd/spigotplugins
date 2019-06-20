@@ -6,7 +6,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.nordryd.command.CommandManager;
 import com.nordryd.enums.ColorEnumHandler.ANSIColor;
+import com.nordryd.instance.LobbyManager;
+import com.nordryd.player.PlayerEventListener;
 import com.nordryd.util.annotation.GameRegistration;
 
 /**
@@ -49,9 +52,10 @@ public abstract class EventListener implements Listener
         pluginManager.registerEvents(new PlayerEventListener(jPlugin), jPlugin);
         pluginManager.registerEvents(new EntityEventListener(jPlugin), jPlugin);
         pluginManager.registerEvents(new BlockEventListener(jPlugin), jPlugin);
-        pluginManager.registerEvents(new CommandEventListener(jPlugin), jPlugin);
+        pluginManager.registerEvents(new CommandManager(jPlugin), jPlugin);
         pluginManager.registerEvents(new ServerEventListener(jPlugin), jPlugin);
         pluginManager.registerEvents(new WorldEventListener(jPlugin), jPlugin);
+        pluginManager.registerEvents(new LobbyManager(jPlugin), jPlugin);
 
         jPlugin.getLogger().info(ANSIColor.YELLOW + "EventListeners registered successfully!" + ANSIColor.RESET);
     }

@@ -3,6 +3,8 @@ package com.nordryd.event;
 import org.bukkit.event.entity.EntityEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.nordryd.player.PlayerEventListener;
+
 /**
  * <p>
  * Class to handle all {@link EntityEvent}s. {@link EntityEvent}s that pertain

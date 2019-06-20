@@ -1,53 +1,72 @@
 package com.nordryd.world.generator;
 
-import java.util.Random;
-
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.generator.ChunkGenerator;
-import org.bukkit.util.noise.SimplexOctaveGenerator;
 
-import com.nordryd.util.IValues;
-
-public class LobbyGenerator extends ChunkGenerator
+/**
+ * <p>
+ * Class for generating a lobby in a normal world, as well as sets the spawn
+ * location.
+ * </p>
+ * 
+ * @author Nordryd
+ */
+public class LobbyGenerator
 {
-    // Generally, more octaves -> smoother terrain...?
-    private static final int OCTAVES = 8;
+    private static final int LENGTH = 12, HEIGHT = 6, startX = 0, startY = 118, startZ = 0;
 
-    // How to scale each coordinate
-    private static final double SCALE = 0.005;
+    public static void generateLobby(World world) {
+        world.setSpawnLocation(LENGTH / 2, startY + 1, LENGTH / 2);
 
-    // Minimum height of the whole world (each pillar will be jacked up this many
-    // blocks, basically)
-    private static final int MINIMUM_HEIGHT = 10;
-
-    // Difference between highest & lowest possible heights of the world
-    // TODO try to make this different for each biome?
-    private static final int DEFAULT_MULTIPLIER = 0;
-
-    // How much to alter the amplitude/frequency between each octave
-    private static final double NOISE_AMPLITUDE = 0.5, NOISE_FREQUENCY = 0.5;
-    private int currentHeight = MINIMUM_HEIGHT;
-
-    @Override
-    public ChunkData generateChunkData(World world, Random random, int chunkX, int chunkZ, BiomeGrid biome) {
-        ChunkData chunk = createChunkData(world);
-
-        // Octave generator MUST be placed here.
-        SimplexOctaveGenerator generator = new SimplexOctaveGenerator(new Random(world.getSeed()), OCTAVES);
-
-        // Larger scale = steeper terrain (0 = superflat?)
-        generator.setScale(SCALE);
-
-        // Generating the chunk's heights and blocks, doing each (x,z) as a "pillar"
-        for (int x = 0; x < IValues.CHUNK_SIZE; x++) {
-            for (int z = 0; z < IValues.CHUNK_SIZE; z++) {
-                currentHeight = (int) ((generator.noise((chunkX * IValues.CHUNK_SIZE) + x, (chunkZ * IValues.CHUNK_SIZE) + z, NOISE_AMPLITUDE,
-                        NOISE_FREQUENCY) * DEFAULT_MULTIPLIER) + MINIMUM_HEIGHT);
-                chunk.setBlock(x, currentHeight, z, Material.BLACK_STAINED_GLASS);
+        // STRUCTURE
+        // floor
+        for (int x = startX; x < LENGTH; x++) {
+            for (int z = startZ; z < LENGTH; z++) {
+                if (isOnEdge(x, z)) {
+                    setBlockAt(world, x, startY, z, Material.POLISHED_DIORITE);
+                }
+                else {
+                    setBlockAt(world, x, startY, z, Material.GLASS);
+                }
             }
         }
 
-        return chunk;
+        // roof
+        for (int x = startX; x < LENGTH; x++) {
+            for (int z = startZ; z < LENGTH; z++) {
+                if (isOnEdge(x, z)) {
+                    setBlockAt(world, x, startY + HEIGHT, z, Material.POLISHED_DIORITE);
+                }
+                else {
+                    setBlockAt(world, x, startY + HEIGHT, z, Material.GLASS);
+                }
+            }
+        }
+
+        // walls
+        for (int y = startY + 1; y < startY + HEIGHT; y++) {
+            for (int x = startX; x < LENGTH; x++) {
+                setBlockAt(world, x, y, startZ, isCorner(x, startZ) ? Material.POLISHED_DIORITE : Material.GLASS);
+                setBlockAt(world, x, y, startZ + LENGTH - 1, isCorner(x, startZ + LENGTH - 1) ? Material.POLISHED_DIORITE : Material.GLASS);
+            }
+
+            for (int z = startZ; z < LENGTH; z++) {
+                setBlockAt(world, startX, y, z, isCorner(startX, z) ? Material.POLISHED_DIORITE : Material.GLASS);
+                setBlockAt(world, startX + LENGTH - 1, y, z, isCorner(startX + LENGTH - 1, z) ? Material.POLISHED_DIORITE : Material.GLASS);
+            }
+        }
+    }
+
+    private static void setBlockAt(World world, int x, int y, int z, Material type) {
+        world.getBlockAt(x, y, z).setType(type);
+    }
+
+    private static boolean isOnEdge(int x, int z) {
+        return (x == 0) || (x == LENGTH - 1) || (z == 0) || (z == LENGTH - 1);
+    }
+
+    private static boolean isCorner(int x, int z) {
+        return ((x == 0) && (z == 0)) || ((x == 0) && (z == LENGTH - 1)) || ((x == LENGTH - 1) && (z == 0))
+                || ((x == LENGTH - 1) && (z == LENGTH - 1));
     }
 }

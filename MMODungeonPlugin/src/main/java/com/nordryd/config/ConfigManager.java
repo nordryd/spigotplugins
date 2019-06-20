@@ -2,6 +2,7 @@ package com.nordryd.config;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.nordryd.player.PlayerConfig;
 import com.nordryd.util.annotation.GameRegistration;
 
 /**
@@ -21,7 +22,8 @@ public class ConfigManager
      */
     @GameRegistration
     public static void registerConfigs(JavaPlugin jPlugin) {
-        DefaultConfig.DO_LOW_HEALTH_EFFECTS.register();
-        InstanceConfig.DUNGEONS.register();
+        DefaultConfig.values()[0].register();
+        InstanceConfig.values()[0].register();
+        PlayerConfig.values()[0].register();
     }
 }

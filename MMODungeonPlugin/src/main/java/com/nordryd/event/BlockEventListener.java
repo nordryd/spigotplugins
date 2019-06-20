@@ -9,6 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.nordryd.item.AbstractTool;
 import com.nordryd.item.InstanceEditTool;
+import com.nordryd.player.PlayerEventListener;
 import com.nordryd.util.IUtility;
 
 /**

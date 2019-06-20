@@ -2,15 +2,18 @@ package com.nordryd;
 
 import java.util.logging.Logger;
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.nordryd.command.CommandManager;
+import com.nordryd.command.Commands;
 import com.nordryd.config.ConfigManager;
-import com.nordryd.enums.Commands;
-import com.nordryd.event.CommandEventListener;
 import com.nordryd.event.EventListener;
+import com.nordryd.instance.InstanceManager;
+import com.nordryd.player.PlayerManager;
 import com.nordryd.util.IReference.InfoMessages;
 import com.nordryd.util.UpdateChecker;
-import com.nordryd.world.InstanceManager;
 
 /**
  * <p>
@@ -37,16 +40,25 @@ public class Main extends JavaPlugin
 
         ConfigManager.registerConfigs(this);
 
-        CommandEventListener cmdListener = new CommandEventListener(this);
+        CommandManager cmdListener = new CommandManager(this);
         Commands.registerCommands(this, cmdListener, cmdListener);
 
         EventListener.registerEventListeners(this);
 
         UpdateChecker.checkForUpdates(logger);
+
+        /**
+         * TODO: get all the configs from PlayerConfig.WORLD_ON_LOGOUT and store it in a
+         * map and restore it when the player joins?
+         */
     }
 
     @Override
     public void onDisable() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            PlayerManager.storeExitingPlayerWorld(player);
+        }
+
         logger.info(InfoMessages.ON_DISABLE);
     }
 }

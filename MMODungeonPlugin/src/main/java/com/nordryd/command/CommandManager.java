@@ -1,10 +1,9 @@
-package com.nordryd.event;
+package com.nordryd.command;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -12,13 +11,12 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.nordryd.enums.Commands;
-import com.nordryd.enums.Instance;
+import com.nordryd.event.EventListener;
+import com.nordryd.instance.InstanceManager;
 import com.nordryd.item.InstanceEditTool;
 import com.nordryd.item.RegionEditTool;
-import com.nordryd.util.IUtility;
+import com.nordryd.player.PlayerManager;
 import com.nordryd.util.IValues;
-import com.nordryd.world.InstanceManager;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -29,7 +27,7 @@ import net.md_5.bungee.api.ChatColor;
  * 
  * @author Nordryd
  */
-public class CommandEventListener extends EventListener implements CommandExecutor, TabCompleter
+public class CommandManager extends EventListener implements CommandExecutor, TabCompleter
 {
     /**
      * Constructor.
@@ -37,7 +35,7 @@ public class CommandEventListener extends EventListener implements CommandExecut
      * @param plugin
      *        {@link JavaPlugin}
      */
-    public CommandEventListener(JavaPlugin jPlugin) {
+    public CommandManager(JavaPlugin jPlugin) {
         super(jPlugin);
     }
 
@@ -86,25 +84,12 @@ public class CommandEventListener extends EventListener implements CommandExecut
                 player.sendMessage(str.substring(0, str.length() - 1));
 
                 return true;
-            case PORT:
-                Optional<World> world = InstanceManager.getInstanceFromName(args[1]);
-                if (world.isPresent()) {
-                    if (args[1].equals(IValues.HOMEWORLD_STRING) && IUtility.isWorldNetherOrEnd(player.getWorld().getName())) {
-                        player.sendMessage(ChatColor.RED + "Yeah, no. Nice try. Stop trying to cheat & take the portal :P");
-                        return true;
-                    }
-
-                    player.teleport(world.get().getSpawnLocation());
-                }
-                else {
-                    player.sendMessage(ChatColor.RED + "The world " + args[1] + " does not exist!");
-                }
-
+            case START_INSTANCE:
+                PlayerManager.setPlayerInstanceReturnLocation(player);
+                InstanceManager.startInstance(player);
                 return true;
-            case CREATE_TEST_WORLD:
-                player.sendMessage("World being created. Players will be immobilized during this time.");
-                InstanceManager.createInstance(Instance.SKY);
-
+            case END_INSTANCE:
+                PlayerManager.returnPlayer(player);
                 return true;
             case REGION_EDIT_TOOL:
                 player.getInventory().addItem(new RegionEditTool());
@@ -114,23 +99,24 @@ public class CommandEventListener extends EventListener implements CommandExecut
                 player.getInventory().addItem(new InstanceEditTool());
                 return true;
             default:
+                sender.sendMessage(IValues.BASE_CMD_USAGE_STRING);
                 return false;
             }
         }
+
+        sender.sendMessage(ChatColor.DARK_RED + "This command must be sent by a player.");
         return false;
     }
 
+    // TODO implement a sorting algorithm to sort
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
         if (sender instanceof Player) {
             if (cmd.getName().equalsIgnoreCase(IValues.CMD_PREFIX)) {
                 List<String> commands = new ArrayList<>();
+
                 for (Commands command : Commands.values()) {
                     commands.add(command.getCommand());
-                }
-
-                if (args[0].equals(Commands.PORT.getCommand())) {
-                    return InstanceManager.getInstanceNames();
                 }
 
                 return commands;

@@ -1,4 +1,4 @@
-package com.nordryd.world;
+package com.nordryd.instance;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,12 +7,15 @@ import java.util.Optional;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
+import org.bukkit.entity.Player;
 
 import com.nordryd.config.InstanceConfig;
-import com.nordryd.enums.Instance;
 import com.nordryd.enums.InstanceEnumHandler.InstanceType;
 import com.nordryd.util.IUtility;
 import com.nordryd.util.IValues;
+import com.nordryd.world.generator.LobbyGenerator;
+
+import net.md_5.bungee.api.ChatColor;
 
 public class InstanceManager
 {
@@ -26,7 +29,20 @@ public class InstanceManager
      */
     public static void createInstance(Instance instance) {
         String name = IValues.WORLD_PREFIX + instance.getName();
-        Bukkit.createWorld(new WorldCreator(name).generator(instance.getChunkGenerator()).generateStructures(false));
+        World world;
+        if (instance.getChunkGenerator() == null) {
+            world = Bukkit.createWorld(new WorldCreator(name).generateStructures(false).seed(400055));
+            if (instance.getType().equals(InstanceType.LOBBY)) {
+                LobbyGenerator.generateLobby(world);
+            }
+        }
+        else {
+            world = Bukkit.createWorld(new WorldCreator(name).generator(instance.getChunkGenerator()).generateStructures(false));
+        }
+
+        world.setTime(instance.getTime());
+        world.setSpawnFlags(false, false);
+        world.setStorm(true);
 
         if (!instance.getType().equals(InstanceType.LOBBY)) {
             InstanceConfig respectiveConfig = instance.getType().equals(InstanceType.ARENA) ? InstanceConfig.ARENAS : InstanceConfig.DUNGEONS;
@@ -36,6 +52,14 @@ public class InstanceManager
             InstanceConfig.getConfig().set(respectiveConfig.getKey(), configInstanceList);
             InstanceConfig.save();
         }
+    }
+
+    public static void startInstance(Player player) {
+        player.sendMessage(ChatColor.DARK_AQUA + "Generating lobby (this might take a while, and players will be frozen during this time)...");
+        createInstance(Instance.LOBBY);
+
+        player.sendMessage(ChatColor.DARK_AQUA + "Lobby generated. Teleporting party..." + ChatColor.RESET);
+        player.teleport(getInstanceFromName(Instance.LOBBY.getName()).get().getSpawnLocation());
     }
 
     public static void restartInstances() {
@@ -69,7 +93,6 @@ public class InstanceManager
     }
 
     public static Optional<World> getInstanceFromName(String instanceName) {
-        Bukkit.broadcastMessage(instanceName);
         String name = (instanceName.equals(IValues.HOMEWORLD_STRING)) ? IValues.WORLD_PREFIX.substring(0, IValues.WORLD_PREFIX.length() - 1)
                 : IValues.WORLD_PREFIX + instanceName;
 

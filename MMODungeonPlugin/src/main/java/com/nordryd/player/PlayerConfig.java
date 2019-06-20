@@ -1,11 +1,13 @@
-package com.nordryd.config;
+package com.nordryd.player;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
 import com.nordryd.enums.ColorEnumHandler.ANSIColor;
 import com.nordryd.util.IConfig;
@@ -24,7 +26,15 @@ public enum PlayerConfig implements IConfig
      * Stores player data needed for when the player logs back in
      * </p>
      */
-    PLAYERS("players");
+    RETURN_LOCATIONS("return_locations"),
+
+    /**
+     * <p>
+     * Stores a player's location on logout to determine if they are instanced or
+     * not.
+     * </p>
+     */
+    WORLD_ON_LOGOUT("world_on_logout");
 
     private final String key;
 
@@ -48,13 +58,58 @@ public enum PlayerConfig implements IConfig
     @Override
     public void register() {
         CONFIG.options().copyDefaults();
-        for (InstanceConfig config : InstanceConfig.values()) {
+        for (PlayerConfig config : PlayerConfig.values()) {
             CONFIG.set(config.getKey(), new ArrayList<>());
         }
 
         save();
 
         JPLUGIN.getLogger().info(ANSIColor.GREEN + "PlayerConfig registered successfully!" + ANSIColor.RESET);
+    }
+
+    /**
+     * Sets a player's value in the specified string list.
+     * 
+     * @param player
+     *        {@link Player}
+     * @param value
+     *        The value to associate with the player.
+     */
+    public void setPlayerValue(Player player, String value) {
+        List<String> storedValues = CONFIG.getStringList(this.getKey());
+        int registeredPlayerIndex = getRegisteredPlayerIndexInConfig(player);
+
+        if (registeredPlayerIndex != -1) {
+            storedValues.remove(registeredPlayerIndex);
+        }
+
+        storedValues.add(player.getName() + " " + value);
+
+        CONFIG.set(this.getKey(), storedValues);
+        save();
+    }
+
+    /**
+     * Removes & returns a player value from the config list.
+     * 
+     * @param player
+     *        {@link Player}
+     * @return The removed value;
+     */
+    public String removePlayerValue(Player player) {
+        List<String> storedValues = CONFIG.getStringList(this.getKey());
+        int registeredPlayerIndex = getRegisteredPlayerIndexInConfig(player);
+
+        if (registeredPlayerIndex != -1) {
+            String removedValue = storedValues.get(registeredPlayerIndex);
+            storedValues.remove(registeredPlayerIndex);
+            CONFIG.set(this.getKey(), storedValues);
+            save();
+
+            return removedValue;
+        }
+
+        return "";
     }
 
     /**
@@ -82,18 +137,30 @@ public enum PlayerConfig implements IConfig
             JPLUGIN.getDataFolder().mkdir();
         }
 
-        file = new File(JPLUGIN.getDataFolder(), "instance.yml");
+        file = new File(JPLUGIN.getDataFolder(), "players.yml");
 
         if (!file.exists()) {
             try {
                 file.createNewFile();
-                JPLUGIN.getLogger().info(ANSIColor.GREEN + "The instance.yml file has been created" + ANSIColor.RESET);
+                JPLUGIN.getLogger().info(ANSIColor.GREEN + "The players.yml file has been created" + ANSIColor.RESET);
             }
             catch (IOException ioe) {
-                JPLUGIN.getLogger().info(ANSIColor.RED + "Could not create instance.yml" + ANSIColor.RESET);
+                JPLUGIN.getLogger().info(ANSIColor.RED + "Could not create players.yml" + ANSIColor.RESET);
             }
         }
 
         CONFIG = YamlConfiguration.loadConfiguration(file);
+    }
+
+    private int getRegisteredPlayerIndexInConfig(Player player) {
+        List<String> registered = PlayerConfig.getConfig().getStringList(this.getKey());
+
+        for (int registeredPlayerIndex = 0; registeredPlayerIndex < registered.size(); registeredPlayerIndex++) {
+            if (registered.get(registeredPlayerIndex).contains(player.getName())) {
+                return registeredPlayerIndex;
+            }
+        }
+
+        return -1;
     }
 }
