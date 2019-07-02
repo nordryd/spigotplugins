@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -89,7 +91,9 @@ public class CommandManager extends EventListener implements CommandExecutor, Ta
                 InstanceManager.startInstance(player);
                 return true;
             case END_INSTANCE:
+                World previousInstance = player.getWorld();
                 PlayerManager.returnPlayer(player);
+                Bukkit.unloadWorld(previousInstance, false);
                 return true;
             case REGION_EDIT_TOOL:
                 player.getInventory().addItem(new RegionEditTool());

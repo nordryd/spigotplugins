@@ -46,7 +46,7 @@ public class PlayerManager
         PlayerConfig.WORLD_ON_LOGOUT.setPlayerValue(player, player.getWorld().getName());
     }
 
-    public static void restoreJoiningPlayerLocation(Player player) {
+    public static void restorePlayerLocation(Player player) {
         String receivedValue = PlayerConfig.WORLD_ON_LOGOUT.removePlayerValue(player);
         Bukkit.broadcastMessage(ChatColor.RED + receivedValue);
         Bukkit.getConsoleSender().sendMessage(receivedValue);

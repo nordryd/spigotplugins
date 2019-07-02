@@ -2,6 +2,7 @@ package com.nordryd.player;
 
 import java.util.Optional;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
@@ -11,6 +12,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
+import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -67,10 +69,20 @@ public class PlayerEventListener extends EventListener
         player.setMetadata(IMetadata.PLAYER_HEALTH_LOW, IMetadata.getMetadataValue(jPlugin, false));
         player.setMetadata(IMetadata.PLAYER_INSTANCE_EDIT_MODE, IMetadata.getMetadataValue(jPlugin, false));
 
+        Bukkit.broadcastMessage(player.getName() + " is in world " + player.getWorld().getName());
+
         // TODO check if player is instanced, if they are check if the instance is still
         // active, if it is port them there, else port them to their return_location
 
         checkPlayerHealth(player);
+    }
+
+    @EventHandler
+    public void onPlayerSpawn(EntitySpawnEvent esevent) {
+        if (esevent.getEntityType() == EntityType.PLAYER) {
+            Player player = (Player) esevent.getEntity();
+            Bukkit.broadcastMessage(player.getName() + " has spawned!");
+        }
     }
 
     @EventHandler

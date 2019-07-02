@@ -13,6 +13,7 @@ import com.nordryd.event.EventListener;
 import com.nordryd.instance.InstanceManager;
 import com.nordryd.player.PlayerManager;
 import com.nordryd.util.IReference.InfoMessages;
+import com.nordryd.util.IUtility;
 import com.nordryd.util.UpdateChecker;
 
 /**
@@ -56,7 +57,9 @@ public class Main extends JavaPlugin
     @Override
     public void onDisable() {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            PlayerManager.storeExitingPlayerWorld(player);
+            if (IUtility.isInstanceWorld(player.getWorld())) {
+                PlayerManager.restorePlayerLocation(player);
+            }
         }
 
         logger.info(InfoMessages.ON_DISABLE);

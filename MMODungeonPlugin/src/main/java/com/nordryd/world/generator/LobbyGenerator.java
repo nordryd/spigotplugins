@@ -3,6 +3,8 @@ package com.nordryd.world.generator;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Sign;
 
 /**
  * <p>
@@ -14,7 +16,7 @@ import org.bukkit.World;
  */
 public class LobbyGenerator
 {
-    private static final int LENGTH = 12, HEIGHT = 6, startX = 0, startY = 10, startZ = 0;
+    private static final int LENGTH = 13, HEIGHT = 6, startX = 0, startY = 10, startZ = 0;
 
     public static void generateLobby(World world) {
         world.setSpawnLocation(LENGTH / 2, startY + 1, LENGTH / 2);
@@ -59,21 +61,19 @@ public class LobbyGenerator
 
         // SPECIAL BLOCKS
         // special block/sign locations (sans Y offsets)
-        Location cancelLoc = new Location(world, startX + LENGTH - 3, (double) startY, startZ + LENGTH - 3);
-        Location startLoc = new Location(world, startX + LENGTH - 3, (double) startY, startZ + 3);
-        Location selectLoc = new Location(world, startX + LENGTH - 3, (double) startY, startZ + (LENGTH / 2));
+        Location cancelLoc = new Location(world, startX + LENGTH - 3, startY + 1, startZ + LENGTH - 3);
+        Location startLoc = new Location(world, startX + LENGTH - 3, startY + 1, startZ + 3);
+        Location selectLoc = new Location(world, startX + LENGTH - 3, startY + 1, startZ + (LENGTH / 2));
 
         // interacting blocks
-        setBlockAt(cancelLoc.add(0, 1, 0), Material.RED_CONCRETE);
-        setBlockAt(startLoc.add(0, 1, 0), Material.GREEN_CONCRETE);
-        setBlockAt(selectLoc.add(0, 1, 0), Material.WHITE_CONCRETE);
+        setBlockAt(cancelLoc, Material.RED_CONCRETE_POWDER);
+        setBlockAt(startLoc, Material.GREEN_CONCRETE_POWDER);
 
         // signs
-        setBlockAt(cancelLoc.add(0, 2, 0), Material.BIRCH_SIGN);
-        setBlockAt(selectLoc.add(0, 1, -1), Material.BIRCH_SIGN);
-        setBlockAt(selectLoc.add(0, 2, 0), Material.JUNGLE_SIGN);
-        setBlockAt(selectLoc.add(0, 1, 1), Material.BIRCH_SIGN);
-        setBlockAt(selectLoc.add(0, 2, 0), Material.BIRCH_SIGN);
+        setBlockAt(cancelLoc.add(0, 1, 0), Material.BIRCH_SIGN);
+        setBlockAt(startLoc.add(0, 1, 0), Material.BIRCH_SIGN);
+
+        setSignText(world.getBlockAt(cancelLoc.add(0, 1, 0)).getState(), 1, "CANCEL");
     }
 
     private static void setBlockAt(World world, int x, int y, int z, Material type) {
@@ -91,5 +91,13 @@ public class LobbyGenerator
     private static boolean isCorner(int x, int z) {
         return ((x == 0) && (z == 0)) || ((x == 0) && (z == LENGTH - 1)) || ((x == LENGTH - 1) && (z == 0))
                 || ((x == LENGTH - 1) && (z == LENGTH - 1));
+    }
+
+    private static void setSignText(BlockState state, int index, String string) {
+        if (state instanceof Sign) {
+            Sign sign = (Sign) state;
+            sign.setLine(index, string);
+            sign.update();
+        }
     }
 }
