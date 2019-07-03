@@ -28,7 +28,7 @@ import com.nordryd.util.annotation.GameRegistration;
 public enum Commands
 {
     HELP("help", false),
-    START_INSTANCE("start_instance", false),
+    START_INSTANCE("start_instance", false, "instance_name"),
     END_INSTANCE("end_instance", false),
     LIST_INSTANCES("list_instances", false),
     REGION_EDIT_TOOL("region_edit_tool", true),

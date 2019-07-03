@@ -8,8 +8,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.nordryd.enums.ColorEnumHandler.ANSIColor;
 import com.nordryd.event.EventListener;
-import com.nordryd.instance.Instance;
-import com.nordryd.util.IValues;
 
 public class WorldEventListener extends EventListener
 {
@@ -31,9 +29,6 @@ public class WorldEventListener extends EventListener
     @EventHandler
     public void onWorldLoad(WorldUnloadEvent wuevent) {
         jPlugin.getLogger().info(ANSIColor.CYAN + "World " + wuevent.getWorld().getName() + " unloaded!" + ANSIColor.RESET);
-        if (wuevent.getWorld().getName().equals(IValues.WORLD_PREFIX + Instance.LOBBY.getName())) {
-            jPlugin.getLogger().info(ANSIColor.RED + jPlugin.getDataFolder().getParentFile().getParent() + ANSIColor.RESET);
-        }
     }
 
     @EventHandler

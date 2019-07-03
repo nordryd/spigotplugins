@@ -27,11 +27,11 @@ public interface IReference
     @PluginUtility
     public static interface InfoMessages
     {
-        public static final String ON_ENABLE = ANSIColor.CYAN + IReference.PLUGIN_NAME + " started. Hello, world!"
-                + ANSIColor.RESET;
-        public static final String CONTACT = ANSIColor.CYAN + "Please contact " + Dev.DISCORD + " on discord with any problems."
-                + ANSIColor.RESET;
-        public static final String ON_DISABLE = ANSIColor.CYAN + IReference.PLUGIN_NAME + " stopped. Goodbye, world!"
+        public static final String ON_ENABLE = ANSIColor.CYAN + IReference.PLUGIN_NAME + " started. Hello, world!" + ANSIColor.RESET;
+        public static final String CONTACT = ANSIColor.CYAN + "Please contact " + Dev.DISCORD + " on discord with any problems." + ANSIColor.RESET;
+        public static final String ON_DISABLE = ANSIColor.CYAN + IReference.PLUGIN_NAME + " stopped. Goodbye, world!" + ANSIColor.RESET;
+        public static final String WARNING = ANSIColor.RED
+                + "[NOTE] It is recommended that you look at your server folder and delete any world folders that are not in use. This plugin creates a LOT of world folders."
                 + ANSIColor.RESET;
     }
 

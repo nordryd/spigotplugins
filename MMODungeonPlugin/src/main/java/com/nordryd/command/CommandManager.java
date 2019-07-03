@@ -1,6 +1,7 @@
 package com.nordryd.command;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.nordryd.event.EventListener;
+import com.nordryd.instance.Instance;
 import com.nordryd.instance.InstanceManager;
 import com.nordryd.item.InstanceEditTool;
 import com.nordryd.item.RegionEditTool;
@@ -88,7 +90,7 @@ public class CommandManager extends EventListener implements CommandExecutor, Ta
                 return true;
             case START_INSTANCE:
                 PlayerManager.setPlayerInstanceReturnLocation(player);
-                InstanceManager.startInstance(player);
+                InstanceManager.startInstance(player, Instance.getInstanceFromName(args[1]));
                 return true;
             case END_INSTANCE:
                 World previousInstance = player.getWorld();
@@ -117,16 +119,38 @@ public class CommandManager extends EventListener implements CommandExecutor, Ta
     public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
         if (sender instanceof Player) {
             if (cmd.getName().equalsIgnoreCase(IValues.CMD_PREFIX)) {
+                if (args[0].equalsIgnoreCase(Commands.START_INSTANCE.getCommand())) {
+                    List<String> instances = new ArrayList<>();
+
+                    for (Instance instance : Instance.values()) {
+                        instances.add(instance.getName());
+                    }
+
+                    return getFinalSortedTabCompleteList(args[0], instances);
+                }
+
                 List<String> commands = new ArrayList<>();
 
                 for (Commands command : Commands.values()) {
                     commands.add(command.getCommand());
                 }
 
-                return commands;
+                return getFinalSortedTabCompleteList(args[0], commands);
             }
         }
 
         return null;
+    }
+
+    private static List<String> getFinalSortedTabCompleteList(String match, List<String> strings) {
+        List<String> newStrings = new ArrayList<>(strings);
+
+        Collections.sort(newStrings, (String left, String right) -> {
+            boolean containsFirst = left.contains(match), containsSecond = right.contains(match);
+
+            return (containsFirst && !containsSecond) ? -1 : ((!containsFirst && containsSecond) ? 1 : 0);
+        });
+
+        return newStrings;
     }
 }

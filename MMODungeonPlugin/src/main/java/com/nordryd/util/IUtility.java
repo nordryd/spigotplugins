@@ -12,7 +12,7 @@ import net.md_5.bungee.api.ChatColor;
 
 /**
  * <p>
- * Utility interface for miscellaneous utility functions.
+ * Utility class for miscellaneous utility functions.
  * </p>
  * 
  * @author Nordryd
@@ -69,5 +69,10 @@ public interface IUtility
 
         return (inventory.getItemInMainHand().hasItemMeta() && inventory.getItemInMainHand().getItemMeta().getDisplayName().equals(displayName))
                 || (inventory.getItemInOffHand().hasItemMeta() && inventory.getItemInOffHand().getItemMeta().getDisplayName().equals(displayName));
+    }
+
+    public static String getMagicString(String string) {
+        return ChatColor.DARK_RED + "" + ChatColor.MAGIC + "M" + ChatColor.RESET + " " + string + ChatColor.RESET + " " + ChatColor.DARK_RED + ""
+                + ChatColor.MAGIC + "M" + ChatColor.RESET;
     }
 }

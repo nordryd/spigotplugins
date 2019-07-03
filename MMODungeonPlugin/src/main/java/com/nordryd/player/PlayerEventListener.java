@@ -69,13 +69,9 @@ public class PlayerEventListener extends EventListener
         player.setMetadata(IMetadata.PLAYER_HEALTH_LOW, IMetadata.getMetadataValue(jPlugin, false));
         player.setMetadata(IMetadata.PLAYER_INSTANCE_EDIT_MODE, IMetadata.getMetadataValue(jPlugin, false));
 
-        Bukkit.broadcastMessage(player.getName() + " is in world " + player.getWorld().getName());
-
         PlayerManager.restorePlayerLocation(player);
 
         checkPlayerHealth(player);
-
-        player.sendMessage(ChatColor.MAGIC + "This will turn to gibberish, so don't bother trying to read it." + ChatColor.RESET);
     }
 
     @EventHandler

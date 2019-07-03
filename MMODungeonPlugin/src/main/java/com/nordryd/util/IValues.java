@@ -27,13 +27,12 @@ public interface IValues
     public static final String BASE_CMD_USAGE_STRING = ChatColor.DARK_RED + "Usage:" + ChatColor.RED + " /" + IValues.CMD_PREFIX + " [command]";
 
     public static final int CHUNK_SIZE = 16;
+    public static final int RANDOMIZER_VALUE_FOR_DEFAULT_PARTICLE_COUNTS = 5;
 
     public static final double DEFAULT_LOW_HEALTH_THRESHOLD = 6.5;
     public static final double BLOCK_CENTER_OFFSET = 0.5;
 
     public static final double PLAYER_HEALTH_MAX = 20.0, LOW_HEALTH_THRESHOLD_UNDERFLOW_RESET = 2.5, LOW_HEALTH_THRESHOLD_OVERFLOW_RESET = 17.5;
-
-    public static final int RANDOMIZER_VALUE_FOR_DEFAULT_PARTICLE_COUNTS = 5;
 
     public static final String CMD_PREFIX = "mmod";
 
@@ -59,5 +58,17 @@ public interface IValues
     public interface ISignStrings
     {
 
+    }
+
+    /**
+     * <p>
+     * Interface for special seeds that generate in desired locations (particularly
+     * biomes)
+     * </p>
+     */
+    @PluginUtility
+    public interface ISeeds
+    {
+        public static final long JUNGLE_SHORE = 400055;
     }
 }

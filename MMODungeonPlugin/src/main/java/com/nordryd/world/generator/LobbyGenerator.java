@@ -3,8 +3,6 @@ package com.nordryd.world.generator;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.Sign;
 
 /**
  * <p>
@@ -26,7 +24,7 @@ public class LobbyGenerator
         for (int x = startX; x < LENGTH; x++) {
             for (int z = startZ; z < LENGTH; z++) {
                 if (isOnEdge(x, z)) {
-                    setBlockAt(world, x, startY, z, Material.POLISHED_DIORITE);
+                    setBlockAt(world, x, startY, z, Material.GLASS);
                 }
                 else {
                     setBlockAt(world, x, startY, z, Material.GLASS);
@@ -38,7 +36,7 @@ public class LobbyGenerator
         for (int x = startX; x < LENGTH; x++) {
             for (int z = startZ; z < LENGTH; z++) {
                 if (isOnEdge(x, z)) {
-                    setBlockAt(world, x, startY + HEIGHT, z, Material.POLISHED_DIORITE);
+                    setBlockAt(world, x, startY + HEIGHT, z, Material.GLASS);
                 }
                 else {
                     setBlockAt(world, x, startY + HEIGHT, z, Material.GLASS);
@@ -49,13 +47,13 @@ public class LobbyGenerator
         // walls
         for (int y = startY + 1; y < startY + HEIGHT; y++) {
             for (int x = startX; x < LENGTH; x++) {
-                setBlockAt(world, x, y, startZ, isCorner(x, startZ) ? Material.POLISHED_DIORITE : Material.GLASS);
-                setBlockAt(world, x, y, startZ + LENGTH - 1, isCorner(x, startZ + LENGTH - 1) ? Material.POLISHED_DIORITE : Material.GLASS);
+                setBlockAt(world, x, y, startZ, Material.GLASS);
+                setBlockAt(world, x, y, startZ + LENGTH - 1, Material.GLASS);
             }
 
             for (int z = startZ; z < LENGTH; z++) {
-                setBlockAt(world, startX, y, z, isCorner(startX, z) ? Material.POLISHED_DIORITE : Material.GLASS);
-                setBlockAt(world, startX + LENGTH - 1, y, z, isCorner(startX + LENGTH - 1, z) ? Material.POLISHED_DIORITE : Material.GLASS);
+                setBlockAt(world, startX, y, z, Material.GLASS);
+                setBlockAt(world, startX + LENGTH - 1, y, z, Material.GLASS);
             }
         }
 
@@ -74,8 +72,6 @@ public class LobbyGenerator
         setBlockAt(cancelLoc.add(0, 1, 0), Material.BIRCH_SIGN);
         setBlockAt(startLoc.add(0, 1, 0), Material.BIRCH_SIGN);
         setBlockAt(selectLoc.add(0, 1, 0), Material.BIRCH_SIGN);
-
-        setSignText(world.getBlockAt(cancelLoc.add(0, 1, 0)).getState(), 1, "CANCEL");
     }
 
     private static void setBlockAt(World world, int x, int y, int z, Material type) {
@@ -90,16 +86,8 @@ public class LobbyGenerator
         return (x == 0) || (x == LENGTH - 1) || (z == 0) || (z == LENGTH - 1);
     }
 
-    private static boolean isCorner(int x, int z) {
-        return ((x == 0) && (z == 0)) || ((x == 0) && (z == LENGTH - 1)) || ((x == LENGTH - 1) && (z == 0))
-                || ((x == LENGTH - 1) && (z == LENGTH - 1));
-    }
-
-    private static void setSignText(BlockState state, int index, String string) {
-        if (state instanceof Sign) {
-            Sign sign = (Sign) state;
-            sign.setLine(index, string);
-            sign.update();
-        }
-    }
+//    private static boolean isCorner(int x, int z) {
+//        return ((x == 0) && (z == 0)) || ((x == 0) && (z == LENGTH - 1)) || ((x == LENGTH - 1) && (z == 0))
+//                || ((x == LENGTH - 1) && (z == LENGTH - 1));
+//    }
 }

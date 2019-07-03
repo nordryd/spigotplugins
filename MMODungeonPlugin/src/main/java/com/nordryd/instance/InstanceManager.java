@@ -2,7 +2,6 @@ package com.nordryd.instance;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -20,6 +19,9 @@ import net.md_5.bungee.api.ChatColor;
 
 public class InstanceManager
 {
+    public static final List<World> LOBBIES = new ArrayList<>();
+    public static final List<World> INSTANCES = new ArrayList<>();
+
     /**
      * TODO: Replace this with when the instance starts, and from there an Instance
      * param will be given, which will have a getType() method<br>
@@ -29,38 +31,30 @@ public class InstanceManager
      * {@code startInstance}, and {@code endInstance}
      */
     public static void createInstance(Instance instance) {
-        String name = IValues.WORLD_PREFIX + instance.getName();
-        World world;
-        if (instance.getChunkGenerator() == null) {
-            world = Bukkit.createWorld(new WorldCreator(name).generateStructures(false).seed(400055).type(WorldType.FLAT));
-            if (instance.getType().equals(InstanceType.LOBBY)) {
-                LobbyGenerator.generateLobby(world);
-                world.setAutoSave(false);
-                world.setTime(instance.getTime());
-                world.setSpawnFlags(false, false);
-                world.setStorm(true);
-            }
-        }
-        else {
-            world = Bukkit.createWorld(new WorldCreator(name).generator(instance.getChunkGenerator()).generateStructures(false));
-        }
+        String name = IValues.WORLD_PREFIX + instance.getName() + "_" + Instance.getNextInstanceId();
+        Bukkit.createWorld(new WorldCreator(name).generator(instance.getChunkGenerator()).generateStructures(false));
 
-        if (!instance.getType().equals(InstanceType.LOBBY)) {
-            InstanceConfig respectiveConfig = instance.getType().equals(InstanceType.ARENA) ? InstanceConfig.ARENAS : InstanceConfig.DUNGEONS;
+        InstanceConfig respectiveConfig = instance.getType().equals(InstanceType.ARENA) ? InstanceConfig.ARENAS : InstanceConfig.DUNGEONS;
 
-            List<String> configInstanceList = InstanceConfig.getConfig().getStringList(respectiveConfig.getKey());
-            configInstanceList.add(name);
-            InstanceConfig.getConfig().set(respectiveConfig.getKey(), configInstanceList);
-            InstanceConfig.save();
-        }
+        List<String> configInstanceList = InstanceConfig.getConfig().getStringList(respectiveConfig.getKey());
+        configInstanceList.add(name);
+        InstanceConfig.getConfig().set(respectiveConfig.getKey(), configInstanceList);
+        InstanceConfig.save();
     }
 
-    public static void startInstance(Player player) {
+    /**
+     * TODO: in the start_instance command, have each instance be listed, and each
+     * instance has a LobbyBiome associated with it for the landscape of the lobby
+     * 
+     * figure out a way to freeze time in each individual world too
+     */
+    public static void startInstance(Player player, Instance instance) {
         player.sendMessage(ChatColor.DARK_AQUA + "Generating lobby (this might take a while, and players will be frozen during this time)...");
-        createInstance(Instance.LOBBY);
+        String lobbyName = "lobby_" + Instance.getNextInstanceId();
+        createLobby(instance, lobbyName);
 
         player.sendMessage(ChatColor.DARK_AQUA + "Lobby generated. Teleporting party..." + ChatColor.RESET);
-        player.teleport(getInstanceFromName(Instance.LOBBY.getName()).get().getSpawnLocation());
+        player.teleport(Bukkit.getWorld(lobbyName).getSpawnLocation());
     }
 
     public static void restartInstances() {
@@ -93,18 +87,13 @@ public class InstanceManager
         return worldNames;
     }
 
-    public static Optional<World> getInstanceFromName(String instanceName) {
-        String name = (instanceName.equals(IValues.HOMEWORLD_STRING)) ? IValues.WORLD_PREFIX.substring(0, IValues.WORLD_PREFIX.length() - 1)
-                : IValues.WORLD_PREFIX + instanceName;
+    private static void createLobby(Instance instance, String name) {
+        World world = Bukkit.createWorld(new WorldCreator(name).generateStructures(false).seed(instance.getSeed()).type(WorldType.FLAT));
 
-        if (!IUtility.isWorldNetherOrEnd(name)) {
-            for (World instance : Bukkit.getWorlds()) {
-                if (instance.getName().equals(name)) {
-                    return Optional.ofNullable(instance);
-                }
-            }
-        }
-
-        return Optional.empty();
+        LobbyGenerator.generateLobby(world);
+        world.setAutoSave(false);
+        world.setTime(instance.getTime());
+        world.setSpawnFlags(false, false);
+        world.setStorm(true);
     }
 }
