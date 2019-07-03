@@ -2,8 +2,6 @@ package com.nordryd;
 
 import java.util.logging.Logger;
 
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.nordryd.command.CommandManager;
@@ -11,9 +9,7 @@ import com.nordryd.command.Commands;
 import com.nordryd.config.ConfigManager;
 import com.nordryd.event.EventListener;
 import com.nordryd.instance.InstanceManager;
-import com.nordryd.player.PlayerManager;
 import com.nordryd.util.IReference.InfoMessages;
-import com.nordryd.util.IUtility;
 import com.nordryd.util.UpdateChecker;
 
 /**
@@ -56,12 +52,6 @@ public class Main extends JavaPlugin
 
     @Override
     public void onDisable() {
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            if (IUtility.isInstanceWorld(player.getWorld())) {
-                PlayerManager.restorePlayerLocation(player);
-            }
-        }
-
         logger.info(InfoMessages.ON_DISABLE);
     }
 }

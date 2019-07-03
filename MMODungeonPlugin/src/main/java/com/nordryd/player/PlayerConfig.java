@@ -59,7 +59,9 @@ public enum PlayerConfig implements IConfig
     public void register() {
         CONFIG.options().copyDefaults();
         for (PlayerConfig config : PlayerConfig.values()) {
-            CONFIG.set(config.getKey(), new ArrayList<>());
+            if (!CONFIG.contains(config.getKey())) {
+                CONFIG.set(config.getKey(), new ArrayList<>());
+            }
         }
 
         save();
@@ -94,7 +96,8 @@ public enum PlayerConfig implements IConfig
      * 
      * @param player
      *        {@link Player}
-     * @return The removed value;
+     * @return The removed value if the player is registered. Otherwise returns an
+     *         empty string.
      */
     public String removePlayerValue(Player player) {
         List<String> storedValues = CONFIG.getStringList(this.getKey());

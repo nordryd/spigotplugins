@@ -68,10 +68,12 @@ public class LobbyGenerator
         // interacting blocks
         setBlockAt(cancelLoc, Material.RED_CONCRETE_POWDER);
         setBlockAt(startLoc, Material.GREEN_CONCRETE_POWDER);
+        setBlockAt(selectLoc, Material.WHITE_CONCRETE_POWDER);
 
         // signs
         setBlockAt(cancelLoc.add(0, 1, 0), Material.BIRCH_SIGN);
         setBlockAt(startLoc.add(0, 1, 0), Material.BIRCH_SIGN);
+        setBlockAt(selectLoc.add(0, 1, 0), Material.BIRCH_SIGN);
 
         setSignText(world.getBlockAt(cancelLoc.add(0, 1, 0)).getState(), 1, "CANCEL");
     }

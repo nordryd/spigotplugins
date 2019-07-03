@@ -48,8 +48,6 @@ public class PlayerManager
 
     public static void restorePlayerLocation(Player player) {
         String receivedValue = PlayerConfig.WORLD_ON_LOGOUT.removePlayerValue(player);
-        Bukkit.broadcastMessage(ChatColor.RED + receivedValue);
-        Bukkit.getConsoleSender().sendMessage(receivedValue);
 
         if (!receivedValue.isEmpty()) {
             String[] playerData = receivedValue.split(" ");

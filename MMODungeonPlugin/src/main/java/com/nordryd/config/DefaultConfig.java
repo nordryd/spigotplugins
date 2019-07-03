@@ -66,7 +66,9 @@ public enum DefaultConfig implements IConfig
     @Override
     public void register() {
         for (DefaultConfig configDefault : DefaultConfig.values()) {
-            JPLUGIN.getConfig().addDefault(configDefault.getKey(), configDefault.getDefault());
+            if (!JPLUGIN.getConfig().contains(configDefault.getKey())) {
+                JPLUGIN.getConfig().addDefault(configDefault.getKey(), configDefault.getDefault());
+            }
         }
 
         JPLUGIN.getConfig().options().copyDefaults(true);

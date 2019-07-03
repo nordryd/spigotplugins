@@ -59,7 +59,9 @@ public enum InstanceConfig implements IConfig
     public void register() {
         CONFIG.options().copyDefaults();
         for (InstanceConfig config : InstanceConfig.values()) {
-            CONFIG.set(config.getKey(), new ArrayList<>());
+            if (!CONFIG.contains(config.getKey())) {
+                CONFIG.set(config.getKey(), new ArrayList<>());
+            }
         }
 
         save();

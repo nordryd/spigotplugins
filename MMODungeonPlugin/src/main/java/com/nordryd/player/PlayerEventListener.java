@@ -71,10 +71,11 @@ public class PlayerEventListener extends EventListener
 
         Bukkit.broadcastMessage(player.getName() + " is in world " + player.getWorld().getName());
 
-        // TODO check if player is instanced, if they are check if the instance is still
-        // active, if it is port them there, else port them to their return_location
+        PlayerManager.restorePlayerLocation(player);
 
         checkPlayerHealth(player);
+
+        player.sendMessage(ChatColor.MAGIC + "This will turn to gibberish, so don't bother trying to read it." + ChatColor.RESET);
     }
 
     @EventHandler
