@@ -1,0 +1,16 @@
+name: MMODungeonPlugin
+main: com.nordryd.Main
+version: 1.0
+api-version: 1.14
+commands:
+   mmod:
+      description: Base for all MMODungeonPlugin commands.
+      permission: mmod.user
+permissions:
+   mmod.admin:
+      description: Gives access to all commands.
+      default: op
+      children:
+         mmod.user: true
+   mmod.user:
+      description: Gives access to commands that do not enable grieving.
